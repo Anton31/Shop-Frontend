@@ -214,6 +214,7 @@ export class ProductListComponent implements OnInit {
     }).afterClosed().subscribe(data => {
       this.productService.editProduct(data).subscribe(data => {
           this.getProducts();
+          this.getFilterTypes();
         },
         error => {
           this.snackBar.open(error.error.message, '', {duration: 3000})
