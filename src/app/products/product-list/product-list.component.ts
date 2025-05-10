@@ -31,8 +31,8 @@ export class ProductListComponent implements OnInit {
   products: Product[] = [];
   filterTypes: Type[] = [];
   filterBrands: Brand[] = [];
-  currentTypeId: number | undefined = undefined;
-  currentBrandId: number | undefined = undefined;
+  currentTypeId = 0;
+  currentBrandId = 0;
   currentSort: string | undefined = undefined;
   currentDir: string | undefined = undefined;
   pageSize: number | undefined = undefined;
@@ -79,20 +79,21 @@ export class ProductListComponent implements OnInit {
   }
 
   getFilterBrands(typeId: number) {
-    this.productService.getAllBrands(typeId, undefined, undefined).subscribe(data => {
+    this.currentTypeId = typeId
+    this.productService.getAllBrands(this.currentTypeId, undefined, undefined).subscribe(data => {
       this.filterBrands = data;
     })
   }
 
   typeFilter(typeId: number) {
     if (typeId == this.currentTypeId) {
-      this.currentTypeId = undefined;
-      this.currentBrandId = undefined;
+      this.currentTypeId = 0;
+      this.currentBrandId = 0;
     } else {
       this.currentTypeId = typeId;
-      this.currentBrandId = undefined;
+      this.currentBrandId = 0;
     }
-    if (this.currentTypeId != undefined) {
+    if (this.currentTypeId > 0) {
       this.getFilterBrands(this.currentTypeId);
     } else {
       this.filterBrands = [];
@@ -109,11 +110,11 @@ export class ProductListComponent implements OnInit {
 
   brandFilter(brandId: number) {
     if (this.currentBrandId == brandId) {
-      this.currentBrandId = undefined;
+      this.currentBrandId = 0;
     } else {
       this.currentBrandId = brandId;
     }
-    if (this.currentTypeId == undefined) {
+    if (this.currentTypeId == 0) {
       this.filterBrands = [];
     }
     this.productService.getProducts(this.currentTypeId, this.currentBrandId,
@@ -183,8 +184,8 @@ export class ProductListComponent implements OnInit {
       price: [1000]
     })
     const dialogRef = this.dialog.open(AddProductComponent, {
-      height: '500px',
-      width: '500px',
+      height: '600px',
+      width: '600px',
       data: {
         productForm: this.productForm, new: true
       }
@@ -222,8 +223,8 @@ export class ProductListComponent implements OnInit {
       price: [product.price]
     })
     const dialogRef = this.dialog.open(AddProductComponent, {
-      height: '500px',
-      width: '500px',
+      height: '600px',
+      width: '600px',
       data: {productForm: this.productForm, new: false}
     }).afterClosed().subscribe(data => {
       this.productService.editProduct(data).subscribe(data => {
@@ -239,8 +240,8 @@ export class ProductListComponent implements OnInit {
 
   deleteProduct(product: Product) {
     this.dialog.open(DeleteProductComponent, {
-      height: '500px',
-      width: '500px',
+      height: '600px',
+      width: '600px',
       data: {
         product: product
       }
@@ -254,8 +255,8 @@ export class ProductListComponent implements OnInit {
   }
 
   resetFilters() {
-    this.currentTypeId = undefined;
-    this.currentBrandId = undefined;
+    this.currentTypeId = 0;
+    this.currentBrandId = 0;
     this.currentSort = undefined;
     this.currentDir = undefined;
     this.pageIndex = undefined;

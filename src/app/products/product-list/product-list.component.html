@@ -1,4 +1,3 @@
-<p></p>
 <mat-chip-listbox>
   @for (type of filterTypes; track type) {
     <mat-chip-option (click)="typeFilter(type.id)">{{ type.name }}</mat-chip-option>
@@ -14,7 +13,7 @@
   <button (click)="openCart()" *ngIf="role=='admin' || role=='user'"
           mat-flat-button matBadge="{{totalQuantity}}" matBadgePosition="after" matBadgeSize="large">
     Cart
-    <mat-icon>shopping_cart</mat-icon>
+    <mat-icon>shopping_cart_checkout</mat-icon>
   </button>
 </p>
 <table (matSortChange)="sortProducts($event)" [dataSource]="products" class="mat-elevation-z8" mat-table matSort>

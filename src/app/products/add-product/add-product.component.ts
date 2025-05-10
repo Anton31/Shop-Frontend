@@ -15,6 +15,7 @@ export class AddProductComponent implements OnInit {
   title: string;
   types!: Type[];
   brands!: Brand[];
+
   constructor(public productService: ProductService,
               public dialogRef: MatDialogRef<AddProductComponent>,
               @Inject(MAT_DIALOG_DATA) public data: ProductDialogData) {
@@ -24,19 +25,35 @@ export class AddProductComponent implements OnInit {
       this.title = 'Edit product'
     }
   }
+
   getTypes() {
     this.productService.getAllTypes(undefined, undefined).subscribe(data => {
       this.types = data;
     });
   }
-  getBrands(){
-    this.productService.getAllBrands(undefined, undefined, undefined).subscribe(data => {
+
+  getProductTypes() {
+    this.productService.getProductTypes().subscribe(data => {
+      this.types = data;
+    })
+  }
+
+  getBrands() {
+    this.productService.getAllBrands(0, undefined, undefined).subscribe(data => {
       this.brands = data;
     });
   }
+
+  selectBrands(event: any) {
+    this.productService.getAllBrands(event.value, undefined, undefined).subscribe(data => {
+      this.brands = data;
+    });
+  }
+
   onNoClick(): void {
     this.dialogRef.close();
   }
+
   ngOnInit(): void {
     this.getTypes();
     this.getBrands();

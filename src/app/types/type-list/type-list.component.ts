@@ -56,7 +56,6 @@ export class TypeListComponent implements OnInit {
   addType() {
     this.typeForm = this.fb.group({
       id: [0],
-      brandId: [0],
       name: ['']
     })
     const dialogRef = this.dialog.open(AddTypeComponent, {

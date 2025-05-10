@@ -1,10 +1,17 @@
-<h1 align="center">{{ title }}</h1>
+<div align="center">
+<h1>{{ title }}</h1>
+<p align="center">
+  <mat-chip-listbox>
+  <mat-chip-option (click)="getProductTypes()">Product types</mat-chip-option>
+  <mat-chip-option (click)="getTypes()">All types</mat-chip-option>
+</mat-chip-listbox>
+</p>
 <form [formGroup]="data.productForm">
   <input formControlName="id" type="hidden"/>
   <p align="center">
     <mat-form-field>
       <mat-label>Type</mat-label>
-      <mat-select formControlName="typeId">
+      <mat-select (selectionChange)="selectBrands($event)" formControlName="typeId">
         <mat-option [value]="0">None</mat-option>
         @for (type of types; track type) {
           <mat-option [value]="type.id">{{ type.name }}</mat-option>
@@ -40,4 +47,4 @@
   <button (click)="onNoClick()" mat-button>No Thanks</button>
   <button [mat-dialog-close]="data.productForm" cdkFocusInitial mat-flat-button>Ok</button>
 </div>
-
+</div>
