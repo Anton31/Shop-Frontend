@@ -4,11 +4,11 @@
   </button>
   <mat-menu #menu="matMenu">
     <p>
-      <button (click)="editUser()" *ngIf="isLoggedIn!=null" color="primary" mat-stroked-button>Change password
+      <button (click)="editUser()" color="primary" mat-stroked-button>Change password
       </button>
     </p>
     <p>
-      <button (click)="logout()" *ngIf="isLoggedIn!=null" color="primary" mat-stroked-button>
+      <button (click)="logout()"  color="primary" mat-stroked-button>
         <mat-icon>logout</mat-icon>
         Logout
       </button>
@@ -16,8 +16,12 @@
   </mat-menu>
   <button (click)="login()" *ngIf="isLoggedIn==null" color="primary" mat-stroked-button>
     <mat-icon>login</mat-icon>
-    Log In
+    Login
   </button>
-  <button (click)="addUser()" *ngIf="isLoggedIn==null" color="primary" mat-stroked-button>Sign Up</button>
+  <button (click)="login2()" *ngIf="isLoggedIn==null" color="primary" mat-stroked-button>
+    <mat-icon>login</mat-icon>
+    Login2
+  </button>
+  <button (click)="addUser()" color="primary" mat-stroked-button>Sign Up</button>
 </div>
 

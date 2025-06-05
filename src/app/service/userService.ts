@@ -33,10 +33,6 @@ export class UserService {
     localStorage.clear();
   }
 
-  checkCredentials() {
-    return localStorage.getItem('token');
-  }
-
   getUser(): Observable<UserInfo> {
     return this.http.get<UserInfo>(this.baseUrl + '/user');
   }
@@ -59,6 +55,7 @@ export class UserService {
       'Content-type': 'application/x-www-form-urlencoded'
     });
     let params = new URLSearchParams();
+    params.append('client_id', 'app-client')
     params.append('grant_type', 'authorization_code');
     params.append('code', code);
     this.http.post<Token>(this.baseUrl + '/oauth2/token', params, {headers: tokenHeaders})

@@ -41,7 +41,6 @@ import {CheckoutComponent} from './checkout/checkout.component';
 import {authInterceptor} from "./service/auth-interceptor";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {OAuthModule} from "angular-oauth2-oidc";
-import {CookieService} from "ngx-cookie-service";
 import {LoginComponent} from "./login/login.component";
 
 @NgModule({

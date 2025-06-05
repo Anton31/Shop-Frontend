@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserDto} from "../dto/userDto";
 import {UserService} from "../service/userService";
-import {AuthGoogleService} from "../service/authGoogleService";
+import {AuthService} from "../service/auth-service";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {RegisterComponent} from "../register/register.component";
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
 
 
   constructor(private userService: UserService,
-              private authService: AuthGoogleService,
+              private authService: AuthService,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
     this.dto = new UserDto('', '', '', '', '', '');
@@ -30,13 +30,16 @@ export class LoginComponent implements OnInit {
     window.location.href = 'http://localhost:8080/oauth2/authorize?response_type=code&client_id=app-client';
 
   }
+  login2() {
+    window.location.href = 'http://localhost:8080/oauth2/authorize?response_type=code&client_id=app-client&scope=openid%20profile&redirect_uri=http://localhost:4200';
 
+  }
   getUser() {
     this.userService.getUser().subscribe(data => {
-        this.role = data.role;
-        this.username = data.username;
-      }
-    )
+      this.username = data.username;
+      this.role = data.role;
+      this.userService.setRole(this.role);
+    })
   }
 
   addUser() {
@@ -70,18 +73,8 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  signInWithGoogle() {
-    this.authService.login();
-  }
-
-  googleLogout() {
-    this.authService.logout();
-    this.userService.clearData();
-    window.location.href = '/';
-  }
-
   logout() {
-    window.location.href = "http://localhost:8080/logout";
+    window.location.href = 'http://localhost:8080/logout';
     this.userService.clearData();
     this.getUser();
     window.location.href = '/';
@@ -89,7 +82,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUser();
-    this.isLoggedIn = this.userService.checkCredentials();
+    this.isLoggedIn = this.userService.getToken();
     let i = window.location.href.indexOf('code');
     if (this.isLoggedIn == null && i != -1) {
       this.userService.retrieveToken(window.location.href.substring(i + 5));
