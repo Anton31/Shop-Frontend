@@ -1,8 +1,33 @@
-<nav>
-  <a class="button" routerLink="/">Products</a> |
+<nav *ngIf="isLoggedIn">
+  <a class="button" routerLink="/products">Products</a> |
   <a class="button" routerLink="/types">Types</a> |
   <a class="button" routerLink="/brands">Brands</a> |
   <a class="button" routerLink="/orders">Orders</a>
 </nav>
-<app-login></app-login>
-<router-outlet></router-outlet>
+<div align="right">
+  <button [matMenuTriggerFor]="menu" color="primary" mat-stroked-button>
+    {{ username }} : {{ role }}
+  </button>
+  <mat-menu #menu="matMenu">
+    <p>
+      <button (click)="editUser()" color="primary" mat-stroked-button>Change password
+      </button>
+    </p>
+    <p>
+      <button (click)="logout()" color="primary" mat-stroked-button>
+        <mat-icon>logout</mat-icon>
+        logout
+      </button>
+    </p>
+  </mat-menu>
+  <button (click)="login()" *ngIf="!isLoggedIn" color="primary" mat-stroked-button>
+    <mat-icon>login</mat-icon>
+    login
+  </button>
+  <button (click)="login2()" *ngIf="!isLoggedIn" color="primary" mat-stroked-button>
+    <mat-icon>login</mat-icon>
+    oidc login
+  </button>
+  <button (click)="addUser()" color="primary" mat-stroked-button>Sign Up</button>
+</div>
+<router-outlet *ngIf="isLoggedIn"></router-outlet>

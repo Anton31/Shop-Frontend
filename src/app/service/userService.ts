@@ -65,7 +65,7 @@ export class UserService {
     this.http.post<Token>(this.baseUrl + '/oauth2/token', params, {headers: tokenHeaders})
       .subscribe(data => {
           this.saveToken(data.access_token);
-          window.location.href = '/';
+          window.location.href = '/products';
         }
       )
   }
