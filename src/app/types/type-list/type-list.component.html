@@ -1,3 +1,4 @@
+<p></p>
 <table (matSortChange)="sortTypes($event)" [dataSource]="types" class="mat-elevation-z8" mat-table matSort>
   <ng-container matColumnDef="name">
     <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by name">Type</th>
@@ -6,8 +7,8 @@
   <ng-container matColumnDef="edit">
     <th *matHeaderCellDef mat-header-cell>Edit</th>
     <td *matCellDef="let type" mat-cell>
-      @if (showAdmin | async) {
-        <button (click)="editType(type)" color="primary" mat-icon-button>
+      @if (role === 'admin') {
+        <button (click)="editType(type)" *ngIf="role==='admin'" color="primary" mat-icon-button>
           <mat-icon>create</mat-icon>
         </button>
       }
@@ -16,7 +17,7 @@
   <ng-container matColumnDef="delete">
     <th *matHeaderCellDef mat-header-cell>Delete</th>
     <td *matCellDef="let type" mat-cell>
-      @if (showAdmin | async) {
+      @if (role === 'admin') {
         <button (click)="deleteType(type)" color="primary" mat-icon-button>
           <mat-icon>delete</mat-icon>
         </button>
@@ -27,6 +28,7 @@
   <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
 </table>
 <p></p>
-@if (showAdmin | async) {
-  <button (click)="addType()" mat-flat-button>Add type</button>
+@if (role === 'admin') {
+  <button (click)="addType()" *ngIf="role==='admin'" mat-flat-button>Add type</button>
 }
+

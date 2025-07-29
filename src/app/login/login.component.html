@@ -1,6 +1,6 @@
 <div align="right">
   <button [matMenuTriggerFor]="menu" color="primary" mat-stroked-button>
-    {{ username }} : {{ role }}
+    {{ (user | async)?.username }} : {{ (user | async)?.role }}
   </button>
   <mat-menu #menu="matMenu">
     <p>
@@ -14,14 +14,15 @@
       </button>
     </p>
   </mat-menu>
-  <button (click)="getUser()" mat-stroked-button>get user</button>
-  <button (click)="login()" *ngIf="!isLoggedIn" color="primary" mat-stroked-button>
-    <mat-icon>login</mat-icon>
-    manual login
-  </button>
-  <button (click)="login2()" color="primary" mat-stroked-button>
-    <mat-icon>login</mat-icon>
-    library login
-  </button>
+  @if ((user | async)?.username === 'none') {
+    <button (click)="login()" color="primary" mat-stroked-button>
+      <mat-icon>login</mat-icon>
+      manual login
+    </button>
+    <button (click)="login2()" color="primary" mat-stroked-button>
+      <mat-icon>login</mat-icon>
+      library login
+    </button>
+  }
   <button (click)="addUser()" color="primary" mat-stroked-button>Sign Up</button>
 </div>

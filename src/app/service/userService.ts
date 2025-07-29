@@ -1,12 +1,11 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {UserDto} from "../dto/userDto";
 import {SuccessResponse} from "../model/successResponse";
 import {Token} from "../model/token";
 import {UserInfo} from "../dto/userInfo";
 import {OAuthService} from "angular-oauth2-oidc";
-import {RoleInfo} from "../dto/roleInfo";
 
 
 type LoginVariant = 'manual' | 'library';
@@ -14,7 +13,7 @@ type LoginVariant = 'manual' | 'library';
 @Injectable()
 export class UserService {
   baseUrl: string = 'http://localhost:8080';
-
+  userSubject = new Subject<UserInfo>;
 
   constructor(private http: HttpClient,
               private oauthService: OAuthService) {
@@ -35,13 +34,13 @@ export class UserService {
 
   saveToken(token: string) {
     localStorage.setItem('token', token);
+    this.getUser();
   }
 
   getToken() {
     if (this.getLoginVariant() === 'library') {
       return this.oauthService.getAccessToken();
     }
-
     return localStorage.getItem('token');
   }
 
@@ -49,8 +48,13 @@ export class UserService {
     return localStorage.getItem('token') != null;
   }
 
-  setRole(role: string) {
-    localStorage.setItem('role', role);
+  setUser(user: UserInfo) {
+    localStorage.setItem('username', user.username);
+    localStorage.setItem('role', user.role);
+  }
+
+  fetchUsername() {
+    return localStorage.getItem('username');
   }
 
   fetchRole() {
@@ -61,12 +65,11 @@ export class UserService {
     localStorage.clear();
   }
 
-  getUser(): Observable<UserInfo> {
-    return this.http.get<UserInfo>(this.baseUrl + '/user');
-  }
-
-  getRole(): Observable<RoleInfo> {
-    return this.http.get<RoleInfo>(this.baseUrl + '/user/role');
+  getUser() {
+    this.http.get<UserInfo>(this.baseUrl + '/user').subscribe(data => {
+      this.userSubject.next(data);
+      this.setUser(data);
+    });
   }
 
   addUser(dto: UserDto): Observable<SuccessResponse> {
@@ -80,7 +83,6 @@ export class UserService {
   resendRegistrationToken(token: string): Observable<SuccessResponse> {
     return this.http.get<SuccessResponse>(this.baseUrl + '/user/resendRegistrationToken?token=' + token);
   }
-
 
   retrieveToken(code: string) {
     const tokenHeaders = new HttpHeaders({

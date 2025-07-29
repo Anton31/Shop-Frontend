@@ -5,6 +5,8 @@ import {AuthService} from "../service/auth-service";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {RegisterComponent} from "../register/register.component";
+import {Observable} from "rxjs";
+import {UserInfo} from "../dto/userInfo";
 
 @Component({
   selector: 'app-login',
@@ -15,26 +17,19 @@ import {RegisterComponent} from "../register/register.component";
 export class LoginComponent implements OnInit {
   isLoggedIn = false;
   dto: UserDto;
-  username!: string | null;
-  role!: string | null;
-
+  user!: Observable<UserInfo>;
 
   constructor(private userService: UserService,
               private authService: AuthService,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
-    this.dto = new UserDto('', '', '', '', '', '');
-    setTimeout(() => {
-      this.getUser();
-    }, 2000)
+    this.dto = new UserDto('', '', 'anton30momot@gmail.com', '', '', '');
+    this.getUser();
   }
 
   getUser() {
-    this.userService.getUser().subscribe(data => {
-      this.username = data.username;
-      this.role = data.role;
-      this.userService.setRole(data.role);
-    })
+    this.userService.getUser();
+    this.user = this.userService.userSubject.pipe();
   }
 
   login() {
@@ -64,7 +59,7 @@ export class LoginComponent implements OnInit {
   }
 
   editUser() {
-    this.dto.username = 'Igor';
+    this.dto.username = this.userService.fetchUsername();
     const dialogRef = this.dialog.open(RegisterComponent, {
       height: '500px',
       width: '500px',

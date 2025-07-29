@@ -1,3 +1,4 @@
+<p></p>
 <table (matSortChange)="sortBrands($event)" [dataSource]="brands" class="mat-elevation-z8" mat-table matSort>
   <ng-container matColumnDef="name">
     <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by name">Brand</th>
@@ -6,7 +7,7 @@
   <ng-container matColumnDef="edit">
     <th *matHeaderCellDef mat-header-cell>Edit</th>
     <td *matCellDef="let brand" mat-cell>
-      @if (showAdmin | async) {
+      @if (role === 'admin') {
         <button (click)="editBrand(brand)" color="primary" mat-icon-button>
           <mat-icon>create</mat-icon>
         </button>
@@ -16,7 +17,7 @@
   <ng-container matColumnDef="delete">
     <th *matHeaderCellDef mat-header-cell>Delete</th>
     <td *matCellDef="let brand" mat-cell>
-      @if (showAdmin | async) {
+      @if (role === 'admin') {
         <button (click)="deleteBrand(brand)" color="primary" mat-icon-button>
           <mat-icon>delete</mat-icon>
         </button>
@@ -26,6 +27,7 @@
   <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
   <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
 </table>
-@if (showAdmin | async) {
+<p></p>
+@if (role === 'admin') {
   <button (click)="addBrand()" mat-flat-button>Add brand</button>
 }

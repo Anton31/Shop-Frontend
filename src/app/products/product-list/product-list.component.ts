@@ -18,7 +18,6 @@ import {DeletePhotoComponent} from "../../photos/delete-photo/delete-photo.compo
 import {CartComponent} from "../../cart/cart.component";
 import {OrderDto} from "../../dto/orderDto";
 import {Cart} from "../../model/cart";
-import {map, Observable} from "rxjs";
 
 @Component({
   selector: 'app-product-list',
@@ -50,8 +49,6 @@ export class ProductListComponent implements OnInit {
   orderDto: OrderDto;
   cart!: Cart;
 
-  showAdmin!: Observable<boolean>;
-  showUser!: Observable<boolean>;
 
   constructor(private fb: FormBuilder,
               private productService: ProductService,
@@ -61,14 +58,17 @@ export class ProductListComponent implements OnInit {
               private snackBar: MatSnackBar) {
     this.itemDto = new ItemDto(0, 0, 0);
     this.orderDto = new OrderDto('', '', '');
-    setTimeout(() => {
-      this.getRole()
-    }, 2000);
+    if (!this.userService.checkCredentials()) {
+      this.getUser();
+    } else {
+      this.role = this.userService.fetchRole();
+    }
   }
 
-  getRole() {
-    this.showAdmin = this.userService.getRole().pipe(map(role => role.name === 'admin'));
-    this.showUser = this.userService.getRole().pipe(map(role => role.name === 'user' || role.name === 'admin'));
+  getUser() {
+    this.userService.userSubject.subscribe(data => {
+      this.role = data.role;
+    })
   }
 
   sortProducts(sortState: Sort) {

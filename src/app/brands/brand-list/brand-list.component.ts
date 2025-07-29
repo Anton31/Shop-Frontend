@@ -8,13 +8,12 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {UserService} from "../../service/userService";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Sort} from "@angular/material/sort";
-import {map, Observable} from "rxjs";
 
 @Component({
-    selector: 'app-brand-list',
-    templateUrl: './brand-list.component.html',
-    styleUrls: ['./brand-list.component.css'],
-    standalone: false
+  selector: 'app-brand-list',
+  templateUrl: './brand-list.component.html',
+  styleUrls: ['./brand-list.component.css'],
+  standalone: false
 })
 export class BrandListComponent implements OnInit {
   brands: Brand[] = [];
@@ -23,7 +22,7 @@ export class BrandListComponent implements OnInit {
   role!: string | null;
   currentSort: string | undefined = undefined;
   currentDir: string | undefined = undefined;
-  showAdmin!: Observable<boolean>;
+
   constructor(private userService: UserService,
               private productService: ProductService,
               private fb: FormBuilder,
@@ -33,9 +32,6 @@ export class BrandListComponent implements OnInit {
 
   getRole() {
     this.role = this.userService.fetchRole();
-    if(this.role==='admin'){
-      this.showAdmin = this.userService.getRole().pipe(map(role=>role.name==='admin'))
-    }
   }
 
   sortBrands(sortState: Sort) {
@@ -47,8 +43,8 @@ export class BrandListComponent implements OnInit {
   getBrands() {
     this.productService.getAllBrands(0, this.currentDir, this.currentSort)
       .subscribe(data => {
-      this.brands = data;
-    });
+        this.brands = data;
+      });
   }
 
   reset() {
@@ -78,6 +74,7 @@ export class BrandListComponent implements OnInit {
       )
     });
   }
+
   editBrand(brand: Brand) {
     this.brandForm = this.fb.group({
       id: [brand.id],
