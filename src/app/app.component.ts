@@ -6,7 +6,6 @@ import {UserService} from "./service/user-service";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {RegisterComponent} from "./register/register.component";
-import {AuthService} from "./service/auth-service";
 
 
 @Component({
@@ -20,7 +19,6 @@ export class AppComponent implements OnInit {
   user!: Observable<UserInfo>;
 
   constructor(private userService: UserService,
-              private authService: AuthService,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
     this.dto = new UserDto('', '', '', '', '');

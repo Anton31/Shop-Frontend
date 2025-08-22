@@ -6,9 +6,9 @@ import {SuccessResponse} from "../model/successResponse";
 import {Token} from "../model/token";
 import {UserInfo} from "../dto/user-info";
 import {OAuthService} from "angular-oauth2-oidc";
+import {authConfig} from "./auth-config";
+import {LocalStorageService} from "./local-storage-service";
 
-
-type LoginVariant = 'manual' | 'library';
 
 @Injectable({providedIn: 'root'})
 export class UserService {
@@ -17,7 +17,10 @@ export class UserService {
   isLoggedIn = false;
 
   constructor(private http: HttpClient,
+              private storageService: LocalStorageService,
               private oauthService: OAuthService) {
+    this.oauthService.configure(authConfig);
+    this.oauthService.loadDiscoveryDocumentAndTryLogin();
     this.oauthService.events.subscribe(event => {
       if (event.type === 'token_received') {
         this.getUser();
@@ -26,18 +29,18 @@ export class UserService {
   }
 
   login() {
-    this.setLoginVariant('manual');
+    this.storageService.setLoginVariant('manual');
     window.location.href = 'http://localhost:8080/oauth2/authorize?client_id=app-client&response_type=code' +
       '&scope=openid&redirect_uri=http://localhost:4200';
   }
 
   login2() {
-    this.setLoginVariant('library');
+    this.storageService.setLoginVariant('library');
     this.oauthService.initCodeFlow();
   }
 
   logout() {
-    if (this.getLoginVariant() === 'manual') {
+    if (this.storageService.getLoginVariant() === 'manual') {
       this.logout1();
     } else {
       this.logout2();
@@ -54,34 +57,13 @@ export class UserService {
     this.oauthService.logOut();
   }
 
-  setLoginVariant(variant: LoginVariant) {
-    localStorage.setItem('loginVariant', variant);
-  }
-
-  getLoginVariant(): LoginVariant {
-    const variant = localStorage.getItem('loginVariant');
-    if (variant === 'library') {
-      return variant;
-    } else {
-      return 'manual';
-    }
-  }
-
   saveToken(token: string) {
-    localStorage.setItem('token', token);
-  }
-
-  getToken() {
-    if (this.getLoginVariant() === 'library') {
-      return this.oauthService.getAccessToken();
-    }
-    return localStorage.getItem('token');
+    this.storageService.saveToken(token);
   }
 
   checkCredentials(): boolean {
-    if (this.getLoginVariant() === 'library') {
+    if (this.storageService.getLoginVariant() === 'library') {
       return this.oauthService.hasValidAccessToken();
-
     }
     return localStorage.getItem('token') != null;
   }
@@ -123,7 +105,7 @@ export class UserService {
     this.isLoggedIn = this.checkCredentials();
     let url = new URLSearchParams(window.location.search);
     let code = url.get('code');
-    if (!this.isLoggedIn && code != null && this.getLoginVariant() === 'manual') {
+    if (!this.isLoggedIn && code != null && this.storageService.getLoginVariant() === 'manual') {
       this.retrieveToken(code);
     }
   }
