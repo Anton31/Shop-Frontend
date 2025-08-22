@@ -37,6 +37,14 @@ export class UserService {
   }
 
   logout() {
+    if (this.getLoginVariant() === 'manual') {
+      this.logout1();
+    } else {
+      this.logout2();
+    }
+  }
+
+  logout1() {
     this.clearData();
     window.location.href = 'http://localhost:8080/logout';
     window.location.reload();

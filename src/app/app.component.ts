@@ -67,19 +67,7 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-    if (this.userService.getLoginVariant() === "manual") {
-      this.logout1();
-    } else {
-      this.logout2();
-    }
-  }
-
-  logout1() {
     this.userService.logout();
-  }
-
-  logout2() {
-    this.userService.logout2();
   }
 
   ngOnInit(): void {
