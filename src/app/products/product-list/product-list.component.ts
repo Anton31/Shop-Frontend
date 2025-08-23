@@ -82,7 +82,7 @@ export class ProductListComponent implements OnInit {
 
   getFilterBrands(typeId: number) {
     this.currentTypeId = typeId;
-    this.productService.getProductBrands(this.currentTypeId).subscribe(data => {
+    this.productService.getAllBrandsByTypeId(this.currentTypeId).subscribe(data => {
       this.filterBrands = data;
     });
   }
@@ -179,8 +179,8 @@ export class ProductListComponent implements OnInit {
   addProduct() {
     this.productForm = this.fb.group({
       id: [undefined],
-      typeId: [1],
-      brandId: [1],
+      typeId: [0],
+      brandId: [0],
       name: [''],
       price: [1000]
     })

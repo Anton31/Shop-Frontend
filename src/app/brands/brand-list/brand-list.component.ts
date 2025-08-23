@@ -40,7 +40,7 @@ export class BrandListComponent implements OnInit {
   }
 
   getBrands() {
-    this.productService.getAllBrands(this.currentDir, this.currentSort)
+    this.productService.getAllBrandsByTypeId(0)
       .subscribe(data => {
         this.brands = data;
       });
