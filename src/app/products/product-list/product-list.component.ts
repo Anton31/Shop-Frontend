@@ -82,7 +82,7 @@ export class ProductListComponent implements OnInit {
 
   getFilterBrands(typeId: number) {
     this.currentTypeId = typeId;
-    this.productService.getAllBrandsByTypeId(this.currentTypeId).subscribe(data => {
+    this.productService.getAllBrandsByTypeId(this.currentTypeId, undefined).subscribe(data => {
       this.filterBrands = data;
     });
   }
@@ -204,10 +204,18 @@ export class ProductListComponent implements OnInit {
   }
 
   editProduct(product: Product) {
+    let typeId = 0;
+    if (product.type != null) {
+      typeId = product.type.id;
+    }
+    let brandId = 0;
+    if (product.brand != null) {
+      brandId = product.brand.id;
+    }
     this.productForm = this.fb.group({
       id: [product.id],
-      typeId: [product.type.id],
-      brandId: [product.brand.id],
+      typeId: [typeId],
+      brandId: [brandId],
       name: [product.name],
       price: [product.price]
     })

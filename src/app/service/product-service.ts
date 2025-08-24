@@ -22,11 +22,9 @@ export class ProductService {
     this.fileArray = [];
   }
 
-  getAllTypes(dir: string | undefined,
-              sort: string | undefined): Observable<Type[]> {
+  getAllTypes(dir: string | undefined): Observable<Type[]> {
     let params = new HttpParams();
     params = dir == undefined ? params : params.set('dir', dir);
-    params = sort == undefined ? params : params.set('sort', sort);
     return this.http.get<Type[]>(`${this.baseUrl}/products/type`, {params: params});
   }
 
@@ -34,11 +32,12 @@ export class ProductService {
     return this.http.get<Type[]>(`${this.baseUrl}/products/productType`);
   }
 
-  getAllBrandsByTypeId(typeId: number): Observable<Brand[]> {
+  getAllBrandsByTypeId(typeId: number, dir: string | undefined): Observable<Brand[]> {
     let params = new HttpParams();
     if (typeId > 0) {
       params = params.set('typeId', typeId);
     }
+    params = dir == undefined ? params : params.set('dir', dir);
     return this.http.get<Brand[]>(`${this.baseUrl}/products/brand`, {params: params});
   }
 
