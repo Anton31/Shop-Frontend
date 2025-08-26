@@ -31,13 +31,14 @@ import {NgOptimizedImage} from "@angular/common";
 import {MatMenuModule} from "@angular/material/menu";
 import {CartComponent} from './cart/cart.component';
 import {AddPhotoComponent} from './photos/add-photo/add-photo.component';
-import {DeletePhotoComponent} from './photos/delete-photo/delete-photo.component';
+import {DeletePhotosComponent} from './photos/delete-photos/delete-photos.component';
 import {ListOrdersComponent} from './orders/list-orders/list-orders.component';
 import {MatBadgeModule} from "@angular/material/badge";
 import {CheckoutComponent} from './checkout/checkout.component';
 import {authInterceptor} from "./service/auth-interceptor";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {OAuthModule} from "angular-oauth2-oidc";
+import {DeletePhotoComponent} from "./photos/delete-photo/delete-photo.component";
 
 
 @NgModule({
@@ -55,9 +56,10 @@ import {OAuthModule} from "angular-oauth2-oidc";
     DeleteBrandComponent,
     CartComponent,
     AddPhotoComponent,
-    DeletePhotoComponent,
+    DeletePhotosComponent,
     ListOrdersComponent,
-    CheckoutComponent
+    CheckoutComponent,
+    DeletePhotoComponent,
   ],
   bootstrap: [AppComponent], imports: [BrowserModule,
     RouterModule.forRoot([

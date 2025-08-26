@@ -14,12 +14,14 @@ import {ItemDto} from "../../dto/itemDto";
 import {UserService} from "../../service/user-service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {AddPhotoComponent} from "../../photos/add-photo/add-photo.component";
-import {DeletePhotoComponent} from "../../photos/delete-photo/delete-photo.component";
+import {DeletePhotosComponent} from "../../photos/delete-photos/delete-photos.component";
 import {CartComponent} from "../../cart/cart.component";
 import {OrderDto} from "../../dto/orderDto";
 import {Cart} from "../../model/cart";
 import {Observable} from "rxjs";
 import {UserInfo} from "../../dto/user-info";
+import {DeletePhotoComponent} from "../../photos/delete-photo/delete-photo.component";
+import {Photo} from "../../model/photo";
 
 
 @Component({
@@ -260,15 +262,30 @@ export class ProductListComponent implements OnInit {
     this.pageSize = undefined;
   }
 
-  deletePhoto(product: Product) {
-    this.dialog.open(DeletePhotoComponent, {
+  deletePhotos(product: Product) {
+    this.dialog.open(DeletePhotosComponent, {
       height: '500px',
       width: '500px',
       data: {
         product: product
       }
     }).afterClosed().subscribe(data => {
-      this.productService.deletePhoto(data).subscribe(data => {
+      this.productService.deletePhotos(data).subscribe(data => {
+        this.getProducts();
+        this.resetFilters();
+      });
+    });
+  }
+
+  deletePhoto(product: Product, photo: Photo) {
+    this.dialog.open(DeletePhotoComponent, {
+      height: '500px',
+      width: '500px',
+      data: {
+        photo: photo
+      }
+    }).afterClosed().subscribe(data => {
+      this.productService.deletePhoto(product.id, data.id).subscribe(data => {
         this.getProducts();
         this.resetFilters();
       });

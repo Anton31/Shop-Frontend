@@ -129,7 +129,11 @@ export class ProductService {
     return this.http.post<any>(`${this.baseUrl}/products/photo`, formData);
   }
 
-  deletePhoto(productId: number): Observable<any> {
+  deletePhotos(productId: number): Observable<any> {
     return this.http.delete<any>(`${this.baseUrl}/products/photo/${productId}`);
+  }
+
+  deletePhoto(productId: number, photoId: number): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/products/photo/${productId}/${photoId}`);
   }
 }
