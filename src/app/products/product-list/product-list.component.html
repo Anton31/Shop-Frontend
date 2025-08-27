@@ -29,21 +29,23 @@
   <ng-container matColumnDef="photo">
     <th *matHeaderCellDef mat-header-cell>Add/remove photos</th>
     <td *matCellDef="let product" mat-cell>
+      @for (photo of product.photos; track photo) {
+        <img src="{{photo.url}}"/>
+        @if ((user | async)?.role === 'admin') {
+          <button (click)="deletePhoto(product, photo)" color="primary" mat-icon-button>
+            <mat-icon>delete</mat-icon>
+          </button>
+        }
+      }
       @if ((user | async)?.role === 'admin') {
-        <div id="photos">
-          @for (photo of product.photos; track photo) {
-            <img src="{{photo.url}}"/>
-            <button (click)="deletePhoto(product, photo)" color="primary" mat-icon-button>
-              <mat-icon>delete</mat-icon>
-            </button>
-          }
+        <p>
           <button (click)="addPhoto(product.id)" color="primary" mat-icon-button>
             <mat-icon>add</mat-icon>
           </button>
           <button (click)="deletePhotos(product)" color="primary" mat-icon-button>
             <mat-icon>delete</mat-icon>
           </button>
-        </div>
+        </p>
       }
     </td>
   </ng-container>
