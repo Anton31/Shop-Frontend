@@ -70,12 +70,8 @@ export class ProductService {
   editProduct(data: any): Observable<any> {
     const formData = new FormData();
     formData.append("id", data.controls.id.value);
-    if (data.controls.typeId.value > 0) {
-      formData.append("typeId", data.controls.typeId.value);
-    }
-    if (data.controls.brandId.value > 0) {
-      formData.append("brandId", data.controls.brandId.value);
-    }
+    formData.append("typeId", data.controls.typeId.value);
+    formData.append("brandId", data.controls.brandId.value);
     formData.append("name", data.controls.name.value);
     formData.append("price", data.controls.price.value);
     return this.http.put<any>(`${this.baseUrl}/products/product`, formData);

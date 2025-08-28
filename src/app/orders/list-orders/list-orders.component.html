@@ -14,10 +14,24 @@
     </ng-container>
     <ng-container matColumnDef="products">
       <th *matHeaderCellDef mat-header-cell> Products</th>
-      <td *matCellDef="let order" mat-cell> <span *ngFor="let item of order.items">
-     Name: {{ item.product.name }}; Price: {{ item.totalPrice }}; Quantity: {{ item.quantity }};
-      <p *ngIf="item.product.photos.length>0"><img alt="no photo" src="{{item.product.photos[0].url}}"/>
-    </span></td>
+      <td *matCellDef="let order" mat-cell>
+        <span *ngFor="let item of order.items">
+          Name: {{ item.product.name }}; Price: {{ item.totalPrice }}; Quantity: {{ item.quantity }};
+        <p>
+          <span *ngFor="let photo of item.product.photos">
+          <img alt="no photo" src="{{photo.url}}"/>
+        </span>
+        </p>
+    </span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="delete">
+      <th *matHeaderCellDef mat-header-cell> Delete</th>
+      <td *matCellDef="let order" mat-cell>
+        <button (click)="deleteOrder(order.id)" color="primary" mat-icon-button>
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
     </ng-container>
     <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
     <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
