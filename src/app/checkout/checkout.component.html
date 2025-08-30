@@ -8,14 +8,15 @@
       <td *matCellDef="let item" mat-cell> {{ item.product.name }}</td>
     </ng-container>
     <ng-container matColumnDef="photo">
-      <th *matHeaderCellDef mat-header-cell> Photo</th>
+      <th *matHeaderCellDef mat-header-cell><span class="photos">Photo</span></th>
       <td *matCellDef="let item" mat-cell>
-        <img *ngIf="item.product.photos.length>0" alt="no photo" src="{{item.product.photos[0].url}}"/>
-        <p *ngIf="item.product.photos.length==0">no photo</p>
+        <span *ngFor="let photo of item.product.photos">
+          <img alt="no photo" src="{{photo.url}}"/>
+        </span>
       </td>
     </ng-container>
     <ng-container matColumnDef="actions">
-      <th *matHeaderCellDef mat-header-cell> Actions</th>
+      <th *matHeaderCellDef mat-header-cell> Quantity</th>
       <td *matCellDef="let item" mat-cell>
         <h3>
           {{ item.quantity }}

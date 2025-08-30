@@ -3,7 +3,7 @@
     <mat-chip-option (click)="typeFilter(type.id)">{{ type.name }}</mat-chip-option>
   }
 </mat-chip-listbox>
-<mat-chip-listbox>
+<mat-chip-listbox [selectable]="false">
   @for (brand of filterBrands; track brand) {
     <mat-chip-option (click)="brandFilter(brand.id)">{{ brand.name }}</mat-chip-option>
   }
@@ -27,7 +27,7 @@
     <td *matCellDef="let product" mat-cell> {{ product.price }}</td>
   </ng-container>
   <ng-container matColumnDef="photo">
-    <th *matHeaderCellDef mat-header-cell>Add/remove photos</th>
+    <th *matHeaderCellDef mat-header-cell><span class="photos">Add/remove photos</span></th>
     <td *matCellDef="let product" mat-cell>
       @for (photo of product.photos; track photo) {
         <img src="{{photo.url}}"/>

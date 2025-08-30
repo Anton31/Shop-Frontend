@@ -13,9 +13,9 @@
       <td *matCellDef="let order" mat-cell> {{ order.totalQuantity }}</td>
     </ng-container>
     <ng-container matColumnDef="products">
-      <th *matHeaderCellDef mat-header-cell> Products</th>
+      <th *matHeaderCellDef mat-header-cell><span class="photos">Products</span></th>
       <td *matCellDef="let order" mat-cell>
-        <span *ngFor="let item of order.items">
+        <span *ngFor="let item of order.items" class="photos">
           Name: {{ item.product.name }}; Price: {{ item.totalPrice }}; Quantity: {{ item.quantity }};
         <p>
           <span *ngFor="let photo of item.product.photos">
