@@ -85,7 +85,11 @@ export class ProductListComponent implements OnInit {
   getFilterBrands(typeId: number) {
     this.currentTypeId = typeId;
     this.productService.getAllBrandsByTypeId(this.currentTypeId, undefined).subscribe(data => {
-      this.filterBrands = data;
+      if (this.currentTypeId > 0) {
+        this.filterBrands = data;
+      } else {
+        this.filterBrands = [];
+      }
     });
   }
 
@@ -97,11 +101,7 @@ export class ProductListComponent implements OnInit {
       this.currentTypeId = typeId;
       this.currentBrandId = 0;
     }
-    if (this.currentTypeId > 0) {
-      this.getFilterBrands(this.currentTypeId);
-    } else {
-      this.filterBrands = [];
-    }
+    this.getFilterBrands(this.currentTypeId);
     this.productService.getProducts(this.currentTypeId, this.currentBrandId,
       this.currentSort, this.currentDir, undefined, undefined)
       .subscribe(data => {
@@ -117,9 +117,6 @@ export class ProductListComponent implements OnInit {
       this.currentBrandId = 0;
     } else {
       this.currentBrandId = brandId;
-    }
-    if (this.currentTypeId == 0) {
-      this.filterBrands = [];
     }
     this.productService.getProducts(this.currentTypeId, this.currentBrandId,
       this.currentSort, this.currentDir, undefined, undefined)

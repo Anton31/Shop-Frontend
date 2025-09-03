@@ -3,11 +3,13 @@
     <mat-chip-option (click)="typeFilter(type.id)">{{ type.name }}</mat-chip-option>
   }
 </mat-chip-listbox>
-<mat-chip-listbox [selectable]="false">
-  @for (brand of filterBrands; track brand) {
-    <mat-chip-option (click)="brandFilter(brand.id)">{{ brand.name }}</mat-chip-option>
-  }
-</mat-chip-listbox>
+@if (currentTypeId > 0) {
+  <mat-chip-listbox>
+    @for (brand of filterBrands; track brand) {
+      <mat-chip-option (click)="brandFilter(brand.id)">{{ brand.name }}</mat-chip-option>
+    }
+  </mat-chip-listbox>
+}
 <p align="center">
   @if ((user | async)?.role === 'user' || (user | async)?.role === 'admin') {
     <button (click)="openCart()" mat-flat-button matBadge="{{totalQuantity}}" matBadgePosition="after"
