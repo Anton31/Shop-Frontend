@@ -178,8 +178,8 @@ export class ProductListComponent implements OnInit {
   addProduct() {
     this.productForm = this.fb.group({
       id: [undefined],
-      typeId: [0],
-      brandId: [0],
+      typeId: [1],
+      brandId: [1],
       name: [''],
       price: [1000]
     })
