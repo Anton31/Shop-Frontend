@@ -28,24 +28,26 @@ export class ProductService {
     params = dir == undefined ? params : params.set('dir', dir);
     return this.http.get<Type[]>(`${this.baseUrl}/products/type`, {params: params});
   }
+
   getAllBrands(sort: string | undefined, dir: string | undefined): Observable<Type[]> {
     let params = new HttpParams();
     params = sort == undefined ? params : params.set('sort', sort);
     params = dir == undefined ? params : params.set('dir', dir);
-    return this.http.get<Type[]>(`${this.baseUrl}/products/brand2`, {params: params});
+    return this.http.get<Type[]>(`${this.baseUrl}/products/brand`, {params: params});
   }
+
   getProductTypes(): Observable<Type[]> {
     return this.http.get<Type[]>(`${this.baseUrl}/products/productType`);
   }
 
-  getAllBrandsByTypeId(typeId: number, sort: string | undefined, dir: string | undefined): Observable<Brand[]> {
+  getProductBrands(typeId: number, sort: string | undefined, dir: string | undefined): Observable<Brand[]> {
     let params = new HttpParams();
     if (typeId > 0) {
       params = params.set('typeId', typeId);
     }
     params = sort == undefined ? params : params.set('sort', sort);
     params = dir == undefined ? params : params.set('dir', dir);
-    return this.http.get<Brand[]>(`${this.baseUrl}/products/brand`, {params: params});
+    return this.http.get<Brand[]>(`${this.baseUrl}/products/productBrand`, {params: params});
   }
 
   getProducts(typeId: number, brandId: number,
