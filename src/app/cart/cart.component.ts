@@ -20,7 +20,7 @@ export class CartComponent implements OnInit {
   itemDto!: ItemDto;
   totalPrice!: number;
   totalQuantity!: number;
-  displayedColumns: string[] = ['name', 'photo', 'actions'];
+  displayedColumns: string[] = ['name', 'actions'];
 
   constructor(private orderService: OrderService,
               private router: Router,

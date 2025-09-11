@@ -15,7 +15,7 @@ import {Router} from "@angular/router";
 export class CheckoutComponent implements OnInit {
   cart!: Cart;
   orderDto: OrderDto;
-  displayedColumns: string[] = ['name', 'photo', 'actions'];
+  displayedColumns: string[] = ['name', 'actions'];
 
   constructor(private orderService: OrderService,
               private dialog: MatDialog,

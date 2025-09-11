@@ -5,14 +5,11 @@
   <table [dataSource]="cart.items" class="mat-elevation-z8" mat-table>
     <ng-container matColumnDef="name">
       <th *matHeaderCellDef mat-header-cell> Name</th>
-      <td *matCellDef="let item" mat-cell> {{ item.product.name }}</td>
-    </ng-container>
-    <ng-container matColumnDef="photo">
-      <th *matHeaderCellDef mat-header-cell><span class="photos">Photo</span></th>
       <td *matCellDef="let item" mat-cell>
-        <span *ngFor="let photo of item.product.photos">
-          <img alt="no photo" src="{{photo.url}}"/>
-        </span>
+        <p>
+          <img *ngIf="item.product.photos.length>0" alt="no photo"
+               src="{{item.product.photos[0].url}}"/></p>
+        <p>{{ item.product.name }}</p>
       </td>
     </ng-container>
     <ng-container matColumnDef="actions">

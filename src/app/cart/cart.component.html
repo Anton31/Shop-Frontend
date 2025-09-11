@@ -1,18 +1,16 @@
 <div align="center">
-  <h2 mat-dialog-title>{{ title }}</h2>
-  <h3 mat-dialog-title>Quantity: {{ totalQuantity }} </h3>
-  <h3 mat-dialog-title>Total price: {{ totalPrice }} </h3>
-  <h3 *ngIf="totalPrice==0">Cart is empty</h3>
+  <h3 mat-dialog-title>{{ title }}</h3>
+  <h4 mat-dialog-title>Quantity: {{ totalQuantity }} </h4>
+  <h4 mat-dialog-title>Total price: {{ totalPrice }} </h4>
+  <h4 *ngIf="totalPrice==0">Cart is empty</h4>
   <table [dataSource]="items" class="mat-elevation-z8" mat-table>
-    <ng-container matColumnDef="name">
-      <th *matHeaderCellDef mat-header-cell> Name</th>
-      <td *matCellDef="let item" mat-cell> {{ item.product.name }}</td>
-    </ng-container>
-    <ng-container matColumnDef="photo">
-      <th *matHeaderCellDef mat-header-cell><span class="photos">Photo</span></th>
+    <ng-container align="center" matColumnDef="name">
+      <th *matHeaderCellDef mat-header-cell>Name</th>
       <td *matCellDef="let item" mat-cell>
-        <img *ngIf="item.product.photos.length>0" alt="no photo" src="{{item.product.photos[0].url}}"/>
-        <p *ngIf="item.product.photos.length==0">no photo</p>
+        <p>
+          <img *ngIf="item.product.photos.length>0" alt="no photo"
+               src="{{item.product.photos[0].url}}"/></p>
+        <p>{{ item.product.name }}</p>
       </td>
     </ng-container>
     <ng-container matColumnDef="actions">
