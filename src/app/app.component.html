@@ -4,7 +4,7 @@
   <a class="button" routerLink="/brands">Brands</a> |
   <a class="button" routerLink="/orders">Orders</a>
 </nav>
-<div align="right">
+<div align="right" style="margin: 20px">
   <button [matMenuTriggerFor]="menu" color="primary" mat-stroked-button>
     {{ (user | async)?.username }} : {{ (user | async)?.role }}
   </button>

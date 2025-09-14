@@ -1,106 +1,109 @@
-<mat-chip-listbox>
-  @for (type of filterTypes; track type) {
-    <mat-chip-option (click)="typeFilter(type.id)">{{ type.name }}</mat-chip-option>
-  }
-</mat-chip-listbox>
-@if (currentTypeId > 0) {
+<div style="margin: 20px">
   <mat-chip-listbox>
-    @for (brand of filterBrands; track brand) {
-      <mat-chip-option (click)="brandFilter(brand.id)">{{ brand.name }}</mat-chip-option>
+    @for (type of filterTypes; track type) {
+      <mat-chip-option (click)="typeFilter(type.id)">{{ type.name }}</mat-chip-option>
     }
   </mat-chip-listbox>
-}
-<p align="center">
-  @if ((user | async)?.role === 'user' || (user | async)?.role === 'admin') {
-    <button (click)="openCart()" mat-flat-button matBadge="{{totalQuantity}}" matBadgePosition="after"
-            matBadgeSize="large">
-      Cart
-      <mat-icon>shopping_cart_checkout</mat-icon>
-    </button>
+  @if (currentTypeId > 0) {
+    <mat-chip-listbox>
+      @for (brand of filterBrands; track brand) {
+        <mat-chip-option (click)="brandFilter(brand.id)">{{ brand.name }}</mat-chip-option>
+      }
+    </mat-chip-listbox>
   }
-</p>
-<table (matSortChange)="sortProducts($event)" [dataSource]="products" class="mat-elevation-z8" mat-table matSort>
-  <ng-container matColumnDef="name">
-    <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by name"> Name</th>
-    <td *matCellDef="let product" mat-cell> {{ product.name }}</td>
-  </ng-container>
-  <ng-container matColumnDef="price">
-    <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by price"> Price</th>
-    <td *matCellDef="let product" mat-cell> {{ product.price }}</td>
-  </ng-container>
-  <ng-container matColumnDef="photo">
-    <th *matHeaderCellDef mat-header-cell><span class="photos">Add/remove photos</span></th>
-    <td *matCellDef="let product" mat-cell>
-      @for (photo of product.photos; track photo) {
-        <img src="{{photo.url}}"/>
+  <p align="center">
+    @if ((user | async)?.role === 'user' || (user | async)?.role === 'admin') {
+      <button (click)="openCart()" mat-flat-button matBadge="{{totalQuantity}}" matBadgePosition="after"
+              matBadgeSize="large">
+        Cart
+        <mat-icon>shopping_cart_checkout</mat-icon>
+      </button>
+    }
+  </p>
+  <table (matSortChange)="sortProducts($event)" [dataSource]="products" class="mat-elevation-z8" mat-table matSort>
+    <ng-container matColumnDef="name">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by name"> Name</th>
+      <td *matCellDef="let product" mat-cell> {{ product.name }}</td>
+    </ng-container>
+    <ng-container matColumnDef="price">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by price"> Price</th>
+      <td *matCellDef="let product" mat-cell> {{ product.price }}</td>
+    </ng-container>
+    <ng-container matColumnDef="photo">
+      <th *matHeaderCellDef mat-header-cell><span class="photos">Add/remove photos</span></th>
+      <td *matCellDef="let product" mat-cell>
+        @for (photo of product.photos; track photo) {
+          <img src="{{photo.url}}"/>
+          @if ((user | async)?.role === 'admin') {
+            <button (click)="deletePhoto(product, photo)" color="primary" mat-icon-button>
+              <mat-icon>delete</mat-icon>
+            </button>
+          }
+        }
         @if ((user | async)?.role === 'admin') {
-          <button (click)="deletePhoto(product, photo)" color="primary" mat-icon-button>
+          <p>
+            <button (click)="addPhoto(product.id)" color="primary" mat-icon-button>
+              <mat-icon>add</mat-icon>
+            </button>
+            <button (click)="deletePhotos(product)" color="primary" mat-icon-button>
+              <mat-icon>delete</mat-icon>
+            </button>
+          </p>
+        }
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="type">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by type"> Type</th>
+      <td *matCellDef="let product" mat-cell>
+        {{ product.type.name }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="brand">
+      <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by brand"> Brand</th>
+      <td *matCellDef="let product" mat-cell>
+        {{ product.brand.name }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th *matHeaderCellDef mat-header-cell>Edit/remove product</th>
+      <td *matCellDef="let product" mat-cell>
+        @if ((user | async)?.role === 'admin') {
+          <button (click)="editProduct(product)" mat-icon-button>
+            <mat-icon>create</mat-icon>
+          </button>
+          <button (click)="deleteProduct(product)" mat-icon-button>
             <mat-icon>delete</mat-icon>
           </button>
         }
-      }
-      @if ((user | async)?.role === 'admin') {
-        <p>
-          <button (click)="addPhoto(product.id)" color="primary" mat-icon-button>
-            <mat-icon>add</mat-icon>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="cart">
+      <th *matHeaderCellDef mat-header-cell> Item</th>
+      <td *matCellDef="let product" mat-cell>
+        @if ((user | async)?.role === 'user' || (user | async)?.role === 'admin') {
+          <button (click)="addItemToCart(product.id)"
+                  *ngIf="!cartProductIds.includes(product.id)" mat-icon-button>
+            <mat-icon>add_shopping_cart</mat-icon>
           </button>
-          <button (click)="deletePhotos(product)" color="primary" mat-icon-button>
-            <mat-icon>delete</mat-icon>
-          </button>
-        </p>
-      }
-    </td>
-  </ng-container>
-  <ng-container matColumnDef="type">
-    <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by type"> Type</th>
-    <td *matCellDef="let product" mat-cell>
-      <span *ngIf="product.type!=null">{{ product.type.name }}</span>
-      <span *ngIf="product.type==null">none</span>
-    </td>
-  </ng-container>
-  <ng-container matColumnDef="brand">
-    <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by brand"> Brand</th>
-    <td *matCellDef="let product" mat-cell>
-      <span *ngIf="product.brand!=null"> {{ product.brand.name }}</span>
-      <span *ngIf="product.brand==null">none</span>
-    </td>
-  </ng-container>
-  <ng-container matColumnDef="actions">
-    <th *matHeaderCellDef mat-header-cell>Edit/remove product</th>
-    <td *matCellDef="let product" mat-cell>
-      @if ((user | async)?.role === 'admin') {
-        <button (click)="editProduct(product)" mat-icon-button>
-          <mat-icon>create</mat-icon>
-        </button>
-        <button (click)="deleteProduct(product)" mat-icon-button>
-          <mat-icon>delete</mat-icon>
-        </button>
-      }
-    </td>
-  </ng-container>
-  <ng-container matColumnDef="cart">
-    <th *matHeaderCellDef mat-header-cell> Item</th>
-    <td *matCellDef="let product" mat-cell>
-      @if ((user | async)?.role === 'user' || (user | async)?.role === 'admin') {
-        <button (click)="addItemToCart(product.id)"
-                *ngIf="!cartProductIds.includes(product.id)" mat-icon-button>
-          <mat-icon>add_shopping_cart</mat-icon>
-        </button>
-        <p *ngIf="cartProductIds.includes(product.id)">product in cart</p>
-      }
-    </td>
-  </ng-container>
-  <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-  <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
-</table>
-<mat-paginator (page)=pageChangeEvent($event) [length]="totalProducts"
-               [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize">
-</mat-paginator>
-<p></p>
-@if ((user | async)?.role === 'admin') {
-  <button (click)="addProduct()" mat-flat-button>Add product</button>
-}
-
+          <p *ngIf="cartProductIds.includes(product.id)">
+            <button (click)="openCart()" mat-button>
+              product in cart
+            </button>
+          </p>
+        }
+      </td>
+    </ng-container>
+    <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+    <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+  </table>
+  <mat-paginator (page)=pageChangeEvent($event) [length]="totalProducts"
+                 [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize">
+  </mat-paginator>
+  <p></p>
+  @if ((user | async)?.role === 'admin') {
+    <button (click)="addProduct()" mat-flat-button>Add product</button>
+  }
+</div>
 
 
 
