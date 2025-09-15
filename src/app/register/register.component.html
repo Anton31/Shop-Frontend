@@ -1,38 +1,40 @@
 <h3 align="center">{{ title }}</h3>
-<div *ngIf="title=='register'" align="center">
-  <mat-form-field>
-    <mat-label>Role:</mat-label>
-    <mat-select [(ngModel)]="newUser.role" name="role">
-      <mat-option [value]="'user'">USER</mat-option>
-      <mat-option [value]="'admin'">ADMIN</mat-option>
-    </mat-select>
-  </mat-form-field>
-</div>
-<div *ngIf="title=='register'" align="center">
-  <mat-form-field>
-    <mat-label>User:</mat-label>
-    <input [(ngModel)]="newUser.username" id="username" matInput>
-  </mat-form-field>
-</div>
-<div *ngIf="title=='register'" align="center">
-  <mat-form-field>
-    <mat-label>Email:</mat-label>
-    <input [(ngModel)]="newUser.email" id="email" matInput>
-  </mat-form-field>
-</div>
-<div align="center">
-  <mat-form-field>
-    <mat-label>Password:</mat-label>
-    <input [(ngModel)]="newUser.password" id="password" matInput>
-  </mat-form-field>
-</div>
-<div align="center">
-  <mat-form-field>
-    <mat-label>Confirm password:</mat-label>
-    <input [(ngModel)]="newUser.passwordConfirmed" id="passwordConfirmed" matInput>
-  </mat-form-field>
-</div>
+<form [formGroup]="data.userForm">
+  <div *ngIf="title=='register'" align="center">
+    <mat-form-field>
+      <mat-label>Role:</mat-label>
+      <mat-select formControlName="role">
+        <mat-option [value]="'user'">USER</mat-option>
+        <mat-option [value]="'admin'">ADMIN</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div *ngIf="title=='register'" align="center">
+    <mat-form-field>
+      <mat-label>User:</mat-label>
+      <input formControlName="username" matInput>
+    </mat-form-field>
+  </div>
+  <div *ngIf="title=='register'" align="center">
+    <mat-form-field>
+      <mat-label>Email:</mat-label>
+      <input formControlName="email" matInput>
+    </mat-form-field>
+  </div>
+  <div align="center">
+    <mat-form-field>
+      <mat-label>Password:</mat-label>
+      <input formControlName="password" matInput>
+    </mat-form-field>
+  </div>
+  <div align="center">
+    <mat-form-field>
+      <mat-label>Confirm password:</mat-label>
+      <input formControlName="passwordConfirmed" matInput>
+    </mat-form-field>
+  </div>
+</form>
 <div align="center" mat-dialog-actions>
   <button (click)="onNoClick()" mat-button>No Thanks</button>
-  <button [mat-dialog-close]="newUser" cdkFocusInitial mat-button>Ok</button>
+  <button [mat-dialog-close]="data.userForm" cdkFocusInitial mat-button>Ok</button>
 </div>

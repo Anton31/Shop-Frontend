@@ -1,7 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {BehaviorSubject, Observable} from "rxjs";
-import {UserDto} from "../dto/user-dto";
 import {SuccessResponse} from "../model/successResponse";
 import {Token} from "../model/token";
 import {UserInfo} from "../dto/user-info";
@@ -89,12 +88,22 @@ export class UserService {
     });
   }
 
-  addUser(dto: UserDto): Observable<SuccessResponse> {
-    return this.http.post<any>(this.baseUrl + '/user', dto);
+  addUser(data: any): Observable<SuccessResponse> {
+    const formData = new FormData();
+    formData.append("role", data.controls.role.value);
+    formData.append("username", data.controls.username.value);
+    formData.append("email", data.controls.email.value);
+    formData.append("password", data.controls.password.value);
+    formData.append("passwordConfirmed", data.controls.passwordConfirmed.value);
+    return this.http.post<any>(this.baseUrl + '/user', formData);
   }
 
-  editUser(dto: UserDto): Observable<SuccessResponse> {
-    return this.http.put<any>(this.baseUrl + '/user', dto);
+  editUser(data: any): Observable<SuccessResponse> {
+    const formData = new FormData();
+    formData.append("username", data.controls.username.value);
+    formData.append("password", data.controls.password.value);
+    formData.append("passwordConfirmed", data.controls.passwordConfirmed.value);
+    return this.http.put<any>(this.baseUrl + '/user', formData);
   }
 
   resendRegistrationToken(token: string): Observable<SuccessResponse> {

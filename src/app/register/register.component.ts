@@ -1,20 +1,19 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {UserDto} from "../dto/user-dto";
+import {FormGroup} from "@angular/forms";
 
 @Component({
-    selector: 'app-register',
-    templateUrl: './register.component.html',
-    styleUrls: ['./register.component.css'],
-    standalone: false
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css'],
+  standalone: false
 })
 export class RegisterComponent {
-  newUser: UserDto;
+
   title: string;
 
   constructor(public dialogRef: MatDialogRef<RegisterComponent>,
-              @Inject(MAT_DIALOG_DATA) data: UserDialogData) {
-    this.newUser = data.user;
+              @Inject(MAT_DIALOG_DATA) public data: UserDialogData) {
     if (data.new) {
       this.title = 'register'
     } else {
@@ -28,7 +27,7 @@ export class RegisterComponent {
 }
 
 export interface UserDialogData {
-  user: UserDto;
+  userForm: FormGroup;
   new: boolean;
 }
 

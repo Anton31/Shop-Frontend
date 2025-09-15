@@ -6,6 +6,7 @@ import {UserService} from "./service/user-service";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {RegisterComponent} from "./register/register.component";
+import {FormBuilder, FormGroup} from "@angular/forms";
 
 
 @Component({
@@ -17,8 +18,9 @@ import {RegisterComponent} from "./register/register.component";
 export class AppComponent implements OnInit {
   dto: UserDto;
   user!: Observable<UserInfo>;
-
+  userForm!: FormGroup;
   constructor(private userService: UserService,
+              private fb: FormBuilder,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
     this.dto = new UserDto('', '', '', '', '');
@@ -34,10 +36,17 @@ export class AppComponent implements OnInit {
   }
 
   addUser() {
+    this.userForm = this.fb.group({
+      role: ['user'],
+      username: [''],
+      email: [''],
+      password: [''],
+      passwordConfirmed: [''],
+    })
     const dialogRef = this.dialog.open(RegisterComponent, {
       height: '500px',
       width: '500px',
-      data: {user: this.dto, new: true}
+      data: {userForm: this.userForm, new: true}
     }).afterClosed().subscribe(data => {
       this.userService.addUser(data).subscribe(data2 => {
           this.snackBar.open(data2.message, 'undo', {duration: 3000})
@@ -49,11 +58,16 @@ export class AppComponent implements OnInit {
   }
 
   editUser() {
-    this.dto.username = this.userService.fetchUsername();
+    let username = this.userService.fetchUsername();
+    this.userForm = this.fb.group({
+      username: [username],
+      password: [''],
+      passwordConfirmed: [''],
+    })
     const dialogRef = this.dialog.open(RegisterComponent, {
       height: '500px',
       width: '500px',
-      data: {user: this.dto, new: false}
+      data: {userForm: this.userForm, new: false}
     }).afterClosed().subscribe(data => {
       this.userService.editUser(data).subscribe(data2 => {
           this.snackBar.open(data2.message, 'undo', {duration: 3000})
