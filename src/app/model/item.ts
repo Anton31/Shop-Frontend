@@ -5,5 +5,4 @@ export interface Item {
   product: Product;
   quantity: number;
   totalPrice: number;
-
 }

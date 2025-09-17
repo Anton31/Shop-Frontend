@@ -5,9 +5,8 @@ export class UserDto {
   password: string;
   passwordConfirmed: string;
 
-
   constructor(role: string, username: string, email: string,
-               password: string, passwordConfirmed: string) {
+              password: string, passwordConfirmed: string) {
     this.role = role;
     this.username = username;
     this.email = email;

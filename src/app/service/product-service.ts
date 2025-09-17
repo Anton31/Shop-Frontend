@@ -4,7 +4,7 @@ import {Observable} from "rxjs";
 
 import {Type} from "../model/type";
 import {Brand} from "../model/brand";
-import {ResponseProductDto} from "../dto/ResponseProductDto";
+import {ResponseProductDto} from "../dto/response-product-dto";
 
 @Injectable({providedIn: 'root'})
 export class ProductService {

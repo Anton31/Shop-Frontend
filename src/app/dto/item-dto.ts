@@ -3,7 +3,6 @@ export class ItemDto {
   itemId: number;
   quantity: number;
 
-
   constructor(productId: number, itemId: number, quantity: number) {
     this.productId = productId;
     this.itemId = itemId;

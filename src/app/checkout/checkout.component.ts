@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {OrderService} from "../service/order-service";
 import {Cart} from "../model/cart";
-import {OrderDto} from "../dto/orderDto";
 import {MatDialog} from "@angular/material/dialog";
 import {CartComponent} from "../cart/cart.component";
 import {Router} from "@angular/router";
+import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-checkout',
@@ -14,20 +14,24 @@ import {Router} from "@angular/router";
 })
 export class CheckoutComponent implements OnInit {
   cart!: Cart;
-  orderDto: OrderDto;
+  orderForm!: FormGroup;
   displayedColumns: string[] = ['name', 'actions'];
 
   constructor(private orderService: OrderService,
+              private fb: FormBuilder,
               private dialog: MatDialog,
               private router: Router) {
-    this.orderDto = new OrderDto('', '', '');
+
   }
 
   getCart() {
     this.orderService.getCart().subscribe(data => {
       this.cart = data;
-      this.orderDto.username = data.user.username;
-      this.orderDto.email = data.user.email;
+      this.orderForm = this.fb.group({
+        description: [''],
+        username: [data.user.username],
+        email: [data.user.email]
+      })
     })
   }
 
@@ -36,7 +40,6 @@ export class CheckoutComponent implements OnInit {
       height: '800px',
       width: '800px',
       data: {
-        orderDto: this.orderDto,
         cart: this.cart
       }
     }).afterClosed().subscribe(data => {
@@ -47,7 +50,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   addOrder() {
-    this.orderService.addOrder(this.orderDto).subscribe(data => {
+    this.orderService.addOrder(this.orderForm).subscribe(data => {
       this.router.navigate(['orders']);
     });
   }
@@ -56,3 +59,5 @@ export class CheckoutComponent implements OnInit {
     this.getCart();
   }
 }
+
+

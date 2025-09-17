@@ -1,10 +1,9 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ItemDto} from "../dto/itemDto";
+import {ItemDto} from "../dto/item-dto";
 import {Cart} from "../model/cart";
 import {Order} from "../model/order";
-import {OrderDto} from "../dto/orderDto";
 
 @Injectable({providedIn: 'root'})
 export class OrderService {
@@ -25,8 +24,12 @@ export class OrderService {
     return this.http.post<Cart>(`${this.baseUrl}/cart`, dto);
   }
 
-  addOrder(dto: OrderDto): Observable<Order> {
-    return this.http.post<Order>(`${this.baseUrl}/cart/order`, dto);
+  addOrder(data: any): Observable<Order> {
+    const formData = new FormData();
+    formData.append("description", data.controls.description.value);
+    formData.append("username", data.controls.username.value);
+    formData.append("email", data.controls.email.value);
+    return this.http.post<Order>(`${this.baseUrl}/cart/order`, formData);
   }
 
   editItem(dto: ItemDto): Observable<Cart> {

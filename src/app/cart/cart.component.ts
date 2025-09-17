@@ -1,8 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {ItemDto} from "../dto/itemDto";
+import {ItemDto} from "../dto/item-dto";
 import {OrderService} from "../service/order-service";
 import {Item} from "../model/item";
-import {OrderDto} from "../dto/orderDto";
+import {OrderDto} from "../dto/order-dto";
 import {Cart} from "../model/cart";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Router} from "@angular/router";

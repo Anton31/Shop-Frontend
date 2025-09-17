@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {BehaviorSubject, Observable} from "rxjs";
-import {SuccessResponse} from "../model/successResponse";
+import {SuccessResponse} from "../model/success-response";
 import {Token} from "../model/token";
 import {UserInfo} from "../dto/user-info";
 import {OAuthService} from "angular-oauth2-oidc";

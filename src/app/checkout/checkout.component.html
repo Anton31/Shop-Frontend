@@ -26,23 +26,23 @@
   <p></p>
   <button (click)="openCart()" color="primary" mat-raised-button>Edit products</button>
   <p></p>
-  <form>
+  <form [formGroup]="orderForm">
     <p>
       <mat-form-field>
         <mat-label>Description</mat-label>
-        <input [(ngModel)]="orderDto.description" matInput name="description">
+        <input formControlName="description" matInput>
       </mat-form-field>
     </p>
     <p>
       <mat-form-field>
         <mat-label>User</mat-label>
-        <input [(ngModel)]="orderDto.username" matInput name="username">
+        <input formControlName="username" matInput>
       </mat-form-field>
     </p>
     <p>
       <mat-form-field>
         <mat-label>Email</mat-label>
-        <input [(ngModel)]="orderDto.email" matInput name="email">
+        <input formControlName="email" matInput>
       </mat-form-field>
     </p>
   </form>
