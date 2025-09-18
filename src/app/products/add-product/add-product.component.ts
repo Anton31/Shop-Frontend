@@ -33,7 +33,7 @@ export class AddProductComponent implements OnInit {
   }
 
   getBrands() {
-    this.productService.getAllBrands('name', undefined).subscribe(data => {
+    this.productService.getProductBrands(0, 'name', undefined).subscribe(data => {
       this.brands = data;
     });
   }
