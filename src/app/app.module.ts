@@ -39,6 +39,7 @@ import {authInterceptor} from "./service/auth-interceptor";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {OAuthModule} from "angular-oauth2-oidc";
 import {DeletePhotoComponent} from "./photos/delete-photo/delete-photo.component";
+import {CarouselModule} from "ngx-owl-carousel-o";
 
 
 @NgModule({
@@ -71,6 +72,7 @@ import {DeletePhotoComponent} from "./photos/delete-photo/delete-photo.component
     ]),
     OAuthModule.forRoot(),
     ReactiveFormsModule,
+    CarouselModule,
     FormsModule,
     BrowserAnimationsModule,
     MatDialogModule,
