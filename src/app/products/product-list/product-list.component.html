@@ -32,14 +32,18 @@
     <ng-container matColumnDef="photo">
       <th *matHeaderCellDef mat-header-cell><span class="photos">Add/remove photos</span></th>
       <td *matCellDef="let product" mat-cell>
-        @for (photo of product.photos; track photo) {
-          <img src="{{photo.url}}"/>
-          @if ((user | async)?.role === 'admin') {
-            <button (click)="deletePhoto(product, photo)" color="primary" mat-icon-button>
-              <mat-icon>delete</mat-icon>
-            </button>
+        <owl-carousel-o [options]="customOptions">
+          @for (photo of product.photos; track photo) {
+            <ng-template carouselSlide>
+              <img [src]="photo.url"/>
+              @if ((user | async)?.role === 'admin') {
+                <button (click)="deletePhoto(product, photo)" color="primary" mat-icon-button>
+                  <mat-icon>delete</mat-icon>
+                </button>
+              }
+            </ng-template>
           }
-        }
+        </owl-carousel-o>
         @if ((user | async)?.role === 'admin') {
           <p>
             <button (click)="addPhoto(product.id)" color="primary" mat-icon-button>
@@ -103,6 +107,7 @@
   @if ((user | async)?.role === 'admin') {
     <button (click)="addProduct()" mat-flat-button>Add product</button>
   }
+
 </div>
 
 
