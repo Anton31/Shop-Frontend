@@ -22,6 +22,7 @@ import {Observable} from "rxjs";
 import {UserInfo} from "../../dto/user-info";
 import {DeletePhotoComponent} from "../../photos/delete-photo/delete-photo.component";
 import {Photo} from "../../model/photo";
+import {OwlOptions} from "ngx-owl-carousel-o";
 
 
 @Component({
@@ -31,6 +32,10 @@ import {Photo} from "../../model/photo";
   standalone: false
 })
 export class ProductListComponent implements OnInit {
+  customOptions: OwlOptions = {
+    items: 2,
+    nav: true
+  }
   title = 'angularFrontend';
   products: Product[] = [];
   filterTypes: Type[] = [];
