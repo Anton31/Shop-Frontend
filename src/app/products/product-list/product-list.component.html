@@ -31,7 +31,7 @@
     </ng-container>
     <ng-container matColumnDef="photo">
       <th *matHeaderCellDef mat-header-cell><span class="photos">Add/remove photos</span></th>
-      <td *matCellDef="let product" mat-cell style="max-width: 150px">
+      <td *matCellDef="let product" mat-cell style="max-width: 180px;">
         <owl-carousel-o [options]="customOptions">
           @for (photo of product.photos; track photo) {
             <ng-template carouselSlide [width]="400">
