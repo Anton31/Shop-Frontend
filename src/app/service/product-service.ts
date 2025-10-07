@@ -66,6 +66,10 @@ export class ProductService {
     formData.append("brandId", data.controls.brandId.value);
     formData.append("name", data.controls.name.value);
     formData.append("price", data.controls.price.value);
+    for (let i = 0; i < this.fileArray.length; i++) {
+      formData.append('photos', this.fileArray[i]);
+    }
+    this.deleteFiles();
     return this.http.post<any>(`${this.baseUrl}/products/product`, formData);
   }
 
@@ -76,6 +80,10 @@ export class ProductService {
     formData.append("brandId", data.controls.brandId.value);
     formData.append("name", data.controls.name.value);
     formData.append("price", data.controls.price.value);
+    for (let i = 0; i < this.fileArray.length; i++) {
+      formData.append('photos', this.fileArray[i]);
+    }
+    this.deleteFiles();
     return this.http.put<any>(`${this.baseUrl}/products/product`, formData);
   }
 
@@ -115,16 +123,6 @@ export class ProductService {
 
   deleteBrand(brandId: number): Observable<any> {
     return this.http.delete<any>(`${this.baseUrl}/products/brand/${brandId}`);
-  }
-
-  addPhoto(data: any): Observable<any> {
-    const formData = new FormData();
-    formData.append('productId', data.controls.productId.value);
-    for (let i = 0; i < this.fileArray.length; i++) {
-      formData.append('photos', this.fileArray[i]);
-    }
-    this.deleteFiles();
-    return this.http.post<any>(`${this.baseUrl}/products/photo`, formData);
   }
 
   deletePhotos(productId: number): Observable<any> {

@@ -30,8 +30,8 @@
       <td *matCellDef="let product" mat-cell> {{ product.price }}</td>
     </ng-container>
     <ng-container matColumnDef="photo">
-      <th *matHeaderCellDef mat-header-cell><span class="photos">Add/remove photos</span></th>
-      <td *matCellDef="let product" mat-cell style="max-width: 180px;">
+      <th *matHeaderCellDef mat-header-cell><span class="photos">Remove photos</span></th>
+      <td *matCellDef="let product" mat-cell style="max-width: 150px;">
         <owl-carousel-o [options]="customOptions">
           @for (photo of product.photos; track photo) {
             <ng-template carouselSlide [width]="400">
@@ -48,9 +48,6 @@
         </owl-carousel-o>
         @if ((user | async)?.role === 'admin') {
           <p>
-            <button (click)="addPhoto(product.id)" color="primary" mat-icon-button>
-              <mat-icon>add</mat-icon>
-            </button>
             <button (click)="deletePhotos(product)" color="primary" mat-icon-button>
               <mat-icon>delete</mat-icon>
             </button>

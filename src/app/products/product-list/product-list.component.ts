@@ -13,7 +13,6 @@ import {OrderService} from "../../service/order-service";
 import {ItemDto} from "../../dto/item-dto";
 import {UserService} from "../../service/user-service";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {AddPhotoComponent} from "../../photos/add-photo/add-photo.component";
 import {DeletePhotosComponent} from "../../photos/delete-photos/delete-photos.component";
 import {CartComponent} from "../../cart/cart.component";
 import {OrderDto} from "../../dto/order-dto";
@@ -155,29 +154,6 @@ export class ProductListComponent implements OnInit {
         this.pageIndex = data.currentPage;
         this.totalProducts = data.totalProducts;
       });
-  }
-
-  addPhoto(productId: number) {
-    this.photoForm = this.fb.group({
-      productId: [productId],
-      photo: [null]
-    });
-    const dialogRef = this.dialog.open(AddPhotoComponent, {
-      height: '500px',
-      width: '500px',
-      data: {
-        photoForm: this.photoForm
-      }
-    }).afterClosed().subscribe(data => {
-      this.productService.addPhoto(data).subscribe(data => {
-          this.getProducts();
-          this.resetFilters();
-        },
-        error => {
-          this.snackBar.open(error.error.message, '', {duration: 3000})
-        }
-      )
-    });
   }
 
   addProduct() {

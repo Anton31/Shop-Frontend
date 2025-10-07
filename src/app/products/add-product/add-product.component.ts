@@ -26,6 +26,11 @@ export class AddProductComponent implements OnInit {
     }
   }
 
+  handleUpload(event: any) {
+    const file = event.target.files;
+    this.productService.setFiles(file);
+  }
+
   getTypes() {
     this.productService.getAllTypes('name', undefined).subscribe(data => {
       this.types = data;

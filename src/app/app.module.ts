@@ -30,7 +30,6 @@ import {DeleteBrandComponent} from './brands/delete-brand/delete-brand.component
 import {NgOptimizedImage} from "@angular/common";
 import {MatMenuModule} from "@angular/material/menu";
 import {CartComponent} from './cart/cart.component';
-import {AddPhotoComponent} from './photos/add-photo/add-photo.component';
 import {DeletePhotosComponent} from './photos/delete-photos/delete-photos.component';
 import {ListOrdersComponent} from './orders/list-orders/list-orders.component';
 import {MatBadgeModule} from "@angular/material/badge";
@@ -56,7 +55,6 @@ import {CarouselModule} from "ngx-owl-carousel-o";
     DeleteTypeComponent,
     DeleteBrandComponent,
     CartComponent,
-    AddPhotoComponent,
     DeletePhotosComponent,
     ListOrdersComponent,
     CheckoutComponent,
