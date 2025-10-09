@@ -1,0 +1,13 @@
+<h2 align="center">{{ title }}</h2>
+<form [formGroup]="data.photoForm">
+  <p align="center">
+    <input formControlName="productId" type="hidden"/>
+  </p>
+  <p align="center">
+    <input (change)="handleUpload($event)" formControlName="photos" multiple type="file"/>
+  </p>
+</form>
+<div align="center" mat-dialog-actions>
+  <button (click)="onNoClick()" mat-button>No Thanks</button>
+  <button [mat-dialog-close]="data.photoForm" cdkFocusInitial mat-flat-button>Ok</button>
+</div>

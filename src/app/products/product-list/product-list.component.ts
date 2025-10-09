@@ -22,6 +22,8 @@ import {UserInfo} from "../../dto/user-info";
 import {DeletePhotoComponent} from "../../photos/delete-photo/delete-photo.component";
 import {Photo} from "../../model/photo";
 import {OwlOptions} from "ngx-owl-carousel-o";
+import {AddPhotosComponent} from "../../photos/add-photos/add-photos.component";
+
 
 
 @Component({
@@ -32,6 +34,8 @@ import {OwlOptions} from "ngx-owl-carousel-o";
 })
 export class ProductListComponent implements OnInit {
   customOptions: OwlOptions = {
+    loop: true,
+    autoplay: true,
     items: 2,
     nav: true
   }
@@ -64,6 +68,7 @@ export class ProductListComponent implements OnInit {
               private userService: UserService,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
+
     this.itemDto = new ItemDto(0, 0, 0);
     this.orderDto = new OrderDto('', '', '');
     this.user = this.userService.userSubject.pipe();
@@ -230,6 +235,26 @@ export class ProductListComponent implements OnInit {
     this.currentDir = undefined;
     this.pageIndex = undefined;
     this.pageSize = undefined;
+  }
+
+  addPhotos(product: Product) {
+    this.photoForm = this.fb.group({
+      productId: [product.id],
+      photos: [null]
+    });
+    this.dialog.open(AddPhotosComponent, {
+      height: '500px',
+      width: '500px',
+      data: {
+        photoForm: this.photoForm,
+        product: product
+      }
+    }).afterClosed().subscribe(data => {
+      this.productService.addPhotos(data).subscribe(data => {
+        this.getProducts();
+        this.resetFilters();
+      })
+    })
   }
 
   deletePhotos(product: Product) {

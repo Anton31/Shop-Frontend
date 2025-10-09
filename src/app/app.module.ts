@@ -39,12 +39,14 @@ import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {OAuthModule} from "angular-oauth2-oidc";
 import {DeletePhotoComponent} from "./photos/delete-photo/delete-photo.component";
 import {CarouselModule} from "ngx-owl-carousel-o";
+import {AddPhotosComponent} from "./photos/add-photos/add-photos.component";
 
 
 @NgModule({
   declarations: [
     AppComponent,
     AddProductComponent,
+    AddPhotosComponent,
     DeleteProductComponent,
     RegisterComponent,
     AddTypeComponent,

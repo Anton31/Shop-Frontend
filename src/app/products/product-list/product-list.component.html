@@ -48,6 +48,9 @@
         </owl-carousel-o>
         @if ((user | async)?.role === 'admin') {
           <p>
+            <button (click)="addPhotos(product)" color="primary" mat-icon-button>
+              <mat-icon>add</mat-icon>
+            </button>
             <button (click)="deletePhotos(product)" color="primary" mat-icon-button>
               <mat-icon>delete</mat-icon>
             </button>
