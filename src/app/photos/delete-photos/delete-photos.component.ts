@@ -14,7 +14,7 @@ export class DeletePhotosComponent {
 
   constructor(private dialogRef: MatDialogRef<DeletePhotosComponent>,
               @Inject(MAT_DIALOG_DATA) data: DeletePhotosData) {
-    this.title = 'delete photos for product: ' + data.product.name + '?';
+    this.title = 'delete photos for ' + data.product.name + '?';
     this.id = data.product.id;
   }
 

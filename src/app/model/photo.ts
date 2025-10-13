@@ -1,5 +1,5 @@
 export interface Photo {
   id: number;
-  name: string;
+  fileName: string;
   url: string;
 }

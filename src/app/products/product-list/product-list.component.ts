@@ -25,7 +25,6 @@ import {OwlOptions} from "ngx-owl-carousel-o";
 import {AddPhotosComponent} from "../../photos/add-photos/add-photos.component";
 
 
-
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
@@ -37,7 +36,8 @@ export class ProductListComponent implements OnInit {
     loop: true,
     autoplay: true,
     items: 2,
-    nav: true
+    nav: true,
+    navText: ['<', '>']
   }
   title = 'angularFrontend';
   products: Product[] = [];
@@ -72,6 +72,25 @@ export class ProductListComponent implements OnInit {
     this.itemDto = new ItemDto(0, 0, 0);
     this.orderDto = new OrderDto('', '', '');
     this.user = this.userService.userSubject.pipe();
+
+  }
+
+  getProducts() {
+    this.productService.getProducts(this.currentTypeId, this.currentBrandId,
+      this.currentSort, this.currentDir, this.pageIndex, this.pageSize)
+      .subscribe(data => {
+        this.products = data.products;
+        this.pageSize = data.pageSize;
+        this.refresh();
+      });
+  }
+
+  refresh() {
+    this.productService.getProducts(this.currentTypeId, this.currentBrandId,
+      this.currentSort, this.currentDir, this.pageIndex, this.pageSize)
+      .subscribe(data => {
+        this.products = data.products;
+      });
   }
 
   sortProducts(sortState: Sort) {
@@ -118,6 +137,7 @@ export class ProductListComponent implements OnInit {
         this.totalProducts = data.totalProducts;
         this.pageSize = data.pageSize;
         this.pageIndex = data.currentPage;
+        this.refresh();
       });
   }
 
@@ -134,17 +154,7 @@ export class ProductListComponent implements OnInit {
         this.pageSize = data.pageSize;
         this.totalProducts = data.totalProducts;
         this.pageIndex = data.currentPage;
-      });
-  }
-
-  getProducts() {
-    this.productService.getProducts(this.currentTypeId, this.currentBrandId,
-      this.currentSort, this.currentDir, this.pageIndex, this.pageSize)
-      .subscribe(data => {
-        this.products = data.products;
-        this.pageSize = data.pageSize;
-        this.pageIndex = data.currentPage;
-        this.totalProducts = data.totalProducts;
+        this.refresh();
       });
   }
 
@@ -251,8 +261,8 @@ export class ProductListComponent implements OnInit {
       }
     }).afterClosed().subscribe(data => {
       this.productService.addPhotos(data).subscribe(data => {
-        this.getProducts();
         this.resetFilters();
+        this.getProducts();
       })
     })
   }

@@ -16,7 +16,7 @@ export class AddPhotosComponent {
   constructor(private productService: ProductService,
               public dialogRef: MatDialogRef<AddPhotosComponent>,
               @Inject(MAT_DIALOG_DATA) public data: AddPhotosDialogData) {
-    this.title = 'add photos for product ' + data.product.name + '?';
+    this.title = 'add photos for ' + data.product.name + '?';
   }
 
   handleUpload(event: any) {

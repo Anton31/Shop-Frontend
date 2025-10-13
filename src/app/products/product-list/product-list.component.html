@@ -31,10 +31,10 @@
     </ng-container>
     <ng-container matColumnDef="photo">
       <th *matHeaderCellDef mat-header-cell><span class="photos">Remove photos</span></th>
-      <td *matCellDef="let product" mat-cell style="max-width: 150px;">
+      <td *matCellDef="let product" mat-cell style="max-width: 170px;">
         <owl-carousel-o [options]="customOptions">
           @for (photo of product.photos; track photo) {
-            <ng-template carouselSlide [width]="400">
+            <ng-template carouselSlide>
               <img [src]="photo.url"/>
               @if ((user | async)?.role === 'admin') {
                 <p>
@@ -109,7 +109,6 @@
   @if ((user | async)?.role === 'admin') {
     <button (click)="addProduct()" mat-flat-button>Add product</button>
   }
-
 </div>
 
 
