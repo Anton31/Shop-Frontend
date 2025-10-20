@@ -5,6 +5,7 @@ import {Observable} from "rxjs";
 import {Type} from "../model/type";
 import {Brand} from "../model/brand";
 import {ResponseProductDto} from "../dto/response-product-dto";
+import {Product} from "../model/product";
 
 @Injectable({providedIn: 'root'})
 export class ProductService {
@@ -58,6 +59,10 @@ export class ProductService {
     params = page == undefined ? params : params.set('page', page);
     params = size == undefined ? params : params.set('size', size);
     return this.http.get<ResponseProductDto>(`${this.baseUrl}/products/product`, {params: params});
+  }
+
+  getProduct(id: number): Observable<Product> {
+    return this.http.get<Product>(`${this.baseUrl}/products/product/${id}`);
   }
 
   addProduct(data: any): Observable<any> {

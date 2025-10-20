@@ -61,6 +61,7 @@ export class ProductListComponent implements OnInit {
   orderDto: OrderDto;
   cart!: Cart;
   user!: Observable<UserInfo>;
+  product: Product | undefined;
 
   constructor(private fb: FormBuilder,
               private productService: ProductService,
@@ -75,21 +76,19 @@ export class ProductListComponent implements OnInit {
 
   }
 
+  getProduct(id: number) {
+    this.productService.getProduct(id).subscribe(data => {
+      this.product = data
+    });
+    window.location.href = '/#';
+  }
+
   getProducts() {
     this.productService.getProducts(this.currentTypeId, this.currentBrandId,
       this.currentSort, this.currentDir, this.pageIndex, this.pageSize)
       .subscribe(data => {
         this.products = data.products;
         this.pageSize = data.pageSize;
-        this.refresh();
-      });
-  }
-
-  refresh() {
-    this.productService.getProducts(this.currentTypeId, this.currentBrandId,
-      this.currentSort, this.currentDir, this.pageIndex, this.pageSize)
-      .subscribe(data => {
-        this.products = data.products;
       });
   }
 
@@ -137,7 +136,6 @@ export class ProductListComponent implements OnInit {
         this.totalProducts = data.totalProducts;
         this.pageSize = data.pageSize;
         this.pageIndex = data.currentPage;
-        this.refresh();
       });
   }
 
@@ -154,7 +152,6 @@ export class ProductListComponent implements OnInit {
         this.pageSize = data.pageSize;
         this.totalProducts = data.totalProducts;
         this.pageIndex = data.currentPage;
-        this.refresh();
       });
   }
 
