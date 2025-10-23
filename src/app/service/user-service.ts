@@ -5,8 +5,8 @@ import {SuccessResponse} from "../model/success-response";
 import {Token} from "../model/token";
 import {UserInfo} from "../dto/user-info";
 import {OAuthService} from "angular-oauth2-oidc";
-import {authConfig} from "./auth-config";
 import {LocalStorageService} from "./local-storage-service";
+import {AuthService} from "./auth-service";
 
 
 @Injectable({providedIn: 'root'})
@@ -16,10 +16,9 @@ export class UserService {
   isLoggedIn = false;
 
   constructor(private http: HttpClient,
+              private authService: AuthService,
               private storageService: LocalStorageService,
               private oauthService: OAuthService) {
-    this.oauthService.configure(authConfig);
-    this.oauthService.loadDiscoveryDocumentAndTryLogin();
     this.oauthService.events.subscribe(event => {
       if (event.type === 'token_received') {
         this.getUser();
@@ -35,7 +34,7 @@ export class UserService {
 
   login2() {
     this.storageService.setLoginVariant('library');
-    this.oauthService.initCodeFlow();
+    this.authService.login();
   }
 
   logout() {
@@ -53,7 +52,7 @@ export class UserService {
   }
 
   logout2() {
-    this.oauthService.logOut();
+    this.authService.logout();
   }
 
   saveToken(token: string) {
@@ -62,7 +61,7 @@ export class UserService {
 
   checkCredentials(): boolean {
     if (this.storageService.getLoginVariant() === 'library') {
-      return this.oauthService.hasValidAccessToken();
+      return this.authService.hasValidAccessToken();
     }
     return localStorage.getItem('token') != null;
   }
