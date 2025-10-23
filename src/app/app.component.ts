@@ -27,8 +27,8 @@ export class AppComponent implements OnInit {
     this.user = this.userService.userSubject.pipe();
   }
 
-  login() {
-    this.userService.login();
+  login1() {
+    this.userService.login1();
   }
 
   login2() {

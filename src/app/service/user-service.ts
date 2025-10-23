@@ -6,7 +6,8 @@ import {Token} from "../model/token";
 import {UserInfo} from "../dto/user-info";
 import {OAuthService} from "angular-oauth2-oidc";
 import {LocalStorageService} from "./local-storage-service";
-import {AuthService} from "./auth-service";
+import {LibraryService} from "./library-service";
+import {ManualService} from "./manual-service";
 
 
 @Injectable({providedIn: 'root'})
@@ -16,7 +17,8 @@ export class UserService {
   isLoggedIn = false;
 
   constructor(private http: HttpClient,
-              private authService: AuthService,
+              private libraryService: LibraryService,
+              private manualService: ManualService,
               private storageService: LocalStorageService,
               private oauthService: OAuthService) {
     this.oauthService.events.subscribe(event => {
@@ -26,15 +28,14 @@ export class UserService {
     });
   }
 
-  login() {
+  login1() {
     this.storageService.setLoginVariant('manual');
-    window.location.href = 'http://localhost:8080/oauth2/authorize?client_id=app-client&response_type=code' +
-      '&scope=openid&redirect_uri=http://localhost:4200';
+    this.manualService.login();
   }
 
   login2() {
     this.storageService.setLoginVariant('library');
-    this.authService.login();
+    this.libraryService.login();
   }
 
   logout() {
@@ -47,12 +48,12 @@ export class UserService {
 
   logout1() {
     this.clearData();
-    window.location.href = 'http://localhost:8080/logout';
+    this.manualService.logout();
     window.location.reload();
   }
 
   logout2() {
-    this.authService.logout();
+    this.libraryService.logout();
   }
 
   saveToken(token: string) {
@@ -61,7 +62,7 @@ export class UserService {
 
   checkCredentials(): boolean {
     if (this.storageService.getLoginVariant() === 'library') {
-      return this.authService.hasValidAccessToken();
+      return this.libraryService.hasValidAccessToken();
     }
     return localStorage.getItem('token') != null;
   }
