@@ -49,7 +49,6 @@ export class UserService {
   logout1() {
     this.clearData();
     this.manualService.logout();
-    window.location.reload();
   }
 
   logout2() {

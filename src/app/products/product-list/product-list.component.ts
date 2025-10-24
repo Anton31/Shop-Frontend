@@ -275,6 +275,7 @@ export class ProductListComponent implements OnInit {
       this.productService.deletePhotos(data).subscribe(data => {
         this.getProducts();
         this.resetFilters();
+        this.getProduct(data.id);
       });
     });
   }
@@ -290,6 +291,7 @@ export class ProductListComponent implements OnInit {
       this.productService.deletePhoto(product.id, data.id).subscribe(data => {
         this.getProducts();
         this.resetFilters();
+        this.getProduct(data.id);
       });
     });
   }
