@@ -9,12 +9,7 @@ export class ManualService {
   }
 
   logout() {
-    if (window.location.href == '/') {
-      window.location.href = 'http://localhost:8080/logout';
-      window.location.reload();
-    } else {
-      window.location.href = 'http://localhost:8080/logout';
-      window.location.replace('/');
-    }
+    window.location.href = 'http://localhost:8080/logout';
+    window.location.reload();
   }
 }

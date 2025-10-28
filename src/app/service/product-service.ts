@@ -46,7 +46,7 @@ export class ProductService {
 
   getProducts(typeId: number, brandId: number,
               sort: string | undefined, dir: string | undefined,
-              page: number | undefined, size: number | undefined): Observable<ResponseProductDto> {
+              page: number, size: number): Observable<ResponseProductDto> {
     let params = new HttpParams();
     params = sort == undefined ? params : params.set('sort', sort);
     params = dir == undefined ? params : params.set('dir', dir);
@@ -56,8 +56,8 @@ export class ProductService {
     if (brandId > 0) {
       params = params.set('brandId', brandId);
     }
-    params = page == undefined ? params : params.set('page', page);
-    params = size == undefined ? params : params.set('size', size);
+    params = page == 0 ? params : params.set('page', page);
+    params = size == 0 ? params : params.set('size', size);
     return this.http.get<ResponseProductDto>(`${this.baseUrl}/products/product`, {params: params});
   }
 

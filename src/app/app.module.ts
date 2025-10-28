@@ -40,11 +40,13 @@ import {OAuthModule} from "angular-oauth2-oidc";
 import {DeletePhotoComponent} from "./photos/delete-photo/delete-photo.component";
 import {CarouselModule} from "ngx-owl-carousel-o";
 import {AddPhotosComponent} from "./photos/add-photos/add-photos.component";
+import {GetProductComponent} from "./products/get-product/get-product.component";
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    GetProductComponent,
     AddProductComponent,
     AddPhotosComponent,
     DeleteProductComponent,
@@ -65,10 +67,11 @@ import {AddPhotosComponent} from "./photos/add-photos/add-photos.component";
   bootstrap: [AppComponent], imports: [BrowserModule,
     RouterModule.forRoot([
       {path: '', component: ProductListComponent},
+      {path: 'product/:id', component: GetProductComponent},
       {path: 'types', component: TypeListComponent},
       {path: 'brands', component: BrandListComponent},
       {path: 'checkout', component: CheckoutComponent},
-      {path: 'orders', component: ListOrdersComponent},
+      {path: 'orders', component: ListOrdersComponent}
     ]),
     OAuthModule.forRoot(),
     ReactiveFormsModule,

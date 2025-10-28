@@ -21,8 +21,8 @@ import {Observable} from "rxjs";
 import {UserInfo} from "../../dto/user-info";
 import {DeletePhotoComponent} from "../../photos/delete-photo/delete-photo.component";
 import {Photo} from "../../model/photo";
-import {OwlOptions} from "ngx-owl-carousel-o";
 import {AddPhotosComponent} from "../../photos/add-photos/add-photos.component";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -32,13 +32,7 @@ import {AddPhotosComponent} from "../../photos/add-photos/add-photos.component";
   standalone: false
 })
 export class ProductListComponent implements OnInit {
-  customOptions: OwlOptions = {
-    loop: true,
-    autoplay: true,
-    items: 2,
-    nav: true,
-    navText: ['<', '>']
-  }
+
   title = 'angularFrontend';
   products: Product[] = [];
   filterTypes: Type[] = [];
@@ -47,8 +41,8 @@ export class ProductListComponent implements OnInit {
   currentBrandId = 0;
   currentSort: string | undefined = undefined;
   currentDir: string | undefined = undefined;
-  pageSize: number | undefined = undefined;
-  pageIndex: number | undefined = undefined;
+  pageSize = 10;
+  pageIndex = 0;
   totalProducts = 0;
   pageSizeOptions = [2, 5, 10];
   itemDto!: ItemDto;
@@ -61,9 +55,10 @@ export class ProductListComponent implements OnInit {
   orderDto: OrderDto;
   cart!: Cart;
   user!: Observable<UserInfo>;
-  product: Product | undefined;
+
 
   constructor(private fb: FormBuilder,
+              private router: Router,
               private productService: ProductService,
               private orderService: OrderService,
               private userService: UserService,
@@ -77,10 +72,7 @@ export class ProductListComponent implements OnInit {
   }
 
   getProduct(id: number) {
-    this.productService.getProduct(id).subscribe(data => {
-      this.product = data
-    });
-    window.location.href = '/#';
+    this.router.navigate(['/product', id]);
   }
 
   getProducts() {
@@ -130,7 +122,7 @@ export class ProductListComponent implements OnInit {
     }
     this.getFilterBrands(this.currentTypeId);
     this.productService.getProducts(this.currentTypeId, this.currentBrandId,
-      this.currentSort, this.currentDir, undefined, undefined)
+      this.currentSort, this.currentDir, 0, 0)
       .subscribe(data => {
         this.products = data.products;
         this.totalProducts = data.totalProducts;
@@ -146,7 +138,7 @@ export class ProductListComponent implements OnInit {
       this.currentBrandId = brandId;
     }
     this.productService.getProducts(this.currentTypeId, this.currentBrandId,
-      this.currentSort, this.currentDir, undefined, undefined)
+      this.currentSort, this.currentDir, 0, 0)
       .subscribe(data => {
         this.products = data.products;
         this.pageSize = data.pageSize;
@@ -240,8 +232,8 @@ export class ProductListComponent implements OnInit {
     this.currentBrandId = 0;
     this.currentSort = undefined;
     this.currentDir = undefined;
-    this.pageIndex = undefined;
-    this.pageSize = undefined;
+    this.pageIndex = 0;
+    this.pageSize = 10;
   }
 
   addPhotos(product: Product) {

@@ -1,0 +1,10 @@
+#owlId {
+  max-width: 1000px;
+}
+
+#owlImage {
+  max-width: 300px !important;
+  max-height: 300px !important;
+  width: auto !important;
+  height: auto !important;
+}

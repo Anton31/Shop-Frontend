@@ -1,4 +1,4 @@
-<div align="center" style="padding: 20px">
+<div style="padding: 20px">
   <mat-chip-listbox>
     @for (type of filterTypes; track type) {
       <mat-chip-option (click)="typeFilter(type.id)">{{ type.name }}</mat-chip-option>
@@ -19,21 +19,13 @@
         <mat-icon>shopping_cart_checkout</mat-icon>
       </button>
     }
-  <div align="center" id="owlId">
-    @if (product != undefined) {
-      <owl-carousel-o [options]="customOptions">
-        @for (photo of product.photos; track photo) {
-          <ng-template carouselSlide>
-            <img id="owlImage" [src]="photo.url" [alt]="'no photo'"/>
-          </ng-template>
-        }
-      </owl-carousel-o>
-    }
-  </div>
   <table (matSortChange)="sortProducts($event)" [dataSource]="products" class="mat-elevation-z8" mat-table matSort>
     <ng-container matColumnDef="name">
       <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by name"> Name</th>
-      <td *matCellDef="let product" mat-cell> {{ product.name }}</td>
+      <td *matCellDef="let product" mat-cell><a routerLink="/product/{{product.id}}">
+        {{ product.name }}
+      </a>
+      </td>
     </ng-container>
     <ng-container matColumnDef="price">
       <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by price"> Price</th>
@@ -41,9 +33,9 @@
     </ng-container>
     <ng-container matColumnDef="photo">
       <th *matHeaderCellDef mat-header-cell><span class="photos">Remove photos</span></th>
-      <td *matCellDef="let product" mat-cell style="max-width: 600px">
+      <td *matCellDef="let product" mat-cell style="max-width: 450px">
         @for (photo of product.photos; track photo) {
-          <img [src]="photo.url" (click)="getProduct(product.id)"/>
+          <a routerLink="/product/{{product.id}}"><img [src]="photo.url"/></a>
           @if ((user | async)?.role === 'admin') {
             <button (click)="deletePhoto(product, photo)" color="primary" mat-icon-button>
               <mat-icon>delete</mat-icon>
