@@ -28,13 +28,13 @@ export class AddProductComponent implements OnInit {
 
 
   getTypes() {
-    this.productService.getAllTypes('name', undefined).subscribe(data => {
+    this.productService.getAllTypes('name', 'ASC').subscribe(data => {
       this.types = data;
     });
   }
 
   getBrands() {
-    this.productService.getProductBrands(0, 'name', undefined).subscribe(data => {
+    this.productService.getProductBrands(0, 'name', 'ASC').subscribe(data => {
       this.brands = data;
     });
   }

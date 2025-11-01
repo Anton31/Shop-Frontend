@@ -21,8 +21,8 @@ export class TypeListComponent implements OnInit {
   types: Type[] = [];
   displayedColumns: string[] = ['name', 'edit', 'delete'];
   typeForm!: FormGroup;
-  currentSort: string | undefined = undefined;
-  currentDir: string | undefined = undefined;
+  currentSort= 'name';
+  currentDir = 'ASC';
   user!: Observable<UserInfo>;
 
   constructor(private userService: UserService,
@@ -40,7 +40,7 @@ export class TypeListComponent implements OnInit {
   }
 
   reset() {
-    this.currentDir = undefined;
+    this.currentDir = 'ASC';
   }
 
   getTypes() {

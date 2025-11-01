@@ -1,14 +1,16 @@
 <div align="center">
-  <h2>{{title}}</h2>
-<div align="center" id="owlId">
-  @if (product != undefined) {
-    <owl-carousel-o [options]="customOptions">
-      @for (photo of product.photos; track photo) {
-        <ng-template carouselSlide>
-          <img id="owlImage" [src]="photo.url" [alt]="'no photo'"/>
-        </ng-template>
-      }
-    </owl-carousel-o>
-  }
-</div>
+  <h2>{{ title }}</h2>
+  <div align="center" id="owlId">
+    @if (product.photos.length > 0) {
+      <owl-carousel-o [options]="customOptions">
+        @for (photo of product.photos; track photo) {
+          <ng-template carouselSlide>
+            <img id="owlImage" [src]="photo.url" [alt]="'no photo'"/>
+          </ng-template>
+        }
+      </owl-carousel-o>
+    } @else {
+      <h2>no photos</h2>
+    }
+  </div>
 </div>

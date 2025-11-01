@@ -39,8 +39,8 @@ export class ProductListComponent implements OnInit {
   filterBrands: Brand[] = [];
   currentTypeId = 0;
   currentBrandId = 0;
-  currentSort: string | undefined = undefined;
-  currentDir: string | undefined = undefined;
+  currentSort = 'name';
+  currentDir = 'ASC';
   pageSize = 10;
   pageIndex = 0;
   totalProducts = 0;
@@ -71,10 +71,6 @@ export class ProductListComponent implements OnInit {
 
   }
 
-  getProduct(id: number) {
-    this.router.navigate(['/product', id]);
-  }
-
   getProducts() {
     this.productService.getProducts(this.currentTypeId, this.currentBrandId,
       this.currentSort, this.currentDir, this.pageIndex, this.pageSize)
@@ -103,7 +99,7 @@ export class ProductListComponent implements OnInit {
 
   getFilterBrands(typeId: number) {
     this.currentTypeId = typeId;
-    this.productService.getProductBrands(this.currentTypeId, 'name', undefined).subscribe(data => {
+    this.productService.getProductBrands(this.currentTypeId, 'name', 'ASC').subscribe(data => {
       if (this.currentTypeId > 0) {
         this.filterBrands = data;
       } else {
@@ -122,7 +118,7 @@ export class ProductListComponent implements OnInit {
     }
     this.getFilterBrands(this.currentTypeId);
     this.productService.getProducts(this.currentTypeId, this.currentBrandId,
-      this.currentSort, this.currentDir, 0, 0)
+      this.currentSort, this.currentDir, 0, 10)
       .subscribe(data => {
         this.products = data.products;
         this.totalProducts = data.totalProducts;
@@ -138,7 +134,7 @@ export class ProductListComponent implements OnInit {
       this.currentBrandId = brandId;
     }
     this.productService.getProducts(this.currentTypeId, this.currentBrandId,
-      this.currentSort, this.currentDir, 0, 0)
+      this.currentSort, this.currentDir, 0, 10)
       .subscribe(data => {
         this.products = data.products;
         this.pageSize = data.pageSize;
@@ -230,8 +226,8 @@ export class ProductListComponent implements OnInit {
   resetFilters() {
     this.currentTypeId = 0;
     this.currentBrandId = 0;
-    this.currentSort = undefined;
-    this.currentDir = undefined;
+    this.currentSort = 'name';
+    this.currentDir = 'ASC';
     this.pageIndex = 0;
     this.pageSize = 10;
   }
@@ -267,7 +263,6 @@ export class ProductListComponent implements OnInit {
       this.productService.deletePhotos(data).subscribe(data => {
         this.getProducts();
         this.resetFilters();
-        this.getProduct(data.id);
       });
     });
   }
@@ -283,7 +278,6 @@ export class ProductListComponent implements OnInit {
       this.productService.deletePhoto(product.id, data.id).subscribe(data => {
         this.getProducts();
         this.resetFilters();
-        this.getProduct(data.id);
       });
     });
   }

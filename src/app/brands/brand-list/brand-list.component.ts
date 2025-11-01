@@ -21,8 +21,8 @@ export class BrandListComponent implements OnInit {
   brands: Brand[] = [];
   brandForm!: FormGroup;
   displayedColumns: string[] = ['name', 'edit', 'delete'];
-  currentSort: string | undefined = undefined;
-  currentDir: string | undefined = undefined;
+  currentSort = 'name';
+  currentDir = 'ASC';
   user!: Observable<UserInfo>;
 
   constructor(private userService: UserService,
@@ -47,8 +47,8 @@ export class BrandListComponent implements OnInit {
   }
 
   reset() {
-    this.currentDir = undefined;
-    this.currentSort = undefined;
+    this.currentDir = 'ASC';
+    this.currentSort = 'name';
   }
 
   addBrand() {

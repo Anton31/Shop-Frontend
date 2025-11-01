@@ -23,10 +23,10 @@ export class ProductService {
     this.fileArray = [];
   }
 
-  getAllTypes(sort: string | undefined, dir: string | undefined): Observable<Type[]> {
+  getAllTypes(sort: string, dir: string): Observable<Type[]> {
     let params = new HttpParams();
-    params = sort == undefined ? params : params.set('sort', sort);
-    params = dir == undefined ? params : params.set('dir', dir);
+    params = params.set('sort', sort);
+    params = params.set('dir', dir);
     return this.http.get<Type[]>(`${this.baseUrl}/products/type`, {params: params});
   }
 
@@ -34,30 +34,30 @@ export class ProductService {
     return this.http.get<Type[]>(`${this.baseUrl}/products/productType`);
   }
 
-  getProductBrands(typeId: number, sort: string | undefined, dir: string | undefined): Observable<Brand[]> {
+  getProductBrands(typeId: number, sort: string, dir: string): Observable<Brand[]> {
     let params = new HttpParams();
     if (typeId > 0) {
       params = params.set('typeId', typeId);
     }
-    params = sort == undefined ? params : params.set('sort', sort);
-    params = dir == undefined ? params : params.set('dir', dir);
+    params = params.set('sort', sort);
+    params = params.set('dir', dir);
     return this.http.get<Brand[]>(`${this.baseUrl}/products/brand`, {params: params});
   }
 
   getProducts(typeId: number, brandId: number,
-              sort: string | undefined, dir: string | undefined,
+              sort: string, dir: string,
               page: number, size: number): Observable<ResponseProductDto> {
     let params = new HttpParams();
-    params = sort == undefined ? params : params.set('sort', sort);
-    params = dir == undefined ? params : params.set('dir', dir);
+    params = params.set('sort', sort);
+    params = params.set('dir', dir);
     if (typeId > 0) {
       params = params.set('typeId', typeId);
     }
     if (brandId > 0) {
       params = params.set('brandId', brandId);
     }
-    params = page == 0 ? params : params.set('page', page);
-    params = size == 0 ? params : params.set('size', size);
+    params = params.set('page', page);
+    params = params.set('size', size);
     return this.http.get<ResponseProductDto>(`${this.baseUrl}/products/product`, {params: params});
   }
 

@@ -17,7 +17,7 @@ export class GetProductComponent {
     items: 2,
     nav: true
   }
-  product: Product | undefined = undefined;
+  product!: Product;
   productId: string | null = null;
   title = '';
 
