@@ -12,5 +12,23 @@
     } @else {
       <h2>no photos</h2>
     }
+    @if ((user | async)?.role === 'admin') {
+      @for (photo of product.photos; track photo) {
+        <a routerLink="/product/{{product.id}}"><img [src]="photo.url"/></a>
+        @if ((user | async)?.role === 'admin') {
+          <button (click)="deletePhoto(product, photo)" color="primary" mat-icon-button>
+            <mat-icon>delete</mat-icon>
+          </button>
+        }
+      }
+      <p>
+        <button (click)="addPhotos(product)" color="primary" mat-icon-button>
+          <mat-icon>add</mat-icon>
+        </button>
+        <button (click)="deletePhotos(product)" color="primary" mat-icon-button>
+          <mat-icon>delete</mat-icon>
+        </button>
+      </p>
+    }
   </div>
 </div>

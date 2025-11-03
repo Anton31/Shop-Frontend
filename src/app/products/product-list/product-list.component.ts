@@ -13,16 +13,11 @@ import {OrderService} from "../../service/order-service";
 import {ItemDto} from "../../dto/item-dto";
 import {UserService} from "../../service/user-service";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {DeletePhotosComponent} from "../../photos/delete-photos/delete-photos.component";
 import {CartComponent} from "../../cart/cart.component";
 import {OrderDto} from "../../dto/order-dto";
 import {Cart} from "../../model/cart";
 import {Observable} from "rxjs";
 import {UserInfo} from "../../dto/user-info";
-import {DeletePhotoComponent} from "../../photos/delete-photo/delete-photo.component";
-import {Photo} from "../../model/photo";
-import {AddPhotosComponent} from "../../photos/add-photos/add-photos.component";
-import {Router} from "@angular/router";
 
 
 @Component({
@@ -48,7 +43,6 @@ export class ProductListComponent implements OnInit {
   itemDto!: ItemDto;
   displayedColumns: string[] = ['name', 'price', 'photo', 'type', 'brand', 'actions', 'cart'];
   cartProductIds!: number[];
-  photoForm!: FormGroup;
   productForm!: FormGroup;
   totalPrice!: number;
   totalQuantity!: number;
@@ -58,7 +52,6 @@ export class ProductListComponent implements OnInit {
 
 
   constructor(private fb: FormBuilder,
-              private router: Router,
               private productService: ProductService,
               private orderService: OrderService,
               private userService: UserService,
@@ -230,56 +223,6 @@ export class ProductListComponent implements OnInit {
     this.currentDir = 'ASC';
     this.pageIndex = 0;
     this.pageSize = 10;
-  }
-
-  addPhotos(product: Product) {
-    this.photoForm = this.fb.group({
-      productId: [product.id],
-      photos: [null]
-    });
-    this.dialog.open(AddPhotosComponent, {
-      height: '500px',
-      width: '500px',
-      data: {
-        photoForm: this.photoForm,
-        product: product
-      }
-    }).afterClosed().subscribe(data => {
-      this.productService.addPhotos(data).subscribe(data => {
-        this.resetFilters();
-        this.getProducts();
-      })
-    })
-  }
-
-  deletePhotos(product: Product) {
-    this.dialog.open(DeletePhotosComponent, {
-      height: '500px',
-      width: '500px',
-      data: {
-        product: product
-      }
-    }).afterClosed().subscribe(data => {
-      this.productService.deletePhotos(data).subscribe(data => {
-        this.getProducts();
-        this.resetFilters();
-      });
-    });
-  }
-
-  deletePhoto(product: Product, photo: Photo) {
-    this.dialog.open(DeletePhotoComponent, {
-      height: '500px',
-      width: '500px',
-      data: {
-        photo: photo
-      }
-    }).afterClosed().subscribe(data => {
-      this.productService.deletePhoto(product.id, data.id).subscribe(data => {
-        this.getProducts();
-        this.resetFilters();
-      });
-    });
   }
 
   getCart() {
