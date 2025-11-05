@@ -1,6 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {FormGroup} from "@angular/forms";
+import {ProductService} from "../../service/product-service";
+import {Brand} from "../../model/brand";
 
 @Component({
   selector: 'app-add-type',
@@ -10,8 +12,10 @@ import {FormGroup} from "@angular/forms";
 })
 export class AddTypeComponent implements OnInit {
   title: string;
+  brands!: Brand[];
 
-  constructor(public dialogRef: MatDialogRef<AddTypeComponent>,
+  constructor(private service: ProductService,
+              public dialogRef: MatDialogRef<AddTypeComponent>,
               @Inject(MAT_DIALOG_DATA) public data: TypeDialogData
   ) {
     this.title = data.new ? 'Add type' : 'Edit type';
@@ -22,6 +26,9 @@ export class AddTypeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.service.getTypeBrands(0, 'id', 'ASC').subscribe(data => {
+      this.brands = data;
+    })
   }
 }
 

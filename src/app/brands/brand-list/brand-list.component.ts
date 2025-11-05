@@ -21,7 +21,7 @@ export class BrandListComponent implements OnInit {
   brands: Brand[] = [];
   brandForm!: FormGroup;
   displayedColumns: string[] = ['name', 'edit', 'delete'];
-  currentSort = 'name';
+  currentSort = 'id';
   currentDir = 'ASC';
   user!: Observable<UserInfo>;
 
@@ -40,7 +40,7 @@ export class BrandListComponent implements OnInit {
   }
 
   getBrands() {
-    this.productService.getProductBrands(0, this.currentSort, this.currentDir)
+    this.productService.getTypeBrands(0, this.currentSort, this.currentDir)
       .subscribe(data => {
         this.brands = data;
       });
@@ -48,12 +48,12 @@ export class BrandListComponent implements OnInit {
 
   reset() {
     this.currentDir = 'ASC';
-    this.currentSort = 'name';
+    this.currentSort = 'id';
   }
 
   addBrand() {
     this.brandForm = this.fb.group({
-      id: [0],
+      typeId: [1],
       name: ['']
     });
     const dialogRef = this.dialog.open(AddBrandComponent, {

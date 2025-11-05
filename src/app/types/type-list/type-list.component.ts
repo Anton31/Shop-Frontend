@@ -21,7 +21,7 @@ export class TypeListComponent implements OnInit {
   types: Type[] = [];
   displayedColumns: string[] = ['name', 'edit', 'delete'];
   typeForm!: FormGroup;
-  currentSort= 'name';
+  currentSort= 'id';
   currentDir = 'ASC';
   user!: Observable<UserInfo>;
 
@@ -53,6 +53,7 @@ export class TypeListComponent implements OnInit {
   addType() {
     this.typeForm = this.fb.group({
       id: [0],
+      brandId: [1],
       name: ['']
     })
     const dialogRef = this.dialog.open(AddTypeComponent, {
