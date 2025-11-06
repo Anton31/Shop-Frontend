@@ -52,7 +52,6 @@ export class TypeListComponent implements OnInit {
 
   addType() {
     this.typeForm = this.fb.group({
-      id: [0],
       brandId: [1],
       name: ['']
     })
@@ -77,6 +76,7 @@ export class TypeListComponent implements OnInit {
   editType(type: Type) {
     this.typeForm = this.fb.group({
       id: [type.id],
+      brandId: [1],
       name: [type.name]
     })
     const dialogRef = this.dialog.open(AddTypeComponent, {

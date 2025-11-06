@@ -6,7 +6,6 @@
       <mat-form-field>
         <mat-label>Type</mat-label>
         <mat-select formControlName="typeId">
-          <mat-option [value]="1">None</mat-option>
           @for (type of types; track type) {
             <mat-option [value]="type.id">{{ type.name }}</mat-option>
           }
@@ -17,7 +16,6 @@
       <mat-form-field>
         <mat-label>Brand</mat-label>
         <mat-select formControlName="brandId">
-          <mat-option [value]="1">None</mat-option>
           @for (brand of brands; track brand) {
             <mat-option [value]="brand.id">{{ brand.name }}</mat-option>
           }

@@ -3,7 +3,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {FormGroup} from "@angular/forms";
 import {ProductService} from "../../service/product-service";
 import {Type} from "../../model/type";
-import {Brand} from "../../model/brand";
 
 @Component({
   selector: 'app-add-brand',
@@ -37,7 +36,6 @@ export class AddBrandComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTypes();
-
   }
 }
 
