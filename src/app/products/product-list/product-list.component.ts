@@ -34,7 +34,7 @@ export class ProductListComponent implements OnInit {
   filterBrands: Brand[] = [];
   currentTypeId = 0;
   currentBrandId = 0;
-  currentSort = 'id';
+  currentSort = 'name';
   currentDir = 'ASC';
   pageSize = 10;
   pageIndex = 0;
@@ -85,7 +85,7 @@ export class ProductListComponent implements OnInit {
   }
 
   getFilterTypes() {
-    this.productService.getAllTypes('id', 'ASC').subscribe(data => {
+    this.productService.getProductTypes().subscribe(data => {
       this.filterTypes = data;
     });
   }
@@ -219,7 +219,7 @@ export class ProductListComponent implements OnInit {
   resetFilters() {
     this.currentTypeId = 0;
     this.currentBrandId = 0;
-    this.currentSort = 'id';
+    this.currentSort = 'name';
     this.currentDir = 'ASC';
     this.pageIndex = 0;
     this.pageSize = 10;

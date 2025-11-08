@@ -21,7 +21,7 @@ export class TypeListComponent implements OnInit {
   types: Type[] = [];
   displayedColumns: string[] = ['name', 'edit', 'delete'];
   typeForm!: FormGroup;
-  currentSort= 'id';
+  currentSort='id';
   currentDir = 'ASC';
   user!: Observable<UserInfo>;
 
@@ -34,12 +34,12 @@ export class TypeListComponent implements OnInit {
   }
 
   sortTypes(sortState: Sort) {
-    this.currentSort = sortState.active;
     this.currentDir = sortState.direction;
     this.getTypes();
   }
 
   reset() {
+    this.currentSort = 'id';
     this.currentDir = 'ASC';
   }
 
