@@ -114,7 +114,6 @@ export class BrandListComponent implements OnInit {
       )
     })
   }
-
   ngOnInit(): void {
     this.getBrands();
   }
