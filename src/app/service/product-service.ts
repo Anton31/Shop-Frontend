@@ -90,7 +90,6 @@ export class ProductService {
 
   addType(data: any): Observable<any> {
     const formData = new FormData();
-    formData.append("brandId", data.controls.brandId.value);
     formData.append("name", data.controls.name.value);
     return this.http.post<any>(`${this.baseUrl}/products/type`, formData);
   }
@@ -98,7 +97,6 @@ export class ProductService {
   editType(data: any): Observable<any> {
     const formData = new FormData();
     formData.append("id", data.controls.id.value);
-    formData.append("brandId", data.controls.brandId.value);
     formData.append("name", data.controls.name.value);
     return this.http.put<any>(`${this.baseUrl}/products/type`, formData);
   }
@@ -109,7 +107,6 @@ export class ProductService {
 
   addBrand(data: any): Observable<any> {
     const formData = new FormData();
-    formData.append("typeId", data.controls.typeId.value);
     formData.append("name", data.controls.name.value);
     return this.http.post<any>(`${this.baseUrl}/products/brand`, formData);
   }
@@ -117,7 +114,6 @@ export class ProductService {
   editBrand(data: any): Observable<any> {
     const formData = new FormData();
     formData.append("id", data.controls.id.value);
-    formData.append("typeId", data.controls.typeId.value);
     formData.append("name", data.controls.name.value);
     return this.http.put<any>(`${this.baseUrl}/products/brand`, formData);
   }

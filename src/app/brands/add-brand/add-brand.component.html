@@ -4,16 +4,6 @@
     <input formControlName="id" type="hidden">
   </p>
   <p align="center">
-  <mat-form-field>
-    <mat-label>Type</mat-label>
-    <mat-select formControlName="typeId">
-      @for (type of types; track type) {
-        <mat-option [value]="type.id">{{ type.name }}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
-  </p>
-  <p align="center">
     <mat-form-field>
       <mat-label>Name:</mat-label>
       <input formControlName="name" matInput>
