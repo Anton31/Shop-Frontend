@@ -21,7 +21,7 @@ export class BrandListComponent implements OnInit {
   brands: Brand[] = [];
   brandForm!: FormGroup;
   displayedColumns: string[] = ['name', 'edit', 'delete'];
-  currentSort = 'id';
+  currentSort = 'name';
   currentDir = 'ASC';
   user!: Observable<UserInfo>;
 
@@ -40,7 +40,7 @@ export class BrandListComponent implements OnInit {
   }
 
   getBrands() {
-    this.productService.getTypeBrands(0, this.currentSort, this.currentDir)
+    this.productService.getAllBrands(this.currentSort, this.currentDir)
       .subscribe(data => {
         this.brands = data;
       });
@@ -48,7 +48,7 @@ export class BrandListComponent implements OnInit {
 
   reset() {
     this.currentDir = 'ASC';
-    this.currentSort = 'id';
+    this.currentSort = 'name';
   }
 
   addBrand() {
@@ -112,6 +112,7 @@ export class BrandListComponent implements OnInit {
       )
     })
   }
+
   ngOnInit(): void {
     this.getBrands();
   }
