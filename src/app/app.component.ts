@@ -28,12 +28,8 @@ export class AppComponent implements OnInit {
     this.user = this.userService.userSubject.pipe();
   }
 
-  login1() {
-    this.userService.login1();
-  }
-
-  login2() {
-    this.userService.login2();
+  login() {
+    this.userService.login();
   }
 
   addUser() {
@@ -84,6 +80,5 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userService.getAuthCode();
   }
 }
