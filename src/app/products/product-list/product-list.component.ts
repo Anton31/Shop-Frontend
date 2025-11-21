@@ -11,13 +11,13 @@ import {DeleteProductComponent} from "../delete-product/delete-product.component
 import {Sort} from "@angular/material/sort";
 import {OrderService} from "../../service/order-service";
 import {ItemDto} from "../../dto/item-dto";
-import {UserService} from "../../service/user-service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {CartComponent} from "../../cart/cart.component";
 import {OrderDto} from "../../dto/order-dto";
 import {Cart} from "../../model/cart";
 import {Observable} from "rxjs";
 import {UserInfo} from "../../dto/user-info";
+import {AuthService} from "../../service/auth-service";
 
 
 @Component({
@@ -54,13 +54,13 @@ export class ProductListComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private productService: ProductService,
               private orderService: OrderService,
-              private userService: UserService,
+              private authService: AuthService,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
 
     this.itemDto = new ItemDto(0, 0, 0);
     this.orderDto = new OrderDto('', '', '');
-    this.user = this.userService.userSubject.pipe();
+    this.user = this.authService.userSubject.pipe();
 
   }
 

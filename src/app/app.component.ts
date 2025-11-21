@@ -1,12 +1,12 @@
 import {Component, OnInit} from "@angular/core";
-import {UserDto} from "./dto/user-dto";
 import {Observable} from "rxjs";
 import {UserInfo} from "./dto/user-info";
-import {UserService} from "./service/user-service";
+import {AuthService} from "./service/auth-service";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {RegisterComponent} from "./register/register.component";
 import {FormBuilder, FormGroup} from "@angular/forms";
+import {UserService} from "./service/user-service";
 
 
 @Component({
@@ -16,20 +16,25 @@ import {FormBuilder, FormGroup} from "@angular/forms";
   standalone: false
 })
 export class AppComponent implements OnInit {
-  dto: UserDto;
+
   user!: Observable<UserInfo>;
   userForm!: FormGroup;
+  username!: string;
+  role!: string;
 
-  constructor(private userService: UserService,
+  constructor(private authService: AuthService,
+              private userService: UserService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
-    this.dto = new UserDto('', '', '', '', '');
-    this.user = this.userService.userSubject.pipe();
+    this.authService.userSubject.subscribe(data => {
+      this.username = data.username;
+      this.role = data.role;
+    })
   }
 
   login() {
-    this.userService.login();
+    this.authService.login();
   }
 
   addUser() {
@@ -46,18 +51,17 @@ export class AppComponent implements OnInit {
       data: {userForm: this.userForm, new: true}
     }).afterClosed().subscribe(data => {
       this.userService.addUser(data).subscribe(data2 => {
-          this.snackBar.open(data2.message, 'undo', {duration: 3000})
+          this.snackBar.open(data2.message, '', {duration: 3000})
         },
         err => {
-          this.snackBar.open(err.error.message, 'undo', {duration: 3000})
+          this.snackBar.open(err.error.message, '', {duration: 3000})
         })
     })
   }
 
   editUser() {
-    let username = this.userService.fetchUsername();
     this.userForm = this.fb.group({
-      username: [username],
+      username: [this.username],
       password: [''],
       passwordConfirmed: [''],
     })
@@ -67,16 +71,16 @@ export class AppComponent implements OnInit {
       data: {userForm: this.userForm, new: false}
     }).afterClosed().subscribe(data => {
       this.userService.editUser(data).subscribe(data2 => {
-          this.snackBar.open(data2.message, 'undo', {duration: 3000})
+          this.snackBar.open(data2.message, '', {duration: 3000})
         },
         err => {
-          this.snackBar.open(err.error.message, 'undo', {duration: 3000})
+          this.snackBar.open(err.error.message, '', {duration: 3000})
         })
     })
   }
 
   logout() {
-    this.userService.logout();
+    this.authService.logout();
   }
 
   ngOnInit(): void {
