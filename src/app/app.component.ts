@@ -2,11 +2,12 @@ import {Component, OnInit} from "@angular/core";
 import {UserDto} from "./dto/user-dto";
 import {Observable} from "rxjs";
 import {UserInfo} from "./dto/user-info";
-import {UserService} from "./service/user-service";
+import {AuthService} from "./service/auth-service";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {RegisterComponent} from "./register/register.component";
 import {FormBuilder, FormGroup} from "@angular/forms";
+import {UserService} from "./service/user-service";
 
 
 @Component({
@@ -20,16 +21,17 @@ export class AppComponent implements OnInit {
   user!: Observable<UserInfo>;
   userForm!: FormGroup;
 
-  constructor(private userService: UserService,
+  constructor(private authService: AuthService,
+              private userService: UserService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
     this.dto = new UserDto('', '', '', '', '');
-    this.user = this.userService.userSubject.pipe();
+    this.user = this.authService.userSubject.pipe();
   }
 
   login() {
-    this.userService.login();
+    this.authService.login();
   }
 
   addUser() {
@@ -55,7 +57,7 @@ export class AppComponent implements OnInit {
   }
 
   editUser() {
-    let username = this.userService.fetchUsername();
+    let username = this.authService.getUsername();
     this.userForm = this.fb.group({
       username: [username],
       password: [''],
@@ -76,7 +78,7 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-    this.userService.logout();
+    this.authService.logout();
   }
 
   ngOnInit(): void {

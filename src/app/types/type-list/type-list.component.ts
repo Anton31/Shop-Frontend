@@ -5,7 +5,7 @@ import {AddTypeComponent} from "../add-type/add-type.component";
 import {MatDialog} from "@angular/material/dialog";
 import {DeleteTypeComponent} from "../delete-type/delete-type.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {UserService} from "../../service/user-service";
+import {AuthService} from "../../service/auth-service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Sort} from "@angular/material/sort";
 import {Observable} from "rxjs";
@@ -25,7 +25,7 @@ export class TypeListComponent implements OnInit {
   currentDir = 'ASC';
   user!: Observable<UserInfo>;
 
-  constructor(private userService: UserService,
+  constructor(private userService: AuthService,
               private productService: ProductService,
               private fb: FormBuilder,
               private dialog: MatDialog,

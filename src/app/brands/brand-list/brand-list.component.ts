@@ -5,7 +5,7 @@ import {AddBrandComponent} from "../add-brand/add-brand.component";
 import {MatDialog} from "@angular/material/dialog";
 import {DeleteBrandComponent} from "../delete-brand/delete-brand.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {UserService} from "../../service/user-service";
+import {AuthService} from "../../service/auth-service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Sort} from "@angular/material/sort";
 import {Observable} from "rxjs";
@@ -25,7 +25,7 @@ export class BrandListComponent implements OnInit {
   currentDir = 'ASC';
   user!: Observable<UserInfo>;
 
-  constructor(private userService: UserService,
+  constructor(private userService: AuthService,
               private productService: ProductService,
               private fb: FormBuilder,
               private dialog: MatDialog,

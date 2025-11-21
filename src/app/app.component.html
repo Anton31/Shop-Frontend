@@ -12,18 +12,18 @@
     <p>
       <button (click)="editUser()" color="primary" mat-stroked-button>Change password</button>
     </p>
-    <p>
-      <button (click)="logout()" color="primary" mat-stroked-button>
-        <mat-icon>logout</mat-icon>
-        logout
-      </button>
-    </p>
+    <button (click)="logout()" color="primary" mat-stroked-button>
+      <mat-icon>logout</mat-icon>
+      logout
+    </button>
   </mat-menu>
-  @if ((user | async)?.username === 'none') {
+  @if ((user | async)?.role === 'none') {
     <button (click)="login()" color="primary" mat-stroked-button>
       <mat-icon>login</mat-icon>
       login
     </button>
+  }
+  @if ((user | async)?.role === 'none') {
     <button (click)="addUser()" color="primary" mat-stroked-button>Sign Up</button>
   }
 </div>

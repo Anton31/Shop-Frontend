@@ -11,7 +11,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {Observable} from "rxjs";
 import {UserInfo} from "../../dto/user-info";
-import {UserService} from "../../service/user-service";
+import {AuthService} from "../../service/auth-service";
 
 @Component({
   selector: 'app-get-product',
@@ -33,7 +33,7 @@ export class GetProductComponent {
   user!: Observable<UserInfo>;
 
   constructor(private productService: ProductService,
-              private userService: UserService,
+              private userService: AuthService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private route: ActivatedRoute) {
