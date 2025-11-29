@@ -1,12 +1,13 @@
-import {Component, OnInit} from "@angular/core";
-import {Observable} from "rxjs";
-import {UserInfo} from "./dto/user-info";
+import {Component} from "@angular/core";
+
+
 import {AuthService} from "./service/auth-service";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {RegisterComponent} from "./register/register.component";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {UserService} from "./service/user-service";
+import {Subscription} from "rxjs";
 
 
 @Component({
@@ -15,19 +16,18 @@ import {UserService} from "./service/user-service";
   styleUrls: ['./app.component.css'],
   standalone: false
 })
-export class AppComponent implements OnInit {
-
-  user!: Observable<UserInfo>;
+export class AppComponent {
   userForm!: FormGroup;
   username!: string;
   role!: string;
+  subscription!: Subscription;
 
   constructor(private authService: AuthService,
               private userService: UserService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
-    this.authService.userSubject.subscribe(data => {
+    this.subscription = this.authService.userSubject.subscribe(data => {
       this.username = data.username;
       this.role = data.role;
     })
@@ -81,8 +81,5 @@ export class AppComponent implements OnInit {
 
   logout() {
     this.authService.logout();
-  }
-
-  ngOnInit(): void {
   }
 }

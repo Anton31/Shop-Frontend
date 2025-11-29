@@ -8,8 +8,6 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {AuthService} from "../../service/auth-service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Sort} from "@angular/material/sort";
-import {Observable} from "rxjs";
-import {UserInfo} from "../../dto/user-info";
 
 @Component({
   selector: 'app-type-list',
@@ -19,22 +17,25 @@ import {UserInfo} from "../../dto/user-info";
 })
 export class TypeListComponent implements OnInit {
   types: Type[] = [];
-  displayedColumns: string[] = ['name', 'edit', 'delete'];
+  displayedColumns: string[] = ['name', 'brands', 'edit', 'delete'];
   typeForm!: FormGroup;
-  currentSort='name';
+  currentSort = 'name';
   currentDir = 'ASC';
-  user!: Observable<UserInfo>;
+  role!: string;
 
   constructor(private userService: AuthService,
               private productService: ProductService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
-    this.user = this.userService.userSubject.pipe();
+    this.userService.userSubject.subscribe(data => {
+      this.role = data.role;
+    })
   }
 
   sortTypes(sortState: Sort) {
     this.currentDir = sortState.direction;
+    this.currentSort = sortState.active;
     this.getTypes();
   }
 
@@ -108,6 +109,12 @@ export class TypeListComponent implements OnInit {
         this.snackBar.open(error.error.message, '', {duration: 3000})
       });
     });
+  }
+
+  deleteBrand(id: number) {
+    this.productService.deleteBrand(id).subscribe(data => {
+      this.getTypes();
+    })
   }
 
   ngOnInit(): void {

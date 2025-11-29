@@ -13,16 +13,18 @@
       <p>
         <button (click)="editUser()" color="primary" mat-stroked-button>Change password</button>
       </p>
-      <button (click)="logout()" color="primary" mat-stroked-button>
-        <mat-icon>logout</mat-icon>
-        logout
-      </button>
     </mat-menu>
   }
   @if (role === 'none') {
     <button (click)="login()" color="primary" mat-stroked-button>
       <mat-icon>login</mat-icon>
       login
+    </button>
+  }
+  @if (role === 'user' || role === 'admin') {
+    <button (click)="logout()" color="primary" mat-stroked-button>
+      <mat-icon>logout</mat-icon>
+      logout
     </button>
   }
   @if (role === 'none') {

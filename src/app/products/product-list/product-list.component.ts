@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Product} from "../../model/product";
 import {Type} from "../../model/type";
 import {Brand} from "../../model/brand";
@@ -15,9 +15,8 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {CartComponent} from "../../cart/cart.component";
 import {OrderDto} from "../../dto/order-dto";
 import {Cart} from "../../model/cart";
-import {Observable} from "rxjs";
-import {UserInfo} from "../../dto/user-info";
 import {AuthService} from "../../service/auth-service";
+import {Subscription} from "rxjs";
 
 
 @Component({
@@ -26,7 +25,7 @@ import {AuthService} from "../../service/auth-service";
   styleUrls: ['./product-list.component.css'],
   standalone: false
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, OnDestroy {
 
   title = 'angularFrontend';
   products: Product[] = [];
@@ -48,8 +47,8 @@ export class ProductListComponent implements OnInit {
   totalQuantity!: number;
   orderDto: OrderDto;
   cart!: Cart;
-  user!: Observable<UserInfo>;
-
+  role!: string;
+  subscription!: Subscription;
 
   constructor(private fb: FormBuilder,
               private productService: ProductService,
@@ -60,7 +59,6 @@ export class ProductListComponent implements OnInit {
 
     this.itemDto = new ItemDto(0, 0, 0);
     this.orderDto = new OrderDto('', '', '');
-    this.user = this.authService.userSubject.pipe();
 
   }
 
@@ -271,8 +269,15 @@ export class ProductListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.subscription = this.authService.userSubject.subscribe(data => {
+      this.role = data.role;
+    });
     this.getProducts();
     this.getFilterTypes();
     this.getCart();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

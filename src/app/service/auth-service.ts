@@ -17,7 +17,7 @@ export class AuthService {
     this.oauthService.configure(authConfig);
     this.oauthService.loadDiscoveryDocumentAndTryLogin();
     this.oauthService.events.subscribe(event => {
-      if (event.type === 'token_received' || event.type === 'logout') {
+      if (event.type === 'token_received') {
         this.getUser();
       }
     });

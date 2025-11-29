@@ -8,8 +8,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {AuthService} from "../../service/auth-service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Sort} from "@angular/material/sort";
-import {Observable} from "rxjs";
-import {UserInfo} from "../../dto/user-info";
+
 
 @Component({
   selector: 'app-brand-list',
@@ -23,14 +22,16 @@ export class BrandListComponent implements OnInit {
   displayedColumns: string[] = ['name', 'edit', 'delete'];
   currentSort = 'name';
   currentDir = 'ASC';
-  user!: Observable<UserInfo>;
+  role!: string;
 
   constructor(private userService: AuthService,
               private productService: ProductService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
-    this.user = this.userService.userSubject.pipe();
+    this.userService.userSubject.subscribe(data=>{
+      this.role = data.role;
+    })
   }
 
   sortBrands(sortState: Sort) {
