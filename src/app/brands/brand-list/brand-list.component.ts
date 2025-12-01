@@ -29,7 +29,7 @@ export class BrandListComponent implements OnInit {
               private fb: FormBuilder,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
-    this.userService.userSubject.subscribe(data=>{
+    this.userService.userSubject.subscribe(data => {
       this.role = data.role;
     })
   }
@@ -54,7 +54,8 @@ export class BrandListComponent implements OnInit {
 
   addBrand() {
     this.brandForm = this.fb.group({
-      name: ['']
+      name: [''],
+      typeId: [2]
     });
     const dialogRef = this.dialog.open(AddBrandComponent, {
       height: '500px',

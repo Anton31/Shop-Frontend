@@ -43,9 +43,7 @@ export class ProductService {
 
   getTypeBrands(typeId: number, sort: string, dir: string): Observable<Brand[]> {
     let params = new HttpParams();
-    if (typeId > 0) {
-      params = params.set('typeId', typeId);
-    }
+    params = params.set('typeId', typeId);
     params = params.set('sort', sort);
     params = params.set('dir', dir);
     return this.http.get<Brand[]>(`${this.baseUrl}/products/productBrand`, {params: params});
@@ -98,6 +96,7 @@ export class ProductService {
   addType(data: any): Observable<any> {
     const formData = new FormData();
     formData.append("name", data.controls.name.value);
+
     return this.http.post<any>(`${this.baseUrl}/products/type`, formData);
   }
 
@@ -114,6 +113,7 @@ export class ProductService {
 
   addBrand(data: any): Observable<any> {
     const formData = new FormData();
+    formData.append("typeId", data.controls.typeId.value);
     formData.append("name", data.controls.name.value);
     return this.http.post<any>(`${this.baseUrl}/products/brand`, formData);
   }
