@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProductService} from "../../service/product-service";
 import {Brand} from "../../model/brand";
 import {AddBrandComponent} from "../add-brand/add-brand.component";
@@ -8,6 +8,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {AuthService} from "../../service/auth-service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Sort} from "@angular/material/sort";
+import {Subscription} from "rxjs";
 
 
 @Component({
@@ -16,22 +17,20 @@ import {Sort} from "@angular/material/sort";
   styleUrls: ['./brand-list.component.css'],
   standalone: false
 })
-export class BrandListComponent implements OnInit {
+export class BrandListComponent implements OnInit, OnDestroy {
   brands: Brand[] = [];
   brandForm!: FormGroup;
   displayedColumns: string[] = ['name', 'edit', 'delete'];
   currentSort = 'name';
   currentDir = 'ASC';
   role!: string;
+  subscription!: Subscription;
 
   constructor(private userService: AuthService,
               private productService: ProductService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
-    this.userService.userSubject.subscribe(data => {
-      this.role = data.role;
-    })
   }
 
   sortBrands(sortState: Sort) {
@@ -116,6 +115,13 @@ export class BrandListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.subscription = this.userService.userSubject.subscribe(data => {
+      this.role = data.role;
+    });
     this.getBrands();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

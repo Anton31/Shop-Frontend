@@ -16,6 +16,7 @@ export class AddProductComponent implements OnInit {
   types!: Type[];
   brands!: Brand[];
 
+
   constructor(public productService: ProductService,
               public dialogRef: MatDialogRef<AddProductComponent>,
               @Inject(MAT_DIALOG_DATA) public data: ProductDialogData) {
@@ -44,7 +45,6 @@ export class AddProductComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTypes();
-
   }
 }
 

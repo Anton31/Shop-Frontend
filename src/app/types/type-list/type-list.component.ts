@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Type} from "../../model/type";
 import {ProductService} from "../../service/product-service";
 import {AddTypeComponent} from "../add-type/add-type.component";
@@ -8,6 +8,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {AuthService} from "../../service/auth-service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Sort} from "@angular/material/sort";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-type-list',
@@ -15,22 +16,20 @@ import {Sort} from "@angular/material/sort";
   styleUrls: ['./type-list.component.css'],
   standalone: false
 })
-export class TypeListComponent implements OnInit {
+export class TypeListComponent implements OnInit, OnDestroy {
   types: Type[] = [];
   displayedColumns: string[] = ['name', 'brands', 'edit', 'delete'];
   typeForm!: FormGroup;
   currentSort = 'name';
   currentDir = 'ASC';
   role!: string;
+  subscription!: Subscription;
 
   constructor(private userService: AuthService,
               private productService: ProductService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
-    this.userService.userSubject.subscribe(data => {
-      this.role = data.role;
-    })
   }
 
   sortTypes(sortState: Sort) {
@@ -111,13 +110,15 @@ export class TypeListComponent implements OnInit {
     });
   }
 
-  deleteBrand(id: number) {
-    this.productService.deleteBrand(id).subscribe(data => {
-      this.getTypes();
-    })
-  }
 
   ngOnInit(): void {
+    this.subscription = this.userService.userSubject.subscribe(data => {
+      this.role = data.role;
+    });
     this.getTypes();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }
