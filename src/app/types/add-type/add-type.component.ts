@@ -26,7 +26,7 @@ export class AddTypeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.service.getTypeBrands(0, 'id', 'ASC').subscribe(data => {
+    this.service.getAllBrands('name', 'ASC').subscribe(data => {
       this.brands = data;
     })
   }

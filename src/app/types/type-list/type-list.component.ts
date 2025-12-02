@@ -52,6 +52,7 @@ export class TypeListComponent implements OnInit, OnDestroy {
 
   addType() {
     this.typeForm = this.fb.group({
+      brandId: [2],
       name: ['']
     })
     const dialogRef = this.dialog.open(AddTypeComponent, {
