@@ -16,7 +16,12 @@
   <p align="center">
     <mat-form-field>
       <mat-label>Name:</mat-label>
-      <input formControlName="name" matInput>
+      <input [matAutocomplete]="auto" formControlName="name" matInput>
+      <mat-autocomplete #auto="matAutocomplete">
+        @for (brand of brands; track brand) {
+          <mat-option [value]="brand.name">{{ brand.name }}</mat-option>
+        }
+      </mat-autocomplete>
     </mat-form-field>
   </p>
 </form>

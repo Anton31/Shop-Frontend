@@ -41,6 +41,7 @@ import {DeletePhotoComponent} from "./photos/delete-photo/delete-photo.component
 import {CarouselModule} from "ngx-owl-carousel-o";
 import {AddPhotosComponent} from "./photos/add-photos/add-photos.component";
 import {GetProductComponent} from "./products/get-product/get-product.component";
+import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocomplete";
 
 
 @NgModule({
@@ -93,7 +94,9 @@ import {GetProductComponent} from "./products/get-product/get-product.component"
     NgOptimizedImage,
     MatMenuModule,
     MatBadgeModule,
-    RouterModule],
+    RouterModule,
+    MatAutocomplete,
+    MatAutocompleteTrigger],
   providers: [
     provideHttpClient(withInterceptors([authInterceptor]))
   ]
