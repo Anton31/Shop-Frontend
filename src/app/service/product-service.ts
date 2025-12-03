@@ -97,7 +97,6 @@ export class ProductService {
 
   addType(data: any): Observable<any> {
     const formData = new FormData();
-    formData.append("brandId", data.controls.brandId.value);
     formData.append("name", data.controls.name.value);
     return this.http.post<any>(`${this.baseUrl}/products/type`, formData);
   }
