@@ -149,9 +149,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   addProduct() {
     this.productForm = this.fb.group({
-      id: [undefined],
-      typeId: [1],
-      brandId: [1],
+      typeId: [0],
+      brandId: [0],
       name: [''],
       price: [1000]
     })
@@ -177,8 +176,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
   editProduct(product: Product) {
     this.productForm = this.fb.group({
       id: [product.id],
-      typeId: [product.type.id],
-      brandId: [product.brand.id],
+      typeId: [0],
+      brandId: [0],
       name: [product.name],
       price: [product.price]
     })

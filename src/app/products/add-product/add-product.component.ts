@@ -33,7 +33,13 @@ export class AddProductComponent implements OnInit {
     });
   }
 
-  getBrands(event: any) {
+  getBrands() {
+    this.productService.getTypeBrands(0, 'name', 'ASC').subscribe(data => {
+      this.brands = data;
+    });
+  }
+
+  filterBrands(event: any) {
     this.productService.getTypeBrands(event.value, 'name', 'ASC').subscribe(data => {
       this.brands = data;
     });
@@ -45,6 +51,7 @@ export class AddProductComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTypes();
+    this.getBrands();
   }
 }
 
