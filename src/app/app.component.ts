@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, OnDestroy, OnInit} from "@angular/core";
 
 
 import {AuthService} from "./service/auth-service";
@@ -16,7 +16,7 @@ import {Subscription} from "rxjs";
   styleUrls: ['./app.component.css'],
   standalone: false
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
   userForm!: FormGroup;
   username!: string;
   role!: string;
@@ -27,10 +27,18 @@ export class AppComponent {
               private fb: FormBuilder,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
+
+  }
+
+  ngOnInit(): void {
     this.subscription = this.authService.userSubject.subscribe(data => {
       this.username = data.username;
       this.role = data.role;
     })
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   login() {
@@ -80,6 +88,7 @@ export class AppComponent {
   }
 
   logout() {
+    localStorage.clear();
     this.authService.logout();
   }
 }

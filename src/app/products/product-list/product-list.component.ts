@@ -174,10 +174,18 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   editProduct(product: Product) {
+    let typeId = 0;
+    if (product.type !== null) {
+      typeId = product.type.id;
+    }
+    let brandId = 0;
+    if (product.brand !== null) {
+      brandId = product.brand.id;
+    }
     this.productForm = this.fb.group({
       id: [product.id],
-      typeId: [0],
-      brandId: [0],
+      typeId: [typeId],
+      brandId: [brandId],
       name: [product.name],
       price: [product.price]
     })

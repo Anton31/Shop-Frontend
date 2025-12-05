@@ -28,7 +28,7 @@ export class AddProductComponent implements OnInit {
   }
 
   getTypes() {
-    this.productService.getAllTypes('name', 'ASC').subscribe(data => {
+    this.productService.getAllTypes('id', 'ASC').subscribe(data => {
       this.types = data;
     });
   }
