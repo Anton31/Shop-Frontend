@@ -83,7 +83,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   getFilterTypes() {
-    this.productService.getProductTypes().subscribe(data => {
+    this.productService.getProductTypes('id', 'ASC').subscribe(data => {
       this.filterTypes = data;
     });
   }
@@ -149,8 +149,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   addProduct() {
     this.productForm = this.fb.group({
-      typeId: [0],
-      brandId: [0],
+      typeId: [1],
+      brandId: [1],
       name: [''],
       price: [1000]
     })
@@ -174,18 +174,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   editProduct(product: Product) {
-    let typeId = 0;
-    if (product.type !== null) {
-      typeId = product.type.id;
-    }
-    let brandId = 0;
-    if (product.brand !== null) {
-      brandId = product.brand.id;
-    }
     this.productForm = this.fb.group({
       id: [product.id],
-      typeId: [typeId],
-      brandId: [brandId],
+      typeId: [product.type.id],
+      brandId: [product.brand.id],
       name: [product.name],
       price: [product.price]
     })

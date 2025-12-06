@@ -15,7 +15,6 @@ export class AddBrandComponent implements OnInit {
   title: string;
   types!: Type[];
   brands!: Brand[];
-
   constructor(private service: ProductService,
               public dialogRef: MatDialogRef<AddBrandComponent>,
               @Inject(MAT_DIALOG_DATA) public data: BrandDialogData
@@ -25,7 +24,7 @@ export class AddBrandComponent implements OnInit {
   }
 
   getTypes() {
-    this.service.getAllTypes('id', 'ASC').subscribe(data => {
+    this.service.getAllTypes('name', 'ASC').subscribe(data => {
       this.types = data;
     })
   }
