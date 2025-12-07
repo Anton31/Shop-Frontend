@@ -5,8 +5,9 @@
   </p>
   <p align="center">
     <mat-form-field>
-      <mat-label>Type:</mat-label>
-      <mat-select formControlName="typeId">
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="typeId" required>
+        <mat-option [value]="1">None</mat-option>
         @for (type of types; track type) {
           <mat-option [value]="type.id">{{ type.name }}</mat-option>
         }
@@ -16,12 +17,7 @@
   <p align="center">
     <mat-form-field>
       <mat-label>Name:</mat-label>
-      <input [matAutocomplete]="auto" placeholder="select brand" formControlName="name" matInput>
-      <mat-autocomplete #auto="matAutocomplete">
-        @for (brand of brands; track brand) {
-          <mat-option [value]="brand.name">{{ brand.name }}</mat-option>
-        }
-      </mat-autocomplete>
+      <input formControlName="name" matInput>
     </mat-form-field>
   </p>
 </form>

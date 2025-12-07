@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component} from "@angular/core";
 
 
 import {AuthService} from "./service/auth-service";
@@ -7,7 +7,9 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {RegisterComponent} from "./register/register.component";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {UserService} from "./service/user-service";
-import {Subscription} from "rxjs";
+
+import {UserInfo} from "./dto/user-info";
+import {Observable} from "rxjs";
 
 
 @Component({
@@ -16,30 +18,20 @@ import {Subscription} from "rxjs";
   styleUrls: ['./app.component.css'],
   standalone: false
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent {
   userForm!: FormGroup;
   username!: string;
   role!: string;
-  subscription!: Subscription;
+  user!: Observable<UserInfo>;
 
   constructor(private authService: AuthService,
               private userService: UserService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
-
+    this.user = this.authService.userSubject.pipe();
   }
 
-  ngOnInit(): void {
-    this.subscription = this.authService.userSubject.subscribe(data => {
-      this.username = data.username;
-      this.role = data.role;
-    })
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
 
   login() {
     this.authService.login();
@@ -47,7 +39,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   addUser() {
     this.userForm = this.fb.group({
-      role: ['user'],
+      role: ['admin'],
       username: [''],
       email: [''],
       password: [''],

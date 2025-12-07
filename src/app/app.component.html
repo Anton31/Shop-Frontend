@@ -5,9 +5,9 @@
   <a class="button" routerLink="/orders">Orders</a>
 </nav>
 <div align="right" style="margin: 20px">
-  @if (role === 'user' || role === 'admin') {
+  @if ((user | async)?.role === 'user' || (user | async)?.role === 'admin') {
     <button [matMenuTriggerFor]="menu" color="primary" mat-stroked-button>
-      {{ username }} : {{ role }}
+      {{ (user | async)?.username }} : {{ (user | async)?.role }}
     </button>
     <mat-menu #menu="matMenu">
       <p>
@@ -15,19 +15,16 @@
       </p>
     </mat-menu>
   }
-  @if (role === 'none') {
-    <button (click)="login()" color="primary" mat-stroked-button>
-      <mat-icon>login</mat-icon>
-      login
-    </button>
-  }
-  @if (role === 'user' || role === 'admin') {
+  @if ((user | async)?.role === 'user' || (user | async)?.role === 'admin') {
     <button (click)="logout()" color="primary" mat-stroked-button>
       <mat-icon>logout</mat-icon>
       logout
     </button>
-  }
-  @if (role === 'none') {
+  } @else {
+    <button (click)="login()" color="primary" mat-stroked-button>
+      <mat-icon>login</mat-icon>
+      login
+    </button>
     <button (click)="addUser()" color="primary" mat-stroked-button>Sign Up</button>
   }
 </div>

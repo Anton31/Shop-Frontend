@@ -39,10 +39,10 @@ export class AddProductComponent implements OnInit {
     });
   }
 
-  filterBrands(event: any) {
+  getBrandsByType(event: any) {
     this.productService.getTypeBrands(event.value, 'name', 'ASC').subscribe(data => {
       this.brands = data;
-    });
+    })
   }
 
   onNoClick(): void {

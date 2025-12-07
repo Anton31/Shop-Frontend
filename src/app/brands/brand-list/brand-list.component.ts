@@ -53,8 +53,8 @@ export class BrandListComponent implements OnInit, OnDestroy {
 
   addBrand() {
     this.brandForm = this.fb.group({
-      name: [''],
-      typeId: [2]
+      typeId: [1],
+      name: ['']
     });
     const dialogRef = this.dialog.open(AddBrandComponent, {
       height: '500px',
