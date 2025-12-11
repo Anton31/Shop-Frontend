@@ -14,13 +14,35 @@
       </mat-select>
     </mat-form-field>
   </p>
-  <p align="center">
-    <mat-form-field>
-      <mat-label>Name:</mat-label>
-      <input formControlName="name" matInput>
-    </mat-form-field>
-  </p>
+  @if (newBrand === 'new') {
+    <p align="center">
+      <mat-form-field>
+        <mat-label>Name:</mat-label>
+        <input formControlName="name" matInput placeholder="name">
+      </mat-form-field>
+    </p>
+  }
+  @if (newBrand === 'existing') {
+    <p align="center">
+      <mat-form-field>
+        <mat-label>Select name:</mat-label>
+        <input [matAutocomplete]="auto" formControlName="name" matInput placeholder="select name">
+        <mat-autocomplete #auto="matAutocomplete">
+          @for (brand of brands; track brand) {
+            <mat-option [value]="brand.name">{{ brand.name }}</mat-option>
+          }
+        </mat-autocomplete>
+      </mat-form-field>
+    </p>
+  }
 </form>
+<p align="center">
+  <mat-radio-group [(ngModel)]="newBrand">
+    @for (brand of newBrands; track brand) {
+      <mat-radio-button [value]="brand">{{ brand }}</mat-radio-button>
+    }
+  </mat-radio-group>
+</p>
 <div align="center" mat-dialog-actions>
   <button (click)="onNoClick()" mat-button>No Thanks</button>
   <button [mat-dialog-close]="data.brandForm" cdkFocusInitial mat-button>Ok</button>

@@ -42,6 +42,8 @@ import {CarouselModule} from "ngx-owl-carousel-o";
 import {AddPhotosComponent} from "./photos/add-photos/add-photos.component";
 import {GetProductComponent} from "./products/get-product/get-product.component";
 import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocomplete";
+import {MatRadioModule} from "@angular/material/radio";
+
 
 
 @NgModule({
@@ -76,6 +78,7 @@ import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocom
     ]),
     OAuthModule.forRoot(),
     ReactiveFormsModule,
+    MatRadioModule,
     CarouselModule,
     FormsModule,
     BrowserAnimationsModule,
