@@ -1,14 +1,16 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProductService} from "../../service/product-service";
 import {Brand} from "../../model/brand";
 import {AddBrandComponent} from "../add-brand/add-brand.component";
 import {MatDialog} from "@angular/material/dialog";
 import {DeleteBrandComponent} from "../delete-brand/delete-brand.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {AuthService} from "../../service/auth-service";
+
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Sort} from "@angular/material/sort";
-import {Subscription} from "rxjs";
+import {Observable} from "rxjs";
+import {UserInfo} from "../../dto/user-info";
+import {AuthService} from "../../service/auth-service";
 
 
 @Component({
@@ -17,20 +19,21 @@ import {Subscription} from "rxjs";
   styleUrls: ['./brand-list.component.css'],
   standalone: false
 })
-export class BrandListComponent implements OnInit, OnDestroy {
+export class BrandListComponent implements OnInit {
   brands: Brand[] = [];
   brandForm!: FormGroup;
   displayedColumns: string[] = ['name', 'edit', 'delete'];
   currentSort = 'name';
   currentDir = 'ASC';
   role!: string;
-  subscription!: Subscription;
+  user!: Observable<UserInfo>;
 
-  constructor(private userService: AuthService,
+  constructor(private authService: AuthService,
               private productService: ProductService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
+    this.user = this.authService.userSubject.pipe();
   }
 
   sortBrands(sortState: Sort) {
@@ -115,13 +118,6 @@ export class BrandListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscription = this.userService.userSubject.subscribe(data => {
-      this.role = data.role;
-    });
     this.getBrands();
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
   }
 }

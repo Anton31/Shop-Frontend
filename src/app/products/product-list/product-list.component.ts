@@ -91,7 +91,7 @@ export class ProductListComponent implements OnInit {
 
   getFilterBrands(typeId: number) {
     this.currentTypeId = typeId;
-    this.productService.getTypeBrands(this.currentTypeId, 'id', 'ASC').subscribe(data => {
+    this.productService.getProductBrands(this.currentTypeId, 'id', 'ASC').subscribe(data => {
       if (this.currentTypeId > 0) {
         this.filterBrands = data;
       } else {

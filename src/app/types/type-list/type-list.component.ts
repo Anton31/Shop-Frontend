@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Type} from "../../model/type";
 import {ProductService} from "../../service/product-service";
 import {AddTypeComponent} from "../add-type/add-type.component";
@@ -8,7 +8,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {AuthService} from "../../service/auth-service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Sort} from "@angular/material/sort";
-import {Subscription} from "rxjs";
+import {Observable} from "rxjs";
+import {UserInfo} from "../../dto/user-info";
 
 @Component({
   selector: 'app-type-list',
@@ -16,20 +17,21 @@ import {Subscription} from "rxjs";
   styleUrls: ['./type-list.component.css'],
   standalone: false
 })
-export class TypeListComponent implements OnInit, OnDestroy {
+export class TypeListComponent implements OnInit {
   types: Type[] = [];
   displayedColumns: string[] = ['name', 'brands', 'edit', 'delete'];
   typeForm!: FormGroup;
   currentSort = 'name';
   currentDir = 'ASC';
   role!: string;
-  subscription!: Subscription;
+  user!: Observable<UserInfo>;
 
-  constructor(private userService: AuthService,
+  constructor(private authService: AuthService,
               private productService: ProductService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
+    this.user = this.authService.userSubject.pipe();
   }
 
   sortTypes(sortState: Sort) {
@@ -111,15 +113,7 @@ export class TypeListComponent implements OnInit, OnDestroy {
     });
   }
 
-
   ngOnInit(): void {
-    this.subscription = this.userService.userSubject.subscribe(data => {
-      this.role = data.role;
-    });
     this.getTypes();
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
   }
 }

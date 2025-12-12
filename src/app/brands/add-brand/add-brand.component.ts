@@ -3,7 +3,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {FormGroup} from "@angular/forms";
 import {ProductService} from "../../service/product-service";
 import {Type} from "../../model/type";
-import {Brand} from "../../model/brand";
 
 @Component({
   selector: 'app-add-brand',
@@ -14,8 +13,6 @@ import {Brand} from "../../model/brand";
 export class AddBrandComponent implements OnInit {
   title: string;
   types: Type[] = [];
-  brands: Brand[] = [];
-
 
   constructor(private productService: ProductService,
               public dialogRef: MatDialogRef<AddBrandComponent>,
@@ -33,15 +30,8 @@ export class AddBrandComponent implements OnInit {
     })
   }
 
-  getBrands() {
-    this.productService.getAllBrands('name', 'ASC').subscribe(data => {
-      this.brands = data;
-    })
-  }
-
   ngOnInit(): void {
     this.getTypes();
-    this.getBrands();
   }
 }
 

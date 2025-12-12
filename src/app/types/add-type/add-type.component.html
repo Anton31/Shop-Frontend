@@ -5,16 +5,6 @@
   </p>
   <p align="center">
     <mat-form-field>
-      <mat-select formControlName="brandId">
-        <mat-option [value]="1">None</mat-option>
-        @for(brand of brands; track brand){
-          <mat-option [value]="brand.id">{{brand.name}}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-  </p>
-  <p align="center">
-    <mat-form-field>
       <mat-label>Name:</mat-label>
       <input formControlName="name" matInput>
     </mat-form-field>
