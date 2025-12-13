@@ -39,11 +39,6 @@ export class AddProductComponent implements OnInit {
     });
   }
 
-  getBrandsByType(event: any) {
-    this.productService.getProductBrands(event.value, 'name', 'ASC').subscribe(data => {
-      this.brands = data;
-    })
-  }
 
   onNoClick(): void {
     this.dialogRef.close();

@@ -5,21 +5,10 @@
   </p>
   <p align="center">
     <mat-form-field>
-      <mat-label>Type</mat-label>
-      <mat-select formControlName="typeId" required>
-        <mat-option [value]="1">None</mat-option>
-        @for (type of types; track type) {
-          <mat-option [value]="type.id">{{ type.name }}</mat-option>
-        }
-      </mat-select>
+      <mat-label>Name:</mat-label>
+      <input formControlName="name" matInput>
     </mat-form-field>
   </p>
-    <p align="center">
-      <mat-form-field>
-        <mat-label>Name:</mat-label>
-        <input formControlName="name" matInput placeholder="name">
-      </mat-form-field>
-    </p>
 </form>
 <div align="center" mat-dialog-actions>
   <button (click)="onNoClick()" mat-button>No Thanks</button>

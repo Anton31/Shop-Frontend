@@ -1,8 +1,6 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {FormGroup} from "@angular/forms";
-import {ProductService} from "../../service/product-service";
-import {Type} from "../../model/type";
 
 @Component({
   selector: 'app-add-brand',
@@ -10,28 +8,16 @@ import {Type} from "../../model/type";
   styleUrls: ['./add-brand.component.css'],
   standalone: false
 })
-export class AddBrandComponent implements OnInit {
+export class AddBrandComponent {
   title: string;
-  types: Type[] = [];
 
-  constructor(private productService: ProductService,
-              public dialogRef: MatDialogRef<AddBrandComponent>,
+  constructor(public dialogRef: MatDialogRef<AddBrandComponent>,
               @Inject(MAT_DIALOG_DATA) public data: BrandDialogData) {
     this.title = data.new ? 'Add brand' : 'Edit brand';
   }
 
   onNoClick() {
     this.dialogRef.close();
-  }
-
-  getTypes() {
-    this.productService.getAllTypes('name', 'ASC').subscribe(data => {
-      this.types = data;
-    })
-  }
-
-  ngOnInit(): void {
-    this.getTypes();
   }
 }
 
