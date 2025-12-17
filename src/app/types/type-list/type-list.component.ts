@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {Type} from "../../model/type";
 import {ProductService} from "../../service/product-service";
 import {AddTypeComponent} from "../add-type/add-type.component";
@@ -16,7 +16,7 @@ import {map, Observable, Subscription} from "rxjs";
   styleUrls: ['./type-list.component.css'],
   standalone: false
 })
-export class TypeListComponent implements OnInit, OnDestroy {
+export class TypeListComponent implements OnDestroy {
   types: Type[] = [];
   displayedColumns: string[] = ['name', 'brands', 'edit', 'delete'];
   typeForm!: FormGroup;
@@ -31,14 +31,11 @@ export class TypeListComponent implements OnInit, OnDestroy {
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
     this.isAdmin = this.authService.userSubject.pipe(map(value => value.role === 'admin'));
+    this.getTypes();
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
-  }
-
-  ngOnInit(): void {
-    this.getTypes();
   }
 
   sortTypes(sortState: Sort) {
@@ -119,5 +116,4 @@ export class TypeListComponent implements OnInit, OnDestroy {
       });
     });
   }
-
 }

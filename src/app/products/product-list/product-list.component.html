@@ -12,7 +12,7 @@
     </mat-chip-listbox>
   }
   <p align="center">
-    @if ((user | async)?.role === 'user' || (user | async)?.role === 'admin') {
+    @if ((isAdmin | async) || (isUser | async)) {
       <button (click)="openCart()" mat-flat-button matBadge="{{totalQuantity}}" matBadgePosition="after"
               matBadgeSize="large">
         Cart
@@ -55,7 +55,7 @@
     <ng-container matColumnDef="actions">
       <th *matHeaderCellDef mat-header-cell>Edit/remove product</th>
       <td *matCellDef="let product" mat-cell>
-        @if ((user | async)?.role === 'admin') {
+        @if ((isAdmin | async)) {
           <button (click)="editProduct(product)" mat-icon-button>
             <mat-icon>create</mat-icon>
           </button>
@@ -68,7 +68,7 @@
     <ng-container matColumnDef="cart">
       <th *matHeaderCellDef mat-header-cell> Item</th>
       <td *matCellDef="let product" mat-cell>
-        @if ((user | async)?.role === 'user' || (user | async)?.role === 'admin') {
+        @if ((isAdmin | async) || (isUser | async)) {
           <button (click)="addItemToCart(product.id)"
                   *ngIf="!cartProductIds.includes(product.id)" mat-icon-button>
             <mat-icon>add_shopping_cart</mat-icon>
@@ -88,7 +88,7 @@
                  [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize">
   </mat-paginator>
   <p></p>
-  @if ((user | async)?.role === 'admin') {
+  @if ((isAdmin | async)) {
     <button (click)="addProduct()" mat-flat-button>Add product</button>
   }
 </div>

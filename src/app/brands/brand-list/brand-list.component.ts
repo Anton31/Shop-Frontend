@@ -18,7 +18,7 @@ import {AuthService} from "../../service/auth-service";
   styleUrls: ['./brand-list.component.css'],
   standalone: false
 })
-export class BrandListComponent implements OnInit, OnDestroy {
+export class BrandListComponent implements OnDestroy {
   brands: Brand[] = [];
   brandForm!: FormGroup;
   displayedColumns: string[] = ['name', 'edit', 'delete'];
@@ -33,9 +33,6 @@ export class BrandListComponent implements OnInit, OnDestroy {
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
     this.isAdmin = this.authService.userSubject.pipe(map(value => value.role === 'admin'));
-  }
-
-  ngOnInit(): void {
     this.getBrands();
   }
 

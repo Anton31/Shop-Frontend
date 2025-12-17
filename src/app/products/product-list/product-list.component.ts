@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {Product} from "../../model/product";
 import {Type} from "../../model/type";
 import {Brand} from "../../model/brand";
@@ -16,8 +16,7 @@ import {CartComponent} from "../../cart/cart.component";
 import {OrderDto} from "../../dto/order-dto";
 import {Cart} from "../../model/cart";
 import {AuthService} from "../../service/auth-service";
-import {Observable} from "rxjs";
-import {UserInfo} from "../../dto/user-info";
+import {map, Observable, Subscription} from "rxjs";
 
 
 @Component({
@@ -26,7 +25,7 @@ import {UserInfo} from "../../dto/user-info";
   styleUrls: ['./product-list.component.css'],
   standalone: false
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnDestroy {
 
   title = 'angularFrontend';
   products: Product[] = [];
@@ -48,8 +47,11 @@ export class ProductListComponent implements OnInit {
   totalQuantity!: number;
   orderDto: OrderDto;
   cart!: Cart;
-  role!: string;
-  user!: Observable<UserInfo>;
+  isAdmin!: Observable<boolean>;
+  isUser!: Observable<boolean>;
+  productSubscription!: Subscription;
+  typeSubscription!: Subscription;
+  cartSubscription!: Subscription;
 
   constructor(private fb: FormBuilder,
               private productService: ProductService,
@@ -60,11 +62,21 @@ export class ProductListComponent implements OnInit {
 
     this.itemDto = new ItemDto(0, 0, 0);
     this.orderDto = new OrderDto('', '', '');
-    this.user = this.authService.userSubject.pipe();
+    this.isAdmin = this.authService.userSubject.pipe(map(value => value.role === 'admin'));
+    this.isUser = this.authService.userSubject.pipe(map(value => value.role === 'user'));
+    this.getProducts();
+    this.getFilterTypes();
+    this.getCart();
+  }
+
+  ngOnDestroy(): void {
+    this.productSubscription.unsubscribe();
+    this.typeSubscription.unsubscribe();
+    this.cartSubscription.unsubscribe();
   }
 
   getProducts() {
-    this.productService.getProducts(this.currentTypeId, this.currentBrandId,
+    this.productSubscription = this.productService.getProducts(this.currentTypeId, this.currentBrandId,
       this.currentSort, this.currentDir, this.pageIndex, this.pageSize)
       .subscribe(data => {
         this.products = data.products;
@@ -84,14 +96,14 @@ export class ProductListComponent implements OnInit {
   }
 
   getFilterTypes() {
-    this.productService.getProductTypes('name', 'ASC').subscribe(data => {
+    this.typeSubscription = this.productService.getProductTypes('id', 'ASC').subscribe(data => {
       this.filterTypes = data;
     });
   }
 
   getFilterBrands(typeId: number) {
     this.currentTypeId = typeId;
-    this.productService.getProductBrands(this.currentTypeId, 'name', 'ASC').subscribe(data => {
+    this.productService.getProductBrands(this.currentTypeId, 'id', 'ASC').subscribe(data => {
       if (this.currentTypeId > 0) {
         this.filterBrands = data;
       } else {
@@ -226,7 +238,7 @@ export class ProductListComponent implements OnInit {
   getCart() {
     this.totalPrice = 0;
     this.cartProductIds = [];
-    this.orderService.getCart().subscribe(data => {
+    this.cartSubscription = this.orderService.getCart().subscribe(data => {
       this.cart = data;
       this.totalPrice = data.totalPrice;
       this.totalQuantity = data.totalQuantity;
@@ -265,12 +277,6 @@ export class ProductListComponent implements OnInit {
     }).afterClosed().subscribe(data => {
       this.getCart();
     });
-    this.getCart();
-  }
-
-  ngOnInit(): void {
-    this.getProducts();
-    this.getFilterTypes();
     this.getCart();
   }
 }
