@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Type} from "../../model/type";
 import {ProductService} from "../../service/product-service";
 import {AddTypeComponent} from "../add-type/add-type.component";
@@ -8,8 +8,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {AuthService} from "../../service/auth-service";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Sort} from "@angular/material/sort";
-import {Observable} from "rxjs";
-import {UserInfo} from "../../dto/user-info";
+import {map, Observable, Subscription} from "rxjs";
 
 @Component({
   selector: 'app-type-list',
@@ -17,21 +16,29 @@ import {UserInfo} from "../../dto/user-info";
   styleUrls: ['./type-list.component.css'],
   standalone: false
 })
-export class TypeListComponent implements OnInit {
+export class TypeListComponent implements OnInit, OnDestroy {
   types: Type[] = [];
   displayedColumns: string[] = ['name', 'brands', 'edit', 'delete'];
   typeForm!: FormGroup;
   currentSort = 'name';
   currentDir = 'ASC';
-  role!: string;
-  user!: Observable<UserInfo>;
+  isAdmin!: Observable<boolean>;
+  subscription!: Subscription;
 
   constructor(private authService: AuthService,
               private productService: ProductService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
-    this.user = this.authService.userSubject.pipe();
+    this.isAdmin = this.authService.userSubject.pipe(map(value => value.role === 'admin'));
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  ngOnInit(): void {
+    this.getTypes();
   }
 
   sortTypes(sortState: Sort) {
@@ -46,7 +53,7 @@ export class TypeListComponent implements OnInit {
   }
 
   getTypes() {
-    this.productService.getAllTypes(this.currentSort, this.currentDir)
+    this.subscription = this.productService.getAllTypes(this.currentSort, this.currentDir)
       .subscribe(data => {
         this.types = data;
       });
@@ -113,7 +120,4 @@ export class TypeListComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.getTypes();
-  }
 }

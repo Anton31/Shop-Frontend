@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProductService} from "../../service/product-service";
 import {Brand} from "../../model/brand";
 import {AddBrandComponent} from "../add-brand/add-brand.component";
@@ -8,8 +8,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Sort} from "@angular/material/sort";
-import {Observable} from "rxjs";
-import {UserInfo} from "../../dto/user-info";
+import {map, Observable, Subscription} from "rxjs";
 import {AuthService} from "../../service/auth-service";
 
 
@@ -19,21 +18,29 @@ import {AuthService} from "../../service/auth-service";
   styleUrls: ['./brand-list.component.css'],
   standalone: false
 })
-export class BrandListComponent implements OnInit {
+export class BrandListComponent implements OnInit, OnDestroy {
   brands: Brand[] = [];
   brandForm!: FormGroup;
   displayedColumns: string[] = ['name', 'edit', 'delete'];
   currentSort = 'name';
   currentDir = 'ASC';
-  role!: string;
-  user!: Observable<UserInfo>;
+  isAdmin!: Observable<boolean>;
+  subscription!: Subscription;
 
   constructor(private authService: AuthService,
               private productService: ProductService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
-    this.user = this.authService.userSubject.pipe();
+    this.isAdmin = this.authService.userSubject.pipe(map(value => value.role === 'admin'));
+  }
+
+  ngOnInit(): void {
+    this.getBrands();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   sortBrands(sortState: Sort) {
@@ -43,7 +50,7 @@ export class BrandListComponent implements OnInit {
   }
 
   getBrands() {
-    this.productService.getAllBrands(this.currentSort, this.currentDir)
+    this.subscription = this.productService.getAllBrands(this.currentSort, this.currentDir)
       .subscribe(data => {
         this.brands = data;
       });
@@ -115,9 +122,5 @@ export class BrandListComponent implements OnInit {
         }
       )
     })
-  }
-
-  ngOnInit(): void {
-    this.getBrands();
   }
 }

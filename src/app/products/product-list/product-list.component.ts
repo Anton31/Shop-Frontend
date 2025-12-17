@@ -84,14 +84,14 @@ export class ProductListComponent implements OnInit {
   }
 
   getFilterTypes() {
-    this.productService.getProductTypes('id', 'ASC').subscribe(data => {
+    this.productService.getProductTypes('name', 'ASC').subscribe(data => {
       this.filterTypes = data;
     });
   }
 
   getFilterBrands(typeId: number) {
     this.currentTypeId = typeId;
-    this.productService.getProductBrands(this.currentTypeId, 'id', 'ASC').subscribe(data => {
+    this.productService.getProductBrands(this.currentTypeId, 'name', 'ASC').subscribe(data => {
       if (this.currentTypeId > 0) {
         this.filterBrands = data;
       } else {

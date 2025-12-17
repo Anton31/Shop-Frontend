@@ -7,7 +7,7 @@
     <ng-container matColumnDef="edit">
       <th *matHeaderCellDef mat-header-cell>Edit</th>
       <td *matCellDef="let brand" mat-cell>
-        @if ((user | async)?.role === 'admin') {
+        @if (isAdmin | async) {
           <button (click)="editBrand(brand)" color="primary" mat-icon-button>
             <mat-icon>create</mat-icon>
           </button>
@@ -17,7 +17,7 @@
     <ng-container matColumnDef="delete">
       <th *matHeaderCellDef mat-header-cell>Delete</th>
       <td *matCellDef="let brand" mat-cell>
-        @if ((user | async)?.role === 'admin') {
+        @if (isAdmin | async) {
           <button (click)="deleteBrand(brand)" color="primary" mat-icon-button>
             <mat-icon>delete</mat-icon>
           </button>
@@ -28,7 +28,7 @@
     <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
   </table>
   <p></p>
-  @if ((user | async)?.role === 'admin') {
+  @if (isAdmin | async) {
     <button (click)="addBrand()" mat-flat-button>Add brand</button>
   }
 </div>
