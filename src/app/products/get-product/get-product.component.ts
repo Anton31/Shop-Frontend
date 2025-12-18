@@ -9,8 +9,7 @@ import {Photo} from "../../model/photo";
 import {DeletePhotoComponent} from "../../photos/delete-photo/delete-photo.component";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
-import {Observable} from "rxjs";
-import {UserInfo} from "../../dto/user-info";
+import {map, Observable} from "rxjs";
 import {AuthService} from "../../service/auth-service";
 
 @Component({
@@ -23,21 +22,22 @@ export class GetProductComponent {
   customOptions: OwlOptions = {
     loop: true,
     autoplay: true,
-    items: 2,
     nav: true
   }
   product!: Product;
   productId: string | null = null;
   title = '';
   photoForm!: FormGroup;
-  user!: Observable<UserInfo>;
+  isAdmin!: Observable<boolean>;
+  items: number[] = [1, 2, 3];
+
 
   constructor(private productService: ProductService,
               private userService: AuthService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private route: ActivatedRoute) {
-    this.user = this.userService.userSubject.pipe();
+    this.isAdmin = this.userService.userSubject.pipe(map(value => value.role === 'admin'));
     this.route.params.subscribe(params => {
       this.productId = params['id'];
     });
@@ -61,7 +61,7 @@ export class GetProductComponent {
       }
     }).afterClosed().subscribe(data => {
       this.productService.addPhotos(data).subscribe(data => {
-        this.productService.getProduct(data).subscribe(data=>{
+        this.productService.getProduct(data).subscribe(data => {
           this.product = data;
         })
 
@@ -78,7 +78,7 @@ export class GetProductComponent {
       }
     }).afterClosed().subscribe(data => {
       this.productService.deletePhotos(data).subscribe(data => {
-        this.productService.getProduct(data).subscribe(data=>{
+        this.productService.getProduct(data).subscribe(data => {
           this.product = data;
         })
       });
@@ -94,10 +94,19 @@ export class GetProductComponent {
       }
     }).afterClosed().subscribe(data => {
       this.productService.deletePhoto(product.id, data.id).subscribe(data => {
-        this.productService.getProduct(data).subscribe(data=>{
+        this.productService.getProduct(data).subscribe(data => {
           this.product = data;
         })
       });
     });
+  }
+
+  setItems(value: number) {
+    this.customOptions = {
+      items: value,
+      loop: true,
+      autoplay: true,
+      nav: true
+    }
   }
 }

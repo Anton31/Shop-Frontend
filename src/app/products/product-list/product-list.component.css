@@ -1,9 +1,15 @@
-
 img {
   margin-top: 10px;
   max-width: 120px;
 }
 
+.selectedTypeChip {
+  background-color: green !important;
+}
+
+.selectedBrandChip {
+  background-color: green !important;
+}
 
 
 

@@ -1,13 +1,27 @@
 <div style="padding: 20px">
   <mat-chip-listbox>
     @for (type of filterTypes; track type) {
-      <mat-chip-option (click)="typeFilter(type.id)">{{ type.name }}</mat-chip-option>
+      @if (type.id === currentTypeId) {
+        <mat-chip-option (click)="typeFilter(type.id)" class="selectedTypeChip">
+          <span style="color:white">{{ type.name }}</span>
+        </mat-chip-option>
+      } @else {
+        <mat-chip-option (click)="typeFilter(type.id)">{{ type.name }}</mat-chip-option>
+      }
     }
   </mat-chip-listbox>
   @if (currentTypeId > 0) {
     <mat-chip-listbox>
       @for (brand of filterBrands; track brand) {
-        <mat-chip-option (click)="brandFilter(brand.id)">{{ brand.name }}</mat-chip-option>
+        @if (brand.id === currentBrandId) {
+          <mat-chip-option (click)="brandFilter(brand.id)" class="selectedBrandChip" style="color:white">
+            <span style="color:white">{{ brand.name }}</span>
+          </mat-chip-option>
+        } @else {
+          <mat-chip-option (click)="brandFilter(brand.id)">
+            {{ brand.name }}
+          </mat-chip-option>
+        }
       }
     </mat-chip-listbox>
   }
@@ -37,19 +51,19 @@
         @if (product.photos.length > 0) {
           <a routerLink="/product/{{product.id}}"><img [src]="product.photos[0].url"/></a>
         }
-        <p><a routerLink="/product/{{product.id}}">Photos</a></p>
+        <p><a routerLink="/product/{{product.id}}">All Photos</a></p>
       </td>
     </ng-container>
     <ng-container matColumnDef="type">
       <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by type"> Type</th>
       <td *matCellDef="let product" mat-cell>
-          {{ product.type.name }}
+        {{ product.type.name }}
       </td>
     </ng-container>
     <ng-container matColumnDef="brand">
       <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by brand"> Brand</th>
       <td *matCellDef="let product" mat-cell>
-          {{ product.brand.name }}
+        {{ product.brand.name }}
       </td>
     </ng-container>
     <ng-container matColumnDef="actions">
