@@ -46,15 +46,16 @@ export class ProductService {
 
   getProductBrands(typeId: number, sort: string, dir: string): Observable<Brand[]> {
     let params = new HttpParams();
-    params = params.set('typeId', typeId);
+    if (typeId > 0) {
+      params = params.set('typeId', typeId);
+    }
     params = params.set('sort', sort);
     params = params.set('dir', dir);
     return this.http.get<Brand[]>(`${this.baseUrl}/products/productBrand`, {params: params});
   }
 
   getProducts(typeId: number, brandId: number,
-              sort: string, dir: string,
-              page: number, size: number): Observable<ResponseProductDto> {
+              sort: string, dir: string): Observable<ResponseProductDto> {
     let params = new HttpParams();
     params = params.set('sort', sort);
     params = params.set('dir', dir);
@@ -64,8 +65,6 @@ export class ProductService {
     if (brandId > 0) {
       params = params.set('brandId', brandId);
     }
-    params = params.set('page', page);
-    params = params.set('size', size);
     return this.http.get<ResponseProductDto>(`${this.baseUrl}/products/product`, {params: params});
   }
 

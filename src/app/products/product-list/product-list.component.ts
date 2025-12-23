@@ -6,7 +6,6 @@ import {ProductService} from "../../service/product-service";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {AddProductComponent} from "../add-product/add-product.component";
-import {PageEvent} from "@angular/material/paginator";
 import {DeleteProductComponent} from "../delete-product/delete-product.component";
 import {Sort} from "@angular/material/sort";
 import {OrderService} from "../../service/order-service";
@@ -35,8 +34,6 @@ export class ProductListComponent implements OnDestroy {
   currentBrandId = 0;
   currentSort = 'name';
   currentDir = 'ASC';
-  pageSize = 10;
-  pageIndex = 0;
   totalProducts = 0;
   pageSizeOptions = [2, 5, 10];
   itemDto!: ItemDto;
@@ -77,10 +74,10 @@ export class ProductListComponent implements OnDestroy {
 
   getProducts() {
     this.productSubscription = this.productService.getProducts(this.currentTypeId, this.currentBrandId,
-      this.currentSort, this.currentDir, this.pageIndex, this.pageSize)
+      this.currentSort, this.currentDir)
       .subscribe(data => {
         this.products = data.products;
-        this.pageSize = data.pageSize;
+        this.totalProducts = data.totalProducts;
       });
   }
 
@@ -88,10 +85,9 @@ export class ProductListComponent implements OnDestroy {
     this.currentSort = sortState.active;
     this.currentDir = sortState.direction;
     this.productService.getProducts(this.currentTypeId, this.currentBrandId,
-      this.currentSort, this.currentDir, this.pageIndex, this.pageSize)
+      this.currentSort, this.currentDir)
       .subscribe(data => {
         this.products = data.products;
-        this.pageSize = data.pageSize;
       });
   }
 
@@ -122,12 +118,10 @@ export class ProductListComponent implements OnDestroy {
     }
     this.getFilterBrands(this.currentTypeId);
     this.productService.getProducts(this.currentTypeId, this.currentBrandId,
-      this.currentSort, this.currentDir, 0, 10)
+      this.currentSort, this.currentDir)
       .subscribe(data => {
         this.products = data.products;
         this.totalProducts = data.totalProducts;
-        this.pageSize = data.pageSize;
-        this.pageIndex = data.currentPage;
       });
   }
 
@@ -138,25 +132,9 @@ export class ProductListComponent implements OnDestroy {
       this.currentBrandId = brandId;
     }
     this.productService.getProducts(this.currentTypeId, this.currentBrandId,
-      this.currentSort, this.currentDir, 0, 10)
+      this.currentSort, this.currentDir)
       .subscribe(data => {
         this.products = data.products;
-        this.pageSize = data.pageSize;
-        this.totalProducts = data.totalProducts;
-        this.pageIndex = data.currentPage;
-      });
-  }
-
-  pageChangeEvent(event: PageEvent) {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.productService.getProducts(this.currentTypeId, this.currentBrandId,
-      this.currentSort, this.currentDir, this.pageIndex, this.pageSize)
-      .subscribe(data => {
-        this.products = data.products;
-        this.pageSize = data.pageSize;
-        this.pageIndex = data.currentPage;
-        this.totalProducts = data.totalProducts;
       });
   }
 
@@ -219,9 +197,9 @@ export class ProductListComponent implements OnDestroy {
       }
     }).afterClosed().subscribe(data => {
       this.productService.deleteProduct(data).subscribe(data => {
-        this.resetFilters();
         this.getProducts();
         this.getFilterTypes();
+        this.getFilterBrands(this.currentTypeId);
       });
     });
   }
@@ -229,10 +207,6 @@ export class ProductListComponent implements OnDestroy {
   resetFilters() {
     this.currentTypeId = 0;
     this.currentBrandId = 0;
-    this.currentSort = 'name';
-    this.currentDir = 'ASC';
-    this.pageIndex = 0;
-    this.pageSize = 10;
   }
 
   getCart() {

@@ -98,9 +98,6 @@
     <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
     <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
   </table>
-  <mat-paginator (page)=pageChangeEvent($event) [length]="totalProducts"
-                 [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize">
-  </mat-paginator>
   <p></p>
   @if ((isAdmin | async)) {
     <button (click)="addProduct()" mat-flat-button>Add product</button>
