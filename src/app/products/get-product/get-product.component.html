@@ -1,15 +1,14 @@
 <div align="center">
   <h2>{{ title }}</h2>
-  <mat-radio-group
-    class="example-radio-group">
-    @for (item of items; track item) {
-      <mat-radio-button (click)="setItems(item)" [value]="item" class="example-radio-button">
-        {{ item }}
-      </mat-radio-button>
-    }
-  </mat-radio-group>
   <div id="owlId">
     @if (product.photos.length > 0) {
+      <mat-radio-group class="example-radio-group">
+        @for (item of items; track item) {
+          <mat-radio-button (click)="setItems(item)" class="example-radio-button">
+            items: {{ item }};
+          </mat-radio-button>
+        }
+      </mat-radio-group>
       <owl-carousel-o [options]="customOptions">
         @for (photo of product.photos; track photo) {
           <ng-template carouselSlide>

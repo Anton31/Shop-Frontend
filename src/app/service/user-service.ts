@@ -22,7 +22,6 @@ export class UserService {
 
   editUser(data: any): Observable<SuccessResponse> {
     const formData = new FormData();
-    formData.append("username", data.controls.username.value);
     formData.append("password", data.controls.password.value);
     formData.append("passwordConfirmed", data.controls.passwordConfirmed.value);
     return this.http.put<any>(this.baseUrl + '/user', formData);

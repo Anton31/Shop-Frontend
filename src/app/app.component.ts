@@ -20,8 +20,6 @@ import {Observable} from "rxjs";
 })
 export class AppComponent {
   userForm!: FormGroup;
-  username!: string;
-  role!: string;
   user!: Observable<UserInfo>;
 
   constructor(private authService: AuthService,
@@ -32,9 +30,12 @@ export class AppComponent {
     this.user = this.authService.userSubject.pipe();
   }
 
-
   login() {
     this.authService.login();
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
   addUser() {
@@ -61,7 +62,6 @@ export class AppComponent {
 
   editUser() {
     this.userForm = this.fb.group({
-      username: [this.username],
       password: [''],
       passwordConfirmed: [''],
     })
@@ -77,10 +77,5 @@ export class AppComponent {
           this.snackBar.open(err.error.message, '', {duration: 3000})
         })
     })
-  }
-
-  logout() {
-    localStorage.clear();
-    this.authService.logout();
   }
 }

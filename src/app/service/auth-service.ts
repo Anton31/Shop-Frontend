@@ -16,6 +16,7 @@ export class AuthService {
               private http: HttpClient) {
     this.oauthService.configure(authConfig);
     this.oauthService.loadDiscoveryDocumentAndTryLogin();
+    this.oauthService.setupAutomaticSilentRefresh();
     this.oauthService.events.subscribe(event => {
       if (event.type === 'token_received') {
         this.getUser();
