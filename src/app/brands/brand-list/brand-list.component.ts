@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {ProductService} from "../../service/product-service";
 import {Brand} from "../../model/brand";
 import {AddBrandComponent} from "../add-brand/add-brand.component";
@@ -10,6 +10,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {Sort} from "@angular/material/sort";
 import {map, Observable, Subscription} from "rxjs";
 import {AuthService} from "../../service/auth-service";
+import {Type} from "../../model/type";
 
 
 @Component({
@@ -22,10 +23,13 @@ export class BrandListComponent implements OnDestroy {
   brands: Brand[] = [];
   brandForm!: FormGroup;
   displayedColumns: string[] = ['name', 'edit', 'delete'];
-  currentSort = 'name';
+  currentSort = 'id';
   currentDir = 'ASC';
   isAdmin!: Observable<boolean>;
-  subscription!: Subscription;
+  brandSubscription!: Subscription;
+  typeSubscription!: Subscription;
+  types: Type[] = [];
+  currentTypeId = 0;
 
   constructor(private authService: AuthService,
               private productService: ProductService,
@@ -34,28 +38,35 @@ export class BrandListComponent implements OnDestroy {
               private snackBar: MatSnackBar) {
     this.isAdmin = this.authService.userSubject.pipe(map(value => value.role === 'admin'));
     this.getBrands();
+    this.getTypes();
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.brandSubscription.unsubscribe();
+    this.typeSubscription.unsubscribe();
   }
 
   sortBrands(sortState: Sort) {
-    this.currentSort = sortState.active;
     this.currentDir = sortState.direction;
     this.getBrands();
   }
 
   getBrands() {
-    this.subscription = this.productService.getAllBrands(this.currentSort, this.currentDir)
+    this.brandSubscription = this.productService.getProductBrands(this.currentTypeId, this.currentSort, this.currentDir)
       .subscribe(data => {
         this.brands = data;
       });
   }
 
+  getTypes() {
+    this.typeSubscription = this.productService.getProductTypes('id', 'ASC').subscribe(data => {
+      this.types = data;
+    })
+  }
+
   reset() {
     this.currentDir = 'ASC';
-    this.currentSort = 'name';
+    this.currentSort = 'id';
   }
 
   addBrand() {
@@ -119,5 +130,14 @@ export class BrandListComponent implements OnDestroy {
         }
       )
     })
+  }
+
+  typeFilter(typeId: number) {
+    if (this.currentTypeId === typeId) {
+      this.currentTypeId = 0;
+    } else {
+      this.currentTypeId = typeId;
+    }
+    this.getBrands();
   }
 }

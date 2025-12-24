@@ -35,7 +35,6 @@ export class ProductListComponent implements OnDestroy {
   currentSort = 'name';
   currentDir = 'ASC';
   totalProducts = 0;
-  pageSizeOptions = [2, 5, 10];
   itemDto!: ItemDto;
   displayedColumns: string[] = ['name', 'price', 'photo', 'type', 'brand', 'actions', 'cart'];
   cartProductIds!: number[];
