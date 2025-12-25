@@ -3,15 +3,12 @@ img {
   max-width: 120px;
 }
 
-.selectedTypeChip {
+.selectedGreenChip {
   background-color: green !important;
-}
-
-.selectedBrandChip {
-  background-color: green !important;
-}
-
-.mat-mdc-standard-chip {
   --mdc-chip-selected-label-text-color: white;
   --mdc-chip-with-icon-selected-icon-color: white;
 }
+
+
+
+

@@ -1,12 +1,4 @@
 <div style="margin: 20px">
-  <mat-chip-listbox>
-    @for (type of types; track type) {
-      <mat-chip-option (click)="typeFilter(type.id)">
-        {{ type.name }}
-      </mat-chip-option>
-    }
-  </mat-chip-listbox>
-  <p></p>
   <table (matSortChange)="sortBrands($event)" [dataSource]="brands" class="mat-elevation-z8" mat-table matSort>
     <ng-container matColumnDef="name">
       <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by name">Brand</th>

@@ -26,9 +26,7 @@ export class BrandListComponent implements OnDestroy {
   currentDir = 'ASC';
   isAdmin!: Observable<boolean>;
   brandSubscription!: Subscription;
-  typeSubscription!: Subscription;
   types: Type[] = [];
-  currentTypeId = 0;
 
   constructor(private authService: AuthService,
               private productService: ProductService,
@@ -37,12 +35,10 @@ export class BrandListComponent implements OnDestroy {
               private snackBar: MatSnackBar) {
     this.isAdmin = this.authService.userSubject.pipe(map(value => value.role === 'admin'));
     this.getBrands();
-    this.getTypes();
   }
 
   ngOnDestroy(): void {
     this.brandSubscription.unsubscribe();
-    this.typeSubscription.unsubscribe();
   }
 
   sortBrands(sortState: Sort) {
@@ -51,16 +47,10 @@ export class BrandListComponent implements OnDestroy {
   }
 
   getBrands() {
-    this.brandSubscription = this.productService.getProductBrands(this.currentTypeId, 'name', this.currentDir)
+    this.brandSubscription = this.productService.getAllBrands('name', this.currentDir)
       .subscribe(data => {
         this.brands = data;
       });
-  }
-
-  getTypes() {
-    this.typeSubscription = this.productService.getProductTypes('id', 'ASC').subscribe(data => {
-      this.types = data;
-    })
   }
 
   reset() {
@@ -128,14 +118,5 @@ export class BrandListComponent implements OnDestroy {
         }
       )
     })
-  }
-
-  typeFilter(typeId: number) {
-    if (this.currentTypeId === typeId) {
-      this.currentTypeId = 0;
-    } else {
-      this.currentTypeId = typeId;
-    }
-    this.getBrands();
   }
 }

@@ -1,8 +1,8 @@
-<div style="padding: 20px" xmlns="http://www.w3.org/1999/html">
+<div style="padding: 20px">
   <mat-chip-listbox>
     @for (type of filterTypes; track type) {
       @if (type.id === currentTypeId) {
-        <mat-chip-option (click)="typeFilter(type.id)" class="selectedTypeChip">
+        <mat-chip-option (click)="typeFilter(type.id)" class="selectedGreenChip">
           {{ type.name }}
         </mat-chip-option>
       } @else {
@@ -14,7 +14,7 @@
     <mat-chip-listbox>
       @for (brand of filterBrands; track brand) {
         @if (brand.id === currentBrandId) {
-          <mat-chip-option (click)="brandFilter(brand.id)" class="selectedBrandChip">
+          <mat-chip-option (click)="brandFilter(brand.id)" class="selectedGreenChip">
             {{ brand.name }}
           </mat-chip-option>
         } @else {
