@@ -98,7 +98,7 @@ export class ProductListComponent implements OnDestroy {
 
   getFilterBrands(typeId: number) {
     this.currentTypeId = typeId;
-    this.productService.getProductBrands(this.currentTypeId, 'id', 'ASC').subscribe(data => {
+    this.productService.getProductBrands(this.currentTypeId, 'name', 'ASC').subscribe(data => {
       if (this.currentTypeId > 0) {
         this.filterBrands = data;
       } else {

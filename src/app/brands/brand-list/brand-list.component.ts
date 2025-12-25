@@ -23,7 +23,6 @@ export class BrandListComponent implements OnDestroy {
   brands: Brand[] = [];
   brandForm!: FormGroup;
   displayedColumns: string[] = ['name', 'edit', 'delete'];
-  currentSort = 'id';
   currentDir = 'ASC';
   isAdmin!: Observable<boolean>;
   brandSubscription!: Subscription;
@@ -52,7 +51,7 @@ export class BrandListComponent implements OnDestroy {
   }
 
   getBrands() {
-    this.brandSubscription = this.productService.getProductBrands(this.currentTypeId, this.currentSort, this.currentDir)
+    this.brandSubscription = this.productService.getProductBrands(this.currentTypeId, 'name', this.currentDir)
       .subscribe(data => {
         this.brands = data;
       });
@@ -66,7 +65,6 @@ export class BrandListComponent implements OnDestroy {
 
   reset() {
     this.currentDir = 'ASC';
-    this.currentSort = 'id';
   }
 
   addBrand() {
