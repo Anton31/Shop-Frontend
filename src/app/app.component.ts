@@ -9,7 +9,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {UserService} from "./service/user-service";
 
 import {UserInfo} from "./dto/user-info";
-import {Observable} from "rxjs";
+import {map, Observable} from "rxjs";
 
 
 @Component({
@@ -21,6 +21,7 @@ import {Observable} from "rxjs";
 export class AppComponent {
   userForm!: FormGroup;
   user!: Observable<UserInfo>;
+  isLoggedIn: Observable<boolean>;
 
   constructor(private authService: AuthService,
               private userService: UserService,
@@ -28,6 +29,7 @@ export class AppComponent {
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
     this.user = this.authService.userSubject.pipe();
+    this.isLoggedIn = this.authService.userSubject.pipe(map(x => x.role === 'admin' || x.role === 'user'));
   }
 
   login() {

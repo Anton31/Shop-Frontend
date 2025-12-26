@@ -10,7 +10,7 @@ import {HttpClient} from "@angular/common/http";
 export class AuthService {
 
   baseUrl: string = 'http://localhost:8080';
-  userSubject = new BehaviorSubject<UserInfo>(new UserInfo('none', 'none'));
+  userSubject = new BehaviorSubject<UserInfo>(new UserInfo('', ''));
 
   constructor(private oauthService: OAuthService,
               private http: HttpClient) {
