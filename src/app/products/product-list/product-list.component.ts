@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, OnDestroy, signal} from '@angular/core';
 import {Product} from "../../model/product";
 import {Type} from "../../model/type";
 import {Brand} from "../../model/brand";
@@ -30,7 +30,7 @@ export class ProductListComponent implements OnDestroy {
   products: Product[] = [];
   filterTypes: Type[] = [];
   filterBrands: Brand[] = [];
-  currentTypeId = 0;
+  selectedTypeId = signal(0);
   currentBrandId = 0;
   currentSort = 'name';
   currentDir = 'ASC';
@@ -72,7 +72,7 @@ export class ProductListComponent implements OnDestroy {
   }
 
   getProducts() {
-    this.productSubscription = this.productService.getProducts(this.currentTypeId, this.currentBrandId,
+    this.productSubscription = this.productService.getProducts(this.selectedTypeId(), this.currentBrandId,
       this.currentSort, this.currentDir)
       .subscribe(data => {
         this.products = data.products;
@@ -83,7 +83,7 @@ export class ProductListComponent implements OnDestroy {
   sortProducts(sortState: Sort) {
     this.currentSort = sortState.active;
     this.currentDir = sortState.direction;
-    this.productService.getProducts(this.currentTypeId, this.currentBrandId,
+    this.productService.getProducts(this.selectedTypeId(), this.currentBrandId,
       this.currentSort, this.currentDir)
       .subscribe(data => {
         this.products = data.products;
@@ -97,9 +97,9 @@ export class ProductListComponent implements OnDestroy {
   }
 
   getFilterBrands(typeId: number) {
-    this.currentTypeId = typeId;
-    this.productService.getProductBrands(this.currentTypeId, 'id', 'ASC').subscribe(data => {
-      if (this.currentTypeId > 0) {
+    this.selectedTypeId.set(typeId);
+    this.productService.getProductBrands(this.selectedTypeId(), 'id', 'ASC').subscribe(data => {
+      if (this.selectedTypeId() > 0) {
         this.filterBrands = data;
       } else {
         this.filterBrands = [];
@@ -108,15 +108,15 @@ export class ProductListComponent implements OnDestroy {
   }
 
   typeFilter(typeId: number) {
-    if (typeId == this.currentTypeId) {
-      this.currentTypeId = 0;
+    if (typeId == this.selectedTypeId()) {
+      this.selectedTypeId.set(0);
       this.currentBrandId = 0;
     } else {
-      this.currentTypeId = typeId;
+      this.selectedTypeId.set(typeId);
       this.currentBrandId = 0;
     }
-    this.getFilterBrands(this.currentTypeId);
-    this.productService.getProducts(this.currentTypeId, this.currentBrandId,
+    this.getFilterBrands(this.selectedTypeId());
+    this.productService.getProducts(this.selectedTypeId(), this.currentBrandId,
       this.currentSort, this.currentDir)
       .subscribe(data => {
         this.products = data.products;
@@ -130,7 +130,7 @@ export class ProductListComponent implements OnDestroy {
     } else {
       this.currentBrandId = brandId;
     }
-    this.productService.getProducts(this.currentTypeId, this.currentBrandId,
+    this.productService.getProducts(this.selectedTypeId(), this.currentBrandId,
       this.currentSort, this.currentDir)
       .subscribe(data => {
         this.products = data.products;
@@ -198,13 +198,13 @@ export class ProductListComponent implements OnDestroy {
       this.productService.deleteProduct(data).subscribe(data => {
         this.getProducts();
         this.getFilterTypes();
-        this.getFilterBrands(this.currentTypeId);
+        this.getFilterBrands(this.selectedTypeId());
       });
     });
   }
 
   resetFilters() {
-    this.currentTypeId = 0;
+    this.selectedTypeId.set(0);
     this.currentBrandId = 0;
   }
 
