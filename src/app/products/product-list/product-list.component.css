@@ -3,7 +3,7 @@ img {
   max-width: 120px;
 }
 
-.selectedGreenChip {
+.selectedChip {
   background-color: green !important;
   --mdc-chip-selected-label-text-color: white;
   --mdc-chip-with-icon-selected-icon-color: white;

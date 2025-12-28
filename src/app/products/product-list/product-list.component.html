@@ -2,7 +2,7 @@
   <mat-chip-listbox>
     @for (type of filterTypes; track type) {
       @if (type.id === selectedTypeId()) {
-        <mat-chip-option (click)="typeFilter(type.id)" class="selectedGreenChip">
+        <mat-chip-option (click)="typeFilter(type.id)" class="selectedChip">
           {{ type.name }}
         </mat-chip-option>
       } @else {
@@ -13,8 +13,8 @@
   @if (selectedTypeId() > 0) {
     <mat-chip-listbox>
       @for (brand of filterBrands; track brand) {
-        @if (brand.id === currentBrandId) {
-          <mat-chip-option (click)="brandFilter(brand.id)" class="selectedGreenChip">
+        @if (brand.id === selectedBrandId()) {
+          <mat-chip-option (click)="brandFilter(brand.id)" class="selectedChip">
             {{ brand.name }}
           </mat-chip-option>
         } @else {
@@ -69,7 +69,7 @@
     <ng-container matColumnDef="actions">
       <th *matHeaderCellDef mat-header-cell>Edit/remove product</th>
       <td *matCellDef="let product" mat-cell>
-        @if ((isAdmin | async)) {
+        @if (isAdmin | async) {
           <button (click)="editProduct(product)" mat-icon-button>
             <mat-icon>create</mat-icon>
           </button>
@@ -80,7 +80,7 @@
       </td>
     </ng-container>
     <ng-container matColumnDef="cart">
-      <th *matHeaderCellDef mat-header-cell> Item</th>
+      <th *matHeaderCellDef mat-header-cell> Cart</th>
       <td *matCellDef="let product" mat-cell>
         @if ((isAdmin | async) || (isUser | async)) {
           <button (click)="addItemToCart(product.id)"
@@ -89,7 +89,7 @@
           </button>
           <p *ngIf="cartProductIds.includes(product.id)">
             <button (click)="openCart()" mat-button>
-              product in cart
+              in cart
             </button>
           </p>
         }
@@ -99,7 +99,7 @@
     <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
   </table>
   <p></p>
-  @if ((isAdmin | async)) {
+  @if (isAdmin | async) {
     <button (click)="addProduct()" mat-flat-button>Add product</button>
   }
 </div>

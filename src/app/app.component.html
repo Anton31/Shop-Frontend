@@ -13,10 +13,12 @@
       <p>
         <button (click)="editUser()" color="primary" mat-stroked-button>Change password</button>
       </p>
-      <button (click)="logout()" color="primary" mat-stroked-button>
+      <p>
+        <button (click)="logout()" color="primary" mat-stroked-button>
         <mat-icon>logout</mat-icon>
         logout
       </button>
+      </p>
     </mat-menu>
   } @else {
     <button (click)="login()" color="primary" mat-stroked-button>

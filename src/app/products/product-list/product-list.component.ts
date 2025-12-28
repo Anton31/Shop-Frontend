@@ -31,16 +31,16 @@ export class ProductListComponent implements OnDestroy {
   filterTypes: Type[] = [];
   filterBrands: Brand[] = [];
   selectedTypeId = signal(0);
-  currentBrandId = 0;
-  currentSort = 'name';
-  currentDir = 'ASC';
+  selectedBrandId = signal(0);
+  selectedSort = signal('name');
+  selectedDir = signal('ASC');
   totalProducts = 0;
   itemDto!: ItemDto;
   displayedColumns: string[] = ['name', 'price', 'photo', 'type', 'brand', 'actions', 'cart'];
   cartProductIds!: number[];
   productForm!: FormGroup;
   totalPrice!: number;
-  totalQuantity!: number;
+  totalQuantity = 0;
   orderDto: OrderDto;
   cart!: Cart;
   isAdmin!: Observable<boolean>;
@@ -60,9 +60,13 @@ export class ProductListComponent implements OnDestroy {
     this.orderDto = new OrderDto('', '', '');
     this.isAdmin = this.authService.userSubject.pipe(map(value => value.role === 'admin'));
     this.isUser = this.authService.userSubject.pipe(map(value => value.role === 'user'));
+    this.init();
+    this.getCart();
+  }
+
+  init() {
     this.getProducts();
     this.getFilterTypes();
-    this.getCart();
   }
 
   ngOnDestroy(): void {
@@ -72,8 +76,11 @@ export class ProductListComponent implements OnDestroy {
   }
 
   getProducts() {
-    this.productSubscription = this.productService.getProducts(this.selectedTypeId(), this.currentBrandId,
-      this.currentSort, this.currentDir)
+    this.productSubscription = this.productService.getProducts(
+      this.selectedTypeId(),
+      this.selectedBrandId(),
+      this.selectedSort(),
+      this.selectedDir())
       .subscribe(data => {
         this.products = data.products;
         this.totalProducts = data.totalProducts;
@@ -81,10 +88,13 @@ export class ProductListComponent implements OnDestroy {
   }
 
   sortProducts(sortState: Sort) {
-    this.currentSort = sortState.active;
-    this.currentDir = sortState.direction;
-    this.productService.getProducts(this.selectedTypeId(), this.currentBrandId,
-      this.currentSort, this.currentDir)
+    this.selectedSort.set(sortState.active);
+    this.selectedDir.set(sortState.direction);
+    this.productService.getProducts(
+      this.selectedTypeId(),
+      this.selectedBrandId(),
+      this.selectedSort(),
+      this.selectedDir())
       .subscribe(data => {
         this.products = data.products;
       });
@@ -108,16 +118,19 @@ export class ProductListComponent implements OnDestroy {
   }
 
   typeFilter(typeId: number) {
-    if (typeId == this.selectedTypeId()) {
+    if (typeId === this.selectedTypeId()) {
       this.selectedTypeId.set(0);
-      this.currentBrandId = 0;
+      this.selectedBrandId.set(0);
     } else {
       this.selectedTypeId.set(typeId);
-      this.currentBrandId = 0;
+      this.selectedBrandId.set(0);
     }
     this.getFilterBrands(this.selectedTypeId());
-    this.productService.getProducts(this.selectedTypeId(), this.currentBrandId,
-      this.currentSort, this.currentDir)
+    this.productService.getProducts(
+      this.selectedTypeId(),
+      this.selectedBrandId(),
+      this.selectedSort(),
+      this.selectedDir())
       .subscribe(data => {
         this.products = data.products;
         this.totalProducts = data.totalProducts;
@@ -125,13 +138,16 @@ export class ProductListComponent implements OnDestroy {
   }
 
   brandFilter(brandId: number) {
-    if (this.currentBrandId == brandId) {
-      this.currentBrandId = 0;
+    if (this.selectedBrandId() === brandId) {
+      this.selectedBrandId.set(0);
     } else {
-      this.currentBrandId = brandId;
+      this.selectedBrandId.set(brandId);
     }
-    this.productService.getProducts(this.selectedTypeId(), this.currentBrandId,
-      this.currentSort, this.currentDir)
+    this.productService.getProducts(
+      this.selectedTypeId(),
+      this.selectedBrandId(),
+      this.selectedSort(),
+      this.selectedDir())
       .subscribe(data => {
         this.products = data.products;
       });
@@ -153,8 +169,7 @@ export class ProductListComponent implements OnDestroy {
     }).afterClosed().subscribe(data => {
       this.productService.addProduct(data).subscribe(data => {
           this.resetFilters();
-          this.getProducts();
-          this.getFilterTypes();
+          this.init();
         },
         error => {
           this.snackBar.open(error.error.message, '', {duration: 3000})
@@ -178,8 +193,7 @@ export class ProductListComponent implements OnDestroy {
     }).afterClosed().subscribe(data => {
       this.productService.editProduct(data).subscribe(data => {
           this.resetFilters();
-          this.getProducts();
-          this.getFilterTypes();
+          this.init();
         },
         error => {
           this.snackBar.open(error.error.message, '', {duration: 3000})
@@ -205,7 +219,9 @@ export class ProductListComponent implements OnDestroy {
 
   resetFilters() {
     this.selectedTypeId.set(0);
-    this.currentBrandId = 0;
+    this.selectedBrandId.set(0);
+    this.selectedSort.set('name');
+    this.selectedDir.set('ASC');
   }
 
   getCart() {
@@ -235,7 +251,6 @@ export class ProductListComponent implements OnDestroy {
       }).afterClosed().subscribe(data => {
         this.getCart();
       });
-      this.getCart();
     });
   }
 
@@ -250,6 +265,5 @@ export class ProductListComponent implements OnDestroy {
     }).afterClosed().subscribe(data => {
       this.getCart();
     });
-    this.getCart();
   }
 }
