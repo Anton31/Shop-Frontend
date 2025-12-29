@@ -241,16 +241,7 @@ export class ProductListComponent implements OnDestroy {
     this.itemDto.productId = productId;
     this.itemDto.itemId = 0;
     this.orderService.addItemToCart(this.itemDto).subscribe(data => {
-      this.dialog.open(CartComponent, {
-        height: '800px',
-        width: '800px',
-        data: {
-          orderDto: this.orderDto,
-          cart: data
-        }
-      }).afterClosed().subscribe(data => {
-        this.getCart();
-      });
+      this.getCart();
     });
   }
 
@@ -259,8 +250,7 @@ export class ProductListComponent implements OnDestroy {
       height: '800px',
       width: '800px',
       data: {
-        orderDto: this.orderDto,
-        cart: this.cart
+        orderDto: this.orderDto
       }
     }).afterClosed().subscribe(data => {
       this.getCart();

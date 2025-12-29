@@ -3,7 +3,6 @@ import {ItemDto} from "../dto/item-dto";
 import {OrderService} from "../service/order-service";
 import {Item} from "../model/item";
 import {OrderDto} from "../dto/order-dto";
-import {Cart} from "../model/cart";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 
@@ -27,7 +26,7 @@ export class CartComponent implements OnInit {
               private dialogRef: MatDialogRef<CartComponent>,
               @Inject(MAT_DIALOG_DATA) public data: AddItemDialog) {
     this.itemDto = new ItemDto(0, 0, 0);
-    this.title = 'cart';
+    this.title = 'Cart';
   }
 
   getCart() {
@@ -78,5 +77,4 @@ export class CartComponent implements OnInit {
 
 export interface AddItemDialog {
   orderDto: OrderDto;
-  cart: Cart;
 }
