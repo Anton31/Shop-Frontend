@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {OwlOptions} from "ngx-owl-carousel-o";
 import {ProductService} from "../../service/product-service";
 import {Product} from "../../model/product";
@@ -24,24 +24,27 @@ export class GetProductComponent {
     autoplay: true,
     nav: true
   }
+
+  productId = signal(0);
   product!: Product;
-  productId: string | null = null;
   title = '';
   photoForm!: FormGroup;
   isAdmin!: Observable<boolean>;
-  items: number[] = [1, 2, 3];
 
+  private activatedRoute = inject(ActivatedRoute);
+  private productService = inject(ProductService);
+  private authService = inject(AuthService);
+  private dialog = inject(MatDialog);
+  private fb = inject(FormBuilder);
 
-  constructor(private productService: ProductService,
-              private userService: AuthService,
-              private fb: FormBuilder,
-              private dialog: MatDialog,
-              private route: ActivatedRoute) {
-    this.isAdmin = this.userService.userSubject.pipe(map(value => value.role === 'admin'));
-    this.route.params.subscribe(params => {
-      this.productId = params['id'];
+  constructor() {
+    this.isAdmin = this.authService.userSubject.pipe(map(value => value.role === 'admin'));
+
+    this.activatedRoute.params.subscribe((params) => {
+      this.productId.set(params['id']);
     });
-    this.productService.getProduct(Number(this.productId)).subscribe(data => {
+
+    this.productService.getProduct(Number(this.productId())).subscribe(data => {
       this.product = data;
       this.title = data.name;
     });
@@ -64,7 +67,6 @@ export class GetProductComponent {
         this.productService.getProduct(data).subscribe(data => {
           this.product = data;
         })
-
       })
     })
   }

@@ -2,15 +2,19 @@
   <h2>{{ title }}</h2>
   <div id="owlId">
     @if (product.photos.length > 0) {
-      <mat-radio-group class="example-radio-group">
-        @for (item of items; track item) {
-          <mat-radio-button (click)="setItems(item)" class="example-radio-button">
-            items: {{ item }};
-          </mat-radio-button>
-        }
+      <mat-radio-group>
+        <mat-radio-button (click)="setItems(1)">
+          <h3>items: 1;</h3>
+        </mat-radio-button>
+        <mat-radio-button (click)="setItems(2)">
+          <h3>items: 2;</h3>
+        </mat-radio-button>
+        <mat-radio-button (click)="setItems(3)">
+          <h3>items: 3;</h3>
+        </mat-radio-button>
       </mat-radio-group>
       <owl-carousel-o [options]="customOptions">
-        @for (photo of product.photos; track photo) {
+        @for (photo of product.photos; track photo.id) {
           <ng-template carouselSlide>
             <img [alt]="'no photo'" [src]="photo.url" id="owlImage"/>
           </ng-template>
@@ -23,8 +27,8 @@
 </div>
 <div align="center">
   @if (isAdmin | async) {
-    @for (photo of product.photos; track photo) {
-      <a routerLink="/product/{{product.id}}"><img [src]="photo.url"/></a>
+    @for (photo of product.photos; track photo.id) {
+      <img [src]="photo.url"/>
       @if (isAdmin | async) {
         <button (click)="deletePhoto(product, photo)" color="primary" mat-icon-button>
           <mat-icon>delete</mat-icon>
@@ -32,10 +36,10 @@
       }
     }
     <p>
-      <button (click)="addPhotos(product)" color="primary" mat-icon-button>
+      <button (click)="addPhotos(product)" mat-icon-button>
         <mat-icon>add</mat-icon>
       </button>
-      <button (click)="deletePhotos(product)" color="primary" mat-icon-button>
+      <button (click)="deletePhotos(product)" mat-icon-button>
         <mat-icon>delete</mat-icon>
       </button>
     </p>

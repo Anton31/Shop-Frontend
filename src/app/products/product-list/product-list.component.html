@@ -1,6 +1,6 @@
 <div style="padding: 20px">
   <mat-chip-listbox>
-    @for (type of filterTypes; track type) {
+    @for (type of filterTypes; track type.id) {
       @if (type.id === selectedTypeId()) {
         <mat-chip-option (click)="typeFilter(type.id)" class="selectedChip">
           {{ type.name }}
@@ -12,7 +12,7 @@
   </mat-chip-listbox>
   @if (selectedTypeId() > 0) {
     <mat-chip-listbox>
-      @for (brand of filterBrands; track brand) {
+      @for (brand of filterBrands; track brand.id) {
         @if (brand.id === selectedBrandId()) {
           <mat-chip-option (click)="brandFilter(brand.id)" class="selectedChip">
             {{ brand.name }}

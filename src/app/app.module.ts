@@ -69,10 +69,10 @@ import {MatRadioModule} from "@angular/material/radio";
   ],
   bootstrap: [AppComponent], imports: [BrowserModule,
     RouterModule.forRoot([
-      {path: '', component: ProductListComponent},
+      {path: '', component: ProductListComponent, title: 'Products'},
       {path: 'product/:id', component: GetProductComponent},
-      {path: 'types', component: TypeListComponent},
-      {path: 'brands', component: BrandListComponent},
+      {path: 'types', component: TypeListComponent, title: 'Types'},
+      {path: 'brands', component: BrandListComponent, title: 'Brands'},
       {path: 'checkout', component: CheckoutComponent},
       {path: 'orders', component: ListOrdersComponent}
     ]),
