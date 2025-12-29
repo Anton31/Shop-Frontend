@@ -40,7 +40,7 @@ export class ProductListComponent implements OnDestroy {
   cartProductIds!: number[];
   productForm!: FormGroup;
   totalPrice!: number;
-  totalQuantity = 0;
+  totalQuantity = signal(0);
   orderDto: OrderDto;
   cart!: Cart;
   isAdmin!: Observable<boolean>;
@@ -55,18 +55,13 @@ export class ProductListComponent implements OnDestroy {
               private authService: AuthService,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
-
     this.itemDto = new ItemDto(0, 0, 0);
     this.orderDto = new OrderDto('', '', '');
     this.isAdmin = this.authService.userSubject.pipe(map(value => value.role === 'admin'));
     this.isUser = this.authService.userSubject.pipe(map(value => value.role === 'user'));
-    this.init();
-    this.getCart();
-  }
-
-  init() {
     this.getProducts();
     this.getFilterTypes();
+    this.getCart();
   }
 
   ngOnDestroy(): void {
@@ -169,7 +164,8 @@ export class ProductListComponent implements OnDestroy {
     }).afterClosed().subscribe(data => {
       this.productService.addProduct(data).subscribe(data => {
           this.resetFilters();
-          this.init();
+          this.getProducts();
+          this.getFilterTypes();
         },
         error => {
           this.snackBar.open(error.error.message, '', {duration: 3000})
@@ -193,7 +189,8 @@ export class ProductListComponent implements OnDestroy {
     }).afterClosed().subscribe(data => {
       this.productService.editProduct(data).subscribe(data => {
           this.resetFilters();
-          this.init();
+          this.getProducts();
+          this.getFilterTypes();
         },
         error => {
           this.snackBar.open(error.error.message, '', {duration: 3000})
@@ -230,7 +227,7 @@ export class ProductListComponent implements OnDestroy {
     this.cartSubscription = this.orderService.getCart().subscribe(data => {
       this.cart = data;
       this.totalPrice = data.totalPrice;
-      this.totalQuantity = data.totalQuantity;
+      this.totalQuantity.set(data.totalQuantity);
       for (let i = 0; i < data.items.length; i++) {
         this.cartProductIds.push(data.items[i].product.id);
       }

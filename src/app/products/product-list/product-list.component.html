@@ -6,28 +6,24 @@
           {{ type.name }}
         </mat-chip-option>
       } @else {
-        <mat-chip-option (click)="typeFilter(type.id)">{{ type.name }}</mat-chip-option>
+        <mat-chip-option (click)="typeFilter(type.id)">
+          {{ type.name }}
+        </mat-chip-option>
       }
     }
   </mat-chip-listbox>
   @if (selectedTypeId() > 0) {
     <mat-chip-listbox>
       @for (brand of filterBrands; track brand.id) {
-        @if (brand.id === selectedBrandId()) {
-          <mat-chip-option (click)="brandFilter(brand.id)" class="selectedChip">
-            {{ brand.name }}
-          </mat-chip-option>
-        } @else {
-          <mat-chip-option (click)="brandFilter(brand.id)">
-            {{ brand.name }}
-          </mat-chip-option>
-        }
+        <mat-chip-option (click)="brandFilter(brand.id)">
+          {{ brand.name }}
+        </mat-chip-option>
       }
     </mat-chip-listbox>
   }
   <p align="center">
     @if ((isAdmin | async) || (isUser | async)) {
-      <button (click)="openCart()" mat-flat-button matBadge="{{totalQuantity}}" matBadgePosition="after"
+      <button (click)="openCart()" mat-flat-button matBadge="{{totalQuantity()}}" matBadgePosition="after"
               matBadgeSize="large">
         Cart
         <mat-icon>shopping_cart_checkout</mat-icon>
