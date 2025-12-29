@@ -4,7 +4,6 @@ import {Observable} from "rxjs";
 
 import {Type} from "../model/type";
 import {Brand} from "../model/brand";
-import {ResponseProductDto} from "../dto/response-product-dto";
 import {Product} from "../model/product";
 
 @Injectable({providedIn: 'root'})
@@ -55,7 +54,7 @@ export class ProductService {
   }
 
   getProducts(typeId: number, brandId: number,
-              sort: string, dir: string): Observable<ResponseProductDto> {
+              sort: string, dir: string): Observable<Product[]> {
     let params = new HttpParams();
     params = params.set('sort', sort);
     params = params.set('dir', dir);
@@ -65,7 +64,7 @@ export class ProductService {
     if (brandId > 0) {
       params = params.set('brandId', brandId);
     }
-    return this.http.get<ResponseProductDto>(`${this.baseUrl}/products/product`, {params: params});
+    return this.http.get<Product[]>(`${this.baseUrl}/products/product`, {params: params});
   }
 
   getProduct(id: number): Observable<Product> {

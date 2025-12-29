@@ -34,7 +34,6 @@ export class ProductListComponent implements OnDestroy {
   selectedBrandId = signal(0);
   selectedSort = signal('name');
   selectedDir = signal('ASC');
-  totalProducts = 0;
   itemDto!: ItemDto;
   displayedColumns: string[] = ['name', 'price', 'photo', 'type', 'brand', 'actions', 'cart'];
   cartProductIds!: number[];
@@ -77,8 +76,7 @@ export class ProductListComponent implements OnDestroy {
       this.selectedSort(),
       this.selectedDir())
       .subscribe(data => {
-        this.products = data.products;
-        this.totalProducts = data.totalProducts;
+        this.products = data;
       });
   }
 
@@ -91,7 +89,7 @@ export class ProductListComponent implements OnDestroy {
       this.selectedSort(),
       this.selectedDir())
       .subscribe(data => {
-        this.products = data.products;
+        this.products = data;
       });
   }
 
@@ -127,8 +125,7 @@ export class ProductListComponent implements OnDestroy {
       this.selectedSort(),
       this.selectedDir())
       .subscribe(data => {
-        this.products = data.products;
-        this.totalProducts = data.totalProducts;
+        this.products = data;
       });
   }
 
@@ -144,7 +141,7 @@ export class ProductListComponent implements OnDestroy {
       this.selectedSort(),
       this.selectedDir())
       .subscribe(data => {
-        this.products = data.products;
+        this.products = data;
       });
   }
 
