@@ -111,7 +111,7 @@ export class ProductListComponent implements OnDestroy {
   }
 
   typeFilter(typeId: number) {
-    if (typeId === this.selectedTypeId()) {
+    if (typeId == this.selectedTypeId()) {
       this.selectedTypeId.set(0);
       this.selectedBrandId.set(0);
     } else {
@@ -231,11 +231,11 @@ export class ProductListComponent implements OnDestroy {
     });
   }
 
-  addItemToCart(productId: number) {
+  addItemToCart(productId: number, productName: string) {
     this.itemDto.productId = productId;
     this.itemDto.itemId = 0;
     this.orderService.addItemToCart(this.itemDto).subscribe(data => {
-      this.snackBar.open('Product added to cart', '', {duration: 3000});
+      this.snackBar.open(productName + ' added to cart', '', {duration: 3000});
       this.getCart();
     });
   }
