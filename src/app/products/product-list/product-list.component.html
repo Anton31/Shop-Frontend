@@ -79,15 +79,15 @@
       <th *matHeaderCellDef mat-header-cell> Cart</th>
       <td *matCellDef="let product" mat-cell>
         @if ((isAdmin | async) || (isUser | async)) {
-          <button (click)="addItemToCart(product.id, product.name)"
-                  *ngIf="!cartProductIds.includes(product.id)" mat-icon-button>
-            <mat-icon>add_shopping_cart</mat-icon>
-          </button>
-          <p *ngIf="cartProductIds.includes(product.id)">
+          @if (!cartProductIds.includes(product.id)) {
+            <button (click)="addItemToCart(product)" mat-icon-button>
+              <mat-icon>add_shopping_cart</mat-icon>
+            </button>
+          } @else {
             <button (click)="openCart()" mat-button>
               in cart
             </button>
-          </p>
+          }
         }
       </td>
     </ng-container>

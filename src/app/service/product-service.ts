@@ -72,22 +72,26 @@ export class ProductService {
   }
 
   addProduct(data: any): Observable<any> {
-    const formData = new FormData();
-    formData.append("typeId", data.controls.typeId.value);
-    formData.append("brandId", data.controls.brandId.value);
-    formData.append("name", data.controls.name.value);
-    formData.append("price", data.controls.price.value);
-    return this.http.post<any>(`${this.baseUrl}/products/product`, formData);
+
+    const product = {
+      "typeId": data.controls.typeId.value,
+      "brandId": data.controls.brandId.value,
+      "name": data.controls.name.value,
+      "price": data.controls.price.value
+    }
+    return this.http.post<any>(`${this.baseUrl}/products/product`, product);
   }
 
   editProduct(data: any): Observable<any> {
-    const formData = new FormData();
-    formData.append("id", data.controls.id.value);
-    formData.append("typeId", data.controls.typeId.value);
-    formData.append("brandId", data.controls.brandId.value);
-    formData.append("name", data.controls.name.value);
-    formData.append("price", data.controls.price.value);
-    return this.http.put<any>(`${this.baseUrl}/products/product`, formData);
+
+    const product = {
+      "id": data.controls.id.value,
+      "typeId": data.controls.typeId.value,
+      "brandId": data.controls.brandId.value,
+      "name": data.controls.name.value,
+      "price": data.controls.price.value
+    }
+    return this.http.put<any>(`${this.baseUrl}/products/product`, product);
   }
 
   deleteProduct(productId: number): Observable<any> {

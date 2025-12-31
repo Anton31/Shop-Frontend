@@ -1,4 +1,4 @@
-import {Component, OnDestroy, signal} from '@angular/core';
+import {Component, OnDestroy, OnInit, signal} from '@angular/core';
 import {Product} from "../../model/product";
 import {Type} from "../../model/type";
 import {Brand} from "../../model/brand";
@@ -24,7 +24,7 @@ import {map, Observable, Subscription} from "rxjs";
   styleUrls: ['./product-list.component.css'],
   standalone: false
 })
-export class ProductListComponent implements OnDestroy {
+export class ProductListComponent implements OnInit, OnDestroy {
 
   title = 'angularFrontend';
   products: Product[] = [];
@@ -58,9 +58,12 @@ export class ProductListComponent implements OnDestroy {
     this.orderDto = new OrderDto('', '', '');
     this.isAdmin = this.authService.userSubject.pipe(map(value => value.role === 'admin'));
     this.isUser = this.authService.userSubject.pipe(map(value => value.role === 'user'));
+  }
+
+  ngOnInit(): void {
     this.getProducts();
     this.getFilterTypes();
-    this.getCart();
+    setTimeout(()=> {this.getCart();}, 1000);
   }
 
   ngOnDestroy(): void {
@@ -219,23 +222,25 @@ export class ProductListComponent implements OnDestroy {
   }
 
   getCart() {
-    this.totalPrice = 0;
     this.cartProductIds = [];
     this.cartSubscription = this.orderService.getCart().subscribe(data => {
       this.cart = data;
-      this.totalPrice = data.totalPrice;
       this.totalQuantity.set(data.totalQuantity);
-      for (let i = 0; i < data.items.length; i++) {
-        this.cartProductIds.push(data.items[i].product.id);
-      }
+      this.setCartProductsIds();
     });
   }
 
-  addItemToCart(productId: number, productName: string) {
-    this.itemDto.productId = productId;
+  setCartProductsIds() {
+    for (let i = 0; i < this.cart.items.length; i++) {
+      this.cartProductIds.push(this.cart.items[i].product.id);
+    }
+  }
+
+  addItemToCart(product: Product) {
+    this.itemDto.productId = product.id;
     this.itemDto.itemId = 0;
     this.orderService.addItemToCart(this.itemDto).subscribe(data => {
-      this.snackBar.open(productName + ' added to cart', '', {duration: 3000});
+      this.snackBar.open(product.name + ' added to cart', '', {duration: 2000});
       this.getCart();
     });
   }
