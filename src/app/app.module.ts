@@ -74,7 +74,7 @@ import {MatRadioModule} from "@angular/material/radio";
       {path: 'types', component: TypeListComponent},
       {path: 'brands', component: BrandListComponent},
       {path: 'checkout', component: CheckoutComponent},
-      {path: 'orders', component: ListOrdersComponent}
+      {path: 'orders', component: ListOrdersComponent},
     ]),
     OAuthModule.forRoot(),
     ReactiveFormsModule,

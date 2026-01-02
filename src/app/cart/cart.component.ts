@@ -2,9 +2,9 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {ItemDto} from "../dto/item-dto";
 import {OrderService} from "../service/order-service";
 import {Item} from "../model/item";
-import {OrderDto} from "../dto/order-dto";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Router} from "@angular/router";
+import {Cart} from "../model/cart";
 
 
 @Component({
@@ -14,7 +14,7 @@ import {Router} from "@angular/router";
   standalone: false
 })
 export class CartComponent implements OnInit {
-  title: string;
+  title='Cart';
   items!: Item[];
   itemDto!: ItemDto;
   totalPrice!: number;
@@ -26,7 +26,7 @@ export class CartComponent implements OnInit {
               private dialogRef: MatDialogRef<CartComponent>,
               @Inject(MAT_DIALOG_DATA) public data: AddItemDialog) {
     this.itemDto = new ItemDto(0, 0, 0);
-    this.title = 'Cart';
+
   }
 
   getCart() {
@@ -71,10 +71,10 @@ export class CartComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getCart();
+this.getCart();
   }
 }
 
 export interface AddItemDialog {
-  orderDto: OrderDto;
+  cart: Cart;
 }

@@ -5,6 +5,7 @@ export interface Cart {
   id: number;
   user: User;
   items: Item[];
+  cartProductsIds: number[];
   totalPrice: number;
   totalQuantity: number;
 }

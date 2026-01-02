@@ -58,12 +58,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.orderDto = new OrderDto('', '', '');
     this.isAdmin = this.authService.userSubject.pipe(map(value => value.role === 'admin'));
     this.isUser = this.authService.userSubject.pipe(map(value => value.role === 'user'));
+
   }
 
   ngOnInit(): void {
     this.getProducts();
     this.getFilterTypes();
-    setTimeout(()=> {this.getCart();}, 1000);
+    this.getCart();
   }
 
   ngOnDestroy(): void {
@@ -80,7 +81,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       this.selectedDir())
       .subscribe(data => {
         this.products = data;
-      });
+      })
   }
 
   sortProducts(sortState: Sort) {
@@ -223,17 +224,20 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   getCart() {
     this.cartProductIds = [];
-    this.cartSubscription = this.orderService.getCart().subscribe(data => {
+    this.authService.cartSubject.subscribe(data => {
       this.cart = data;
+      this.cartProductIds = data.cartProductsIds;
       this.totalQuantity.set(data.totalQuantity);
-      this.setCartProductsIds();
-    });
+    })
   }
 
-  setCartProductsIds() {
-    for (let i = 0; i < this.cart.items.length; i++) {
-      this.cartProductIds.push(this.cart.items[i].product.id);
-    }
+  getCart2() {
+    this.cartProductIds = [];
+    this.orderService.getCart().subscribe(data => {
+      this.cart = data;
+      this.cartProductIds = data.cartProductsIds;
+      this.totalQuantity.set(data.totalQuantity);
+    })
   }
 
   addItemToCart(product: Product) {
@@ -241,19 +245,16 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.itemDto.itemId = 0;
     this.orderService.addItemToCart(this.itemDto).subscribe(data => {
       this.snackBar.open(product.name + ' added to cart', '', {duration: 2000});
-      this.getCart();
+      this.getCart2();
     });
   }
 
   openCart() {
     this.dialog.open(CartComponent, {
       height: '800px',
-      width: '800px',
-      data: {
-        orderDto: this.orderDto
-      }
+      width: '800px'
     }).afterClosed().subscribe(data => {
-      this.getCart();
+      this.getCart2();
     });
   }
 }

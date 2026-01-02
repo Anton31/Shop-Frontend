@@ -1,9 +1,11 @@
 import {Injectable} from "@angular/core";
 import {OAuthService} from "angular-oauth2-oidc";
 import {authConfig} from "./auth-config";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Subject} from "rxjs";
 import {UserInfo} from "../dto/user-info";
 import {HttpClient} from "@angular/common/http";
+import {OrderService} from "./order-service";
+import {Cart} from "../model/cart";
 
 
 @Injectable({providedIn: 'root'})
@@ -11,8 +13,10 @@ export class AuthService {
 
   baseUrl: string = 'http://localhost:8080';
   userSubject = new BehaviorSubject<UserInfo>(new UserInfo('', ''));
+  cartSubject = new Subject<Cart>();
 
   constructor(private oauthService: OAuthService,
+              private orderService: OrderService,
               private http: HttpClient) {
     this.oauthService.configure(authConfig);
     this.oauthService.loadDiscoveryDocumentAndTryLogin();
@@ -20,6 +24,7 @@ export class AuthService {
     this.oauthService.events.subscribe(event => {
       if (event.type === 'token_received') {
         this.getUser();
+        this.getCart();
       }
     });
   }
@@ -30,6 +35,12 @@ export class AuthService {
 
   logout() {
     this.oauthService.logOut();
+  }
+
+  getCart() {
+    this.orderService.getCart().subscribe(data => {
+      this.cartSubject.next(data);
+    })
   }
 
   getUser() {
