@@ -17,7 +17,6 @@ import {MatIconModule} from "@angular/material/icon";
 import {RegisterComponent} from './register/register.component';
 import {MatTableModule} from "@angular/material/table";
 import {MatSortModule} from "@angular/material/sort";
-import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {AddTypeComponent} from './types/add-type/add-type.component';
 import {AddBrandComponent} from './brands/add-brand/add-brand.component';
@@ -35,15 +34,12 @@ import {ListOrdersComponent} from './orders/list-orders/list-orders.component';
 import {MatBadgeModule} from "@angular/material/badge";
 import {CheckoutComponent} from './checkout/checkout.component';
 import {authInterceptor} from "./service/auth-interceptor";
-import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {OAuthModule} from "angular-oauth2-oidc";
 import {DeletePhotoComponent} from "./photos/delete-photo/delete-photo.component";
 import {CarouselModule} from "ngx-owl-carousel-o";
 import {AddPhotosComponent} from "./photos/add-photos/add-photos.component";
 import {GetProductComponent} from "./products/get-product/get-product.component";
-import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocomplete";
 import {MatRadioModule} from "@angular/material/radio";
-
 
 
 @NgModule({
@@ -69,12 +65,13 @@ import {MatRadioModule} from "@angular/material/radio";
   ],
   bootstrap: [AppComponent], imports: [BrowserModule,
     RouterModule.forRoot([
-      {path: '', component: ProductListComponent},
-      {path: 'product/:id', component: GetProductComponent},
+
+      {path: '', component: ProductListComponent, pathMatch: "full"},
       {path: 'types', component: TypeListComponent},
       {path: 'brands', component: BrandListComponent},
       {path: 'checkout', component: CheckoutComponent},
       {path: 'orders', component: ListOrdersComponent},
+      {path: 'product/:id', component: GetProductComponent},
     ]),
     OAuthModule.forRoot(),
     ReactiveFormsModule,
@@ -84,7 +81,6 @@ import {MatRadioModule} from "@angular/material/radio";
     BrowserAnimationsModule,
     MatDialogModule,
     MatButtonModule,
-    MatButtonToggleModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -92,14 +88,11 @@ import {MatRadioModule} from "@angular/material/radio";
     MatIconModule,
     MatTableModule,
     MatSortModule,
-    MatPaginatorModule,
     MatSnackBarModule,
     NgOptimizedImage,
     MatMenuModule,
     MatBadgeModule,
-    RouterModule,
-    MatAutocomplete,
-    MatAutocompleteTrigger],
+    RouterModule],
   providers: [
     provideHttpClient(withInterceptors([authInterceptor]))
   ]

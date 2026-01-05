@@ -15,7 +15,7 @@ import {CartComponent} from "../../cart/cart.component";
 import {OrderDto} from "../../dto/order-dto";
 import {Cart} from "../../model/cart";
 import {AuthService} from "../../service/auth-service";
-import {map, Observable, Subscription} from "rxjs";
+import {Subscription} from "rxjs";
 
 
 @Component({
@@ -38,12 +38,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['name', 'price', 'photo', 'type', 'brand', 'actions', 'cart'];
   cartProductIds!: number[];
   productForm!: FormGroup;
-  totalPrice!: number;
   totalQuantity = signal(0);
   orderDto: OrderDto;
   cart!: Cart;
-  isAdmin!: Observable<boolean>;
-  isUser!: Observable<boolean>;
+  isAdmin!: boolean;
+  isUser!: boolean;
   productSubscription!: Subscription;
   typeSubscription!: Subscription;
   cartSubscription!: Subscription;
@@ -56,9 +55,16 @@ export class ProductListComponent implements OnInit, OnDestroy {
               private snackBar: MatSnackBar) {
     this.itemDto = new ItemDto(0, 0, 0);
     this.orderDto = new OrderDto('', '', '');
-    this.isAdmin = this.authService.userSubject.pipe(map(value => value.role === 'admin'));
-    this.isUser = this.authService.userSubject.pipe(map(value => value.role === 'user'));
-
+    this.authService.userSubject.subscribe(data => {
+      this.isAdmin = data.role == 'admin';
+    })
+    this.authService.userSubject.subscribe(data => {
+      this.isUser = data.role == 'user';
+    })
+    this.authService.cartSubject.subscribe(data => {
+      this.cartProductIds = data.cartProductsIds;
+      this.totalQuantity.set(data.totalQuantity);
+    })
   }
 
   ngOnInit(): void {
@@ -223,21 +229,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   getCart() {
-    this.cartProductIds = [];
-    this.authService.cartSubject.subscribe(data => {
-      this.cart = data;
-      this.cartProductIds = data.cartProductsIds;
-      this.totalQuantity.set(data.totalQuantity);
-    })
-  }
-
-  getCart2() {
-    this.cartProductIds = [];
-    this.orderService.getCart().subscribe(data => {
-      this.cart = data;
-      this.cartProductIds = data.cartProductsIds;
-      this.totalQuantity.set(data.totalQuantity);
-    })
+    this.authService.getCart();
   }
 
   addItemToCart(product: Product) {
@@ -245,7 +237,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.itemDto.itemId = 0;
     this.orderService.addItemToCart(this.itemDto).subscribe(data => {
       this.snackBar.open(product.name + ' added to cart', '', {duration: 2000});
-      this.getCart2();
+      this.getCart();
     });
   }
 
@@ -254,7 +246,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       height: '800px',
       width: '800px'
     }).afterClosed().subscribe(data => {
-      this.getCart2();
+      this.getCart();
     });
   }
 }

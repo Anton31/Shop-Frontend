@@ -5,6 +5,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {CartComponent} from "../cart/cart.component";
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
+import {AuthService} from "../service/auth-service";
 
 @Component({
   selector: 'app-checkout',
@@ -18,6 +19,7 @@ export class CheckoutComponent implements OnInit {
   displayedColumns: string[] = ['name', 'actions'];
 
   constructor(private orderService: OrderService,
+              private authService: AuthService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private router: Router) {
@@ -25,12 +27,12 @@ export class CheckoutComponent implements OnInit {
   }
 
   getCart() {
-    this.orderService.getCart().subscribe(data => {
+    this.authService.cartSubject.subscribe(data => {
       this.cart = data;
       this.orderForm = this.fb.group({
         description: [''],
-        username: [data.user.username],
-        email: [data.user.email]
+        username: [''],
+        email: ['']
       })
     })
   }

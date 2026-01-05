@@ -99,16 +99,18 @@ export class ProductService {
   }
 
   addType(data: any): Observable<any> {
-    const formData = new FormData();
-    formData.append("name", data.controls.name.value);
-    return this.http.post<any>(`${this.baseUrl}/products/type`, formData);
+    const type = {
+      "name": data.controls.name.value
+    }
+    return this.http.post<any>(`${this.baseUrl}/products/type`, type);
   }
 
   editType(data: any): Observable<any> {
-    const formData = new FormData();
-    formData.append("id", data.controls.id.value);
-    formData.append("name", data.controls.name.value);
-    return this.http.put<any>(`${this.baseUrl}/products/type`, formData);
+    const type = {
+      "id": data.controls.id.value,
+      "name": data.controls.name.value
+    }
+    return this.http.put<any>(`${this.baseUrl}/products/type`, type);
   }
 
   deleteType(typeId: number): Observable<any> {

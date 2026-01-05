@@ -12,10 +12,6 @@ export class OrderService {
   constructor(private http: HttpClient) {
   }
 
-  getCart(): Observable<Cart> {
-    return this.http.get<Cart>(`${this.baseUrl}/cart`);
-  }
-
   getOrders(): Observable<Order[]> {
     return this.http.get<Order[]>(`${this.baseUrl}/cart/order`);
   }

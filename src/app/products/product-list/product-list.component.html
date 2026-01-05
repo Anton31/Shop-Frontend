@@ -22,7 +22,7 @@
     </mat-chip-listbox>
   }
   <p align="center">
-    @if ((isAdmin | async) || (isUser | async)) {
+    @if (isUser || isAdmin) {
       <button (click)="openCart()" mat-flat-button matBadge="{{totalQuantity()}}" matBadgePosition="after"
               matBadgeSize="large">
         Cart
@@ -65,7 +65,7 @@
     <ng-container matColumnDef="actions">
       <th *matHeaderCellDef mat-header-cell>Edit/remove product</th>
       <td *matCellDef="let product" mat-cell>
-        @if (isAdmin | async) {
+        @if (isAdmin) {
           <button (click)="editProduct(product)" mat-icon-button>
             <mat-icon>create</mat-icon>
           </button>
@@ -78,7 +78,7 @@
     <ng-container matColumnDef="cart">
       <th *matHeaderCellDef mat-header-cell> Cart</th>
       <td *matCellDef="let product" mat-cell>
-        @if ((isAdmin | async) || (isUser | async)) {
+        @if (isUser || isAdmin) {
           @if (!cartProductIds.includes(product.id)) {
             <button (click)="addItemToCart(product)" mat-icon-button>
               <mat-icon>add_shopping_cart</mat-icon>
@@ -93,7 +93,7 @@
     <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
   </table>
   <p></p>
-  @if (isAdmin | async) {
+  @if (isAdmin) {
     <button (click)="addProduct()" mat-flat-button>Add product</button>
   }
 </div>

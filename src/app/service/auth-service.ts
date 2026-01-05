@@ -4,7 +4,6 @@ import {authConfig} from "./auth-config";
 import {BehaviorSubject, Subject} from "rxjs";
 import {UserInfo} from "../dto/user-info";
 import {HttpClient} from "@angular/common/http";
-import {OrderService} from "./order-service";
 import {Cart} from "../model/cart";
 
 
@@ -16,7 +15,6 @@ export class AuthService {
   cartSubject = new Subject<Cart>();
 
   constructor(private oauthService: OAuthService,
-              private orderService: OrderService,
               private http: HttpClient) {
     this.oauthService.configure(authConfig);
     this.oauthService.loadDiscoveryDocumentAndTryLogin();
@@ -38,9 +36,10 @@ export class AuthService {
   }
 
   getCart() {
-    this.orderService.getCart().subscribe(data => {
-      this.cartSubject.next(data);
-    })
+    this.http.get<Cart>(`${this.baseUrl}/cart`).subscribe(data => {
+      if (data != null)
+        this.cartSubject.next(data);
+    });
   }
 
   getUser() {
