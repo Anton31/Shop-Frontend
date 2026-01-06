@@ -65,13 +65,11 @@ import {MatRadioModule} from "@angular/material/radio";
   ],
   bootstrap: [AppComponent], imports: [BrowserModule,
     RouterModule.forRoot([
-
       {path: '', component: ProductListComponent},
       {path: 'types', component: TypeListComponent},
       {path: 'brands', component: BrandListComponent},
       {path: 'checkout', component: CheckoutComponent},
-      {path: 'orders', component: ListOrdersComponent},
-      {path: 'product/:id', component: GetProductComponent},
+      {path: 'orders', component: ListOrdersComponent}
     ]),
     OAuthModule.forRoot(),
     ReactiveFormsModule,

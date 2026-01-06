@@ -15,9 +15,11 @@ import {CartComponent} from "../../cart/cart.component";
 import {OrderDto} from "../../dto/order-dto";
 import {Cart} from "../../model/cart";
 import {AuthService} from "../../service/auth-service";
-import {Subscription} from "rxjs";
+import {map, Observable, Subscription} from "rxjs";
 import {AddPhotosComponent} from "../../photos/add-photos/add-photos.component";
 import {DeletePhotosComponent} from "../../photos/delete-photos/delete-photos.component";
+import {Router} from "@angular/router";
+import {GetProductComponent} from "../get-product/get-product.component";
 
 
 @Component({
@@ -44,13 +46,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
   orderDto: OrderDto;
   cart!: Cart;
   photoForm!: FormGroup;
-  isAdmin!: boolean;
-  isUser!: boolean;
+  isAdmin!: Observable<boolean>;
+  isUser!: Observable<boolean>;
   productSubscription!: Subscription;
   typeSubscription!: Subscription;
   cartSubscription!: Subscription;
 
   constructor(private fb: FormBuilder,
+              private router: Router,
               private productService: ProductService,
               private orderService: OrderService,
               private authService: AuthService,
@@ -58,12 +61,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
               private snackBar: MatSnackBar) {
     this.itemDto = new ItemDto(0, 0, 0);
     this.orderDto = new OrderDto('', '', '');
-    this.authService.userSubject.subscribe(data => {
-      this.isAdmin = data.role == 'admin';
-    })
-    this.authService.userSubject.subscribe(data => {
-      this.isUser = data.role == 'user';
-    })
+    this.isAdmin = this.authService.userSubject.pipe(map(user => user.role === 'admin'));
+    this.isUser = this.authService.userSubject.pipe(map(user => user.role === 'user'));
+    this.authService.userSubject.pipe();
     this.authService.cartSubject.subscribe(data => {
       this.cartProductIds = data.cartProductsIds;
       this.totalQuantity.set(data.totalQuantity);
@@ -231,14 +231,24 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.selectedDir.set('ASC');
   }
 
+  openCarousel(product: Product) {
+    this.dialog.open(GetProductComponent, {
+      height: '600px',
+      width: '800px',
+      data: {product: product}
+    }).afterClosed().subscribe(data => {
+      this.getProducts()
+    });
+  }
+
   addPhotos(product: Product) {
     this.photoForm = this.fb.group({
       productId: [product.id],
       photos: [null]
     });
     this.dialog.open(AddPhotosComponent, {
-      height: '500px',
-      width: '500px',
+      height: '800px',
+      width: '600px',
       data: {
         photoForm: this.photoForm,
         product: product
@@ -252,8 +262,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   deletePhotos(product: Product) {
     this.dialog.open(DeletePhotosComponent, {
-      height: '500px',
-      width: '500px',
+      height: '600px',
+      width: '600px',
       data: {
         product: product
       }
@@ -279,8 +289,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   openCart() {
     this.dialog.open(CartComponent, {
-      height: '800px',
-      width: '800px'
+      height: '600px',
+      width: '600px'
     }).afterClosed().subscribe(data => {
       this.getCart();
     });

@@ -25,24 +25,28 @@
     }
   </div>
 </div>
-<div align="center">
-  @if (isAdmin | async) {
-    @for (photo of product.photos; track photo.id) {
-      <img [src]="photo.url"/>
-      @if (isAdmin | async) {
-        <button (click)="deletePhoto(product, photo)" color="primary" mat-icon-button>
-          <mat-icon>delete</mat-icon>
-        </button>
-      }
-    }
-    <p>
-      <button (click)="addPhotos(product)" mat-icon-button>
-        <mat-icon>add</mat-icon>
-      </button>
-      <button (click)="deletePhotos(product)" mat-icon-button>
-        <mat-icon>delete</mat-icon>
-      </button>
-    </p>
-  }
+<div align="center" mat-dialog-actions>
+  <button (click)="onNoClick()" mat-button>No Thanks</button>
+  <button [mat-dialog-close]="data.product" cdkFocusInitial mat-flat-button>Ok</button>
 </div>
+<!--<div align="center">-->
+<!--  @if (isAdmin | async) {-->
+<!--    @for (photo of product.photos; track photo.id) {-->
+<!--      <img [src]="photo.url"/>-->
+<!--      @if (isAdmin | async) {-->
+<!--        <button (click)="deletePhoto(product, photo)" color="primary" mat-icon-button>-->
+<!--          <mat-icon>delete</mat-icon>-->
+<!--        </button>-->
+<!--      }-->
+<!--    }-->
+<!--    <p>-->
+<!--      <button (click)="addPhotos(product)" mat-icon-button>-->
+<!--        <mat-icon>add</mat-icon>-->
+<!--      </button>-->
+<!--      <button (click)="deletePhotos(product)" mat-icon-button>-->
+<!--        <mat-icon>delete</mat-icon>-->
+<!--      </button>-->
+<!--    </p>-->
+<!--  }-->
+<!--</div>-->
 

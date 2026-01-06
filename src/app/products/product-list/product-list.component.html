@@ -1,15 +1,9 @@
 <div style="padding: 20px">
   <mat-chip-listbox>
     @for (type of filterTypes; track type.id) {
-      @if (type.id == selectedTypeId()) {
-        <mat-chip-option (click)="typeFilter(type.id)" class="selectedChip">
-          {{ type.name }}
-        </mat-chip-option>
-      } @else {
-        <mat-chip-option (click)="typeFilter(type.id)">
-          {{ type.name }}
-        </mat-chip-option>
-      }
+      <mat-chip-option (click)="typeFilter(type.id)">
+        {{ type.name }}
+      </mat-chip-option>
     }
   </mat-chip-listbox>
   @if (selectedTypeId() > 0) {
@@ -22,7 +16,7 @@
     </mat-chip-listbox>
   }
   <p align="center">
-    @if (isUser || isAdmin) {
+    @if ((isUser | async) || (isAdmin | async)) {
       <button (click)="openCart()" mat-flat-button matBadge="{{totalQuantity()}}" matBadgePosition="after"
               matBadgeSize="large">
         Cart
@@ -46,7 +40,7 @@
         @if (product.photos.length > 0) {
           <img [src]="product.photos[0].url"/>
         }
-        <p><a [routerLink]="['/product', product.id]">All Photos</a></p>
+        <button (click)="openCarousel(product)" mat-button>All photos</button>
         <button (click)="addPhotos(product)" mat-icon-button>
           <mat-icon>add</mat-icon>
         </button>
@@ -70,7 +64,8 @@
     <ng-container matColumnDef="actions">
       <th *matHeaderCellDef mat-header-cell>Edit/remove product</th>
       <td *matCellDef="let product" mat-cell>
-        @if (isAdmin) {
+        @if (isAdmin | async) {
+          <button (click)="addProduct()" mat-button>Add product</button>
           <button (click)="editProduct(product)" mat-icon-button>
             <mat-icon>create</mat-icon>
           </button>
@@ -83,7 +78,7 @@
     <ng-container matColumnDef="cart">
       <th *matHeaderCellDef mat-header-cell> Cart</th>
       <td *matCellDef="let product" mat-cell>
-        @if (isUser || isAdmin) {
+        @if ((isUser | async) || (isAdmin | async)) {
           @if (!cartProductIds.includes(product.id)) {
             <button (click)="addItemToCart(product)" mat-icon-button>
               <mat-icon>add_shopping_cart</mat-icon>
@@ -98,9 +93,7 @@
     <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
   </table>
   <p></p>
-  @if (isAdmin) {
-    <button (click)="addProduct()" mat-flat-button>Add product</button>
-  }
+
 </div>
 
 
