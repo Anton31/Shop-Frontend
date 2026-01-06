@@ -23,18 +23,12 @@ export class CheckoutComponent implements OnInit {
               private fb: FormBuilder,
               private dialog: MatDialog,
               private router: Router) {
-
-  }
-
-  getCart() {
     this.authService.cartSubject.subscribe(data => {
       this.cart = data;
-      this.orderForm = this.fb.group({
-        description: [''],
-        username: [''],
-        email: ['']
-      })
-    })
+    });
+  }
+  getCart() {
+    this.authService.getCart();
   }
 
   openCart() {

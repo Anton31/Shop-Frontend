@@ -81,7 +81,7 @@ export class TypeListComponent implements OnDestroy {
   editType(type: Type) {
     this.typeForm = this.fb.group({
       id: [type.id],
-      name: [type.name]
+      name: [type.name, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
     })
     const dialogRef = this.dialog.open(AddTypeComponent, {
       height: '500px',

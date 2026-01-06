@@ -234,7 +234,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
   openCarousel(product: Product) {
     this.dialog.open(GetProductComponent, {
       height: '600px',
-      width: '800px',
+      maxWidth: '1000px',
+      minWidth: '1000px',
       data: {product: product}
     }).afterClosed().subscribe(data => {
       this.getProducts()
