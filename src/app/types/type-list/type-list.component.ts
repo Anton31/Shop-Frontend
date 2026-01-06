@@ -6,7 +6,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {DeleteTypeComponent} from "../delete-type/delete-type.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {AuthService} from "../../service/auth-service";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Sort} from "@angular/material/sort";
 import {map, Observable, Subscription} from "rxjs";
 
@@ -58,8 +58,7 @@ export class TypeListComponent implements OnDestroy {
 
   addType() {
     this.typeForm = this.fb.group({
-      brandId: [1],
-      name: ['']
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
     })
     const dialogRef = this.dialog.open(AddTypeComponent, {
       height: '500px',
