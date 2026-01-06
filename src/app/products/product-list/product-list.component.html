@@ -32,9 +32,8 @@
   <table (matSortChange)="sortProducts($event)" [dataSource]="products" class="mat-elevation-z8" mat-table matSort>
     <ng-container matColumnDef="name">
       <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by name"> Name</th>
-      <td *matCellDef="let product" mat-cell><a routerLink="/product/{{product.id}}">
+      <td *matCellDef="let product" mat-cell>
         {{ product.name }}
-      </a>
       </td>
     </ng-container>
     <ng-container matColumnDef="price">
@@ -45,9 +44,15 @@
       <th *matHeaderCellDef mat-header-cell>Photo</th>
       <td *matCellDef="let product" mat-cell>
         @if (product.photos.length > 0) {
-          <a routerLink="/product/{{product.id}}"><img [src]="product.photos[0].url"/></a>
+          <img [src]="product.photos[0].url"/>
         }
-        <p><a routerLink="/product/{{product.id}}">All Photos</a></p>
+        <p><a [routerLink]="['/product', product.id]">All Photos</a></p>
+        <button (click)="addPhotos(product)" mat-icon-button>
+          <mat-icon>add</mat-icon>
+        </button>
+        <button (click)="deletePhotos(product)" mat-icon-button>
+          <mat-icon>delete</mat-icon>
+        </button>
       </td>
     </ng-container>
     <ng-container matColumnDef="type">

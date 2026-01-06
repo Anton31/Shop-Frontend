@@ -42,12 +42,16 @@ export class GetProductComponent {
 
     this.activatedRoute.params.subscribe((params) => {
       this.productId.set(params['id']);
-    });
+      this.getProducts(this.productId());
+    })
+  }
 
-    this.productService.getProduct(Number(this.productId())).subscribe(data => {
+  getProducts(id: number) {
+    this.productService.getProduct(id).subscribe(data => {
       this.product = data;
       this.title = data.name;
     });
+
   }
 
   addPhotos(product: Product) {
@@ -112,3 +116,4 @@ export class GetProductComponent {
     }
   }
 }
+

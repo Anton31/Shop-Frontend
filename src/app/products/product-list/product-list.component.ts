@@ -16,6 +16,8 @@ import {OrderDto} from "../../dto/order-dto";
 import {Cart} from "../../model/cart";
 import {AuthService} from "../../service/auth-service";
 import {Subscription} from "rxjs";
+import {AddPhotosComponent} from "../../photos/add-photos/add-photos.component";
+import {DeletePhotosComponent} from "../../photos/delete-photos/delete-photos.component";
 
 
 @Component({
@@ -41,6 +43,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   totalQuantity = signal(0);
   orderDto: OrderDto;
   cart!: Cart;
+  photoForm!: FormGroup;
   isAdmin!: boolean;
   isUser!: boolean;
   productSubscription!: Subscription;
@@ -226,6 +229,39 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.selectedBrandId.set(0);
     this.selectedSort.set('name');
     this.selectedDir.set('ASC');
+  }
+
+  addPhotos(product: Product) {
+    this.photoForm = this.fb.group({
+      productId: [product.id],
+      photos: [null]
+    });
+    this.dialog.open(AddPhotosComponent, {
+      height: '500px',
+      width: '500px',
+      data: {
+        photoForm: this.photoForm,
+        product: product
+      }
+    }).afterClosed().subscribe(data => {
+      this.productService.addPhotos(data).subscribe(data => {
+        this.getProducts();
+      })
+    })
+  }
+
+  deletePhotos(product: Product) {
+    this.dialog.open(DeletePhotosComponent, {
+      height: '500px',
+      width: '500px',
+      data: {
+        product: product
+      }
+    }).afterClosed().subscribe(data => {
+      this.productService.deletePhotos(data).subscribe(data => {
+        this.getProducts();
+      });
+    });
   }
 
   getCart() {
