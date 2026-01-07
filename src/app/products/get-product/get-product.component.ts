@@ -36,20 +36,17 @@ export class GetProductComponent {
               private fb: FormBuilder,
               private dialog: MatDialog,
               private activatedRoute: ActivatedRoute) {
-    this.isAdmin = this.authService.userSubject.pipe(map(data=>data.role === 'admin'));
+    this.isAdmin = this.authService.userSubject.pipe(map(data => data.role === 'admin'));
     this.activatedRoute.params.subscribe((params) => {
       this.productId.set(params['id']);
-
       this.getProducts(this.productId());
-
     });
-
   }
 
   getProducts(id: number) {
-    this.productService.getProduct(id).subscribe(data=>{
-    this.product = data;});
-
+    this.productService.getProduct(id).subscribe(data => {
+      this.product = data;
+    });
   }
 
   addPhotos(product: Product) {
@@ -107,8 +104,6 @@ export class GetProductComponent {
       nav: true
     }
   }
-
-
 }
 
 

@@ -16,10 +16,7 @@ import {OrderDto} from "../../dto/order-dto";
 import {Cart} from "../../model/cart";
 import {AuthService} from "../../service/auth-service";
 import {map, Observable, Subscription} from "rxjs";
-import {AddPhotosComponent} from "../../photos/add-photos/add-photos.component";
-import {DeletePhotosComponent} from "../../photos/delete-photos/delete-photos.component";
 import {Router} from "@angular/router";
-import {GetProductComponent} from "../get-product/get-product.component";
 
 
 @Component({
@@ -64,6 +61,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.isAdmin = this.authService.userSubject.pipe(map(user => user.role === 'admin'));
     this.isUser = this.authService.userSubject.pipe(map(user => user.role === 'user'));
     this.authService.userSubject.pipe();
+    this.authService.cartSubject.subscribe(data => {
+      this.cartProductIds = data.cartProductsIds;
+      this.totalQuantity.set(data.totalQuantity);
+    })
 
   }
 
@@ -228,44 +229,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.selectedDir.set('ASC');
   }
 
-
-  addPhotos(product: Product) {
-    this.photoForm = this.fb.group({
-      productId: [product.id],
-      photos: [null]
-    });
-    this.dialog.open(AddPhotosComponent, {
-      height: '800px',
-      width: '600px',
-      data: {
-        photoForm: this.photoForm,
-        product: product
-      }
-    }).afterClosed().subscribe(data => {
-      this.productService.addPhotos(data).subscribe(data => {
-        this.getProducts();
-      })
-    })
-  }
-
-  deletePhotos(product: Product) {
-    this.dialog.open(DeletePhotosComponent, {
-      height: '600px',
-      width: '600px',
-      data: {
-        product: product
-      }
-    }).afterClosed().subscribe(data => {
-      this.productService.deletePhotos(data).subscribe(data => {
-        this.getProducts();
-      });
-    });
-  }
-
   getCart() {
-    this.orderService.getCart().subscribe(data=>{
-      this.cartProductIds = data.cartProductsIds;
-      this.totalQuantity.set(data.totalQuantity);
+    this.orderService.getCart().subscribe(data => {
+      this.authService.getCart();
     })
   }
 

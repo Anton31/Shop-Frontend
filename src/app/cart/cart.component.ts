@@ -20,6 +20,7 @@ export class CartComponent implements OnInit {
   displayedColumns: string[] = ['name', 'actions'];
   cart!: Cart;
   orderForm!: FormGroup;
+
   constructor(private orderService: OrderService,
               private fb: FormBuilder,
               private dialogRef: MatDialogRef<CartComponent>,
@@ -30,7 +31,7 @@ export class CartComponent implements OnInit {
   }
 
   getCart() {
-    this.orderService.getCart().subscribe(data=>{
+    this.orderService.getCart().subscribe(data => {
       this.cart = data;
     });
   }
