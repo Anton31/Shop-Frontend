@@ -1,5 +1,5 @@
 <div align="center">
-  <h2>{{ title }}</h2>
+  <h2>{{ product.name }}</h2>
   <div id="owlId">
     @if (product.photos.length > 0) {
       <mat-radio-group>
@@ -24,17 +24,15 @@
       <h2>no photos</h2>
     }
   </div>
-</div>
+
 
 <div align="center">
   @if (isAdmin | async) {
     @for (photo of product.photos; track photo.id) {
       <img [src]="photo.url"/>
-      @if (isAdmin | async) {
         <button (click)="deletePhoto(product, photo)" color="primary" mat-icon-button>
           <mat-icon>delete</mat-icon>
         </button>
-      }
     }
     <p>
       <button (click)="addPhotos(product)" mat-icon-button>
@@ -46,4 +44,4 @@
     </p>
   }
 </div>
-
+</div>

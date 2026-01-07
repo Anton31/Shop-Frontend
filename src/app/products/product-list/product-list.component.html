@@ -38,15 +38,15 @@
       <th *matHeaderCellDef mat-header-cell>Photo</th>
       <td *matCellDef="let product" mat-cell>
         @if (product.photos.length > 0) {
-          <a href="/product/{{product.id}}"><img [src]="product.photos[0].url"/></a>
+          <a routerLink="/product/{{product.id}}"><img [src]="product.photos[0].url"/></a>
         }
-        <a href="/product/{{product.id}}">All photos</a>
-        <button (click)="addPhotos(product)" mat-icon-button>
-          <mat-icon>add</mat-icon>
-        </button>
-        <button (click)="deletePhotos(product)" mat-icon-button>
-          <mat-icon>delete</mat-icon>
-        </button>
+        <a routerLink="/product/{{product.id}}">All photos</a>
+<!--        <button (click)="addPhotos(product)" mat-icon-button>-->
+<!--          <mat-icon>add</mat-icon>-->
+<!--        </button>-->
+<!--        <button (click)="deletePhotos(product)" mat-icon-button>-->
+<!--          <mat-icon>delete</mat-icon>-->
+<!--        </button>-->
       </td>
     </ng-container>
     <ng-container matColumnDef="type">

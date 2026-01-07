@@ -40,7 +40,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   selectedDir = signal('ASC');
   itemDto!: ItemDto;
   displayedColumns: string[] = ['name', 'price', 'photo', 'type', 'brand', 'actions', 'cart'];
-  cartProductIds!: number[];
+  cartProductIds: number[] = [];
   productForm!: FormGroup;
   totalQuantity = signal(0);
   orderDto: OrderDto;

@@ -4,12 +4,13 @@ import {ProductService} from "../../service/product-service";
 import {Product} from "../../model/product";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
-import {Observable} from "rxjs";
+import {map, Observable} from "rxjs";
 import {AddPhotosComponent} from "../../photos/add-photos/add-photos.component";
 import {DeletePhotosComponent} from "../../photos/delete-photos/delete-photos.component";
 import {DeletePhotoComponent} from "../../photos/delete-photo/delete-photo.component";
 import {Photo} from "../../model/photo";
 import {ActivatedRoute} from "@angular/router";
+import {AuthService} from "../../service/auth-service";
 
 @Component({
   selector: 'app-get-product',
@@ -31,21 +32,23 @@ export class GetProductComponent {
   productId = signal(0);
 
   constructor(private productService: ProductService,
+              private authService: AuthService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private activatedRoute: ActivatedRoute) {
+    this.isAdmin = this.authService.userSubject.pipe(map(data=>data.role === 'admin'));
     this.activatedRoute.params.subscribe((params) => {
       this.productId.set(params['id']);
+
       this.getProducts(this.productId());
+
     });
 
   }
 
   getProducts(id: number) {
-    this.productService.getProduct(id).subscribe(data => {
-      this.product = data;
-      this.title = data.name;
-    });
+    this.productService.getProduct(id).subscribe(data=>{
+    this.product = data;});
 
   }
 
@@ -63,9 +66,7 @@ export class GetProductComponent {
       }
     }).afterClosed().subscribe(data => {
       this.productService.addPhotos(data).subscribe(data => {
-        this.productService.getProduct(data).subscribe(data => {
-          this.product = data;
-        })
+        this.getProducts(data);
       })
     })
   }
@@ -79,9 +80,7 @@ export class GetProductComponent {
       }
     }).afterClosed().subscribe(data => {
       this.productService.deletePhotos(data).subscribe(data => {
-        this.productService.getProduct(data).subscribe(data => {
-          this.product = data;
-        })
+        this.getProducts(data);
       });
     });
   }
@@ -95,9 +94,7 @@ export class GetProductComponent {
       }
     }).afterClosed().subscribe(data => {
       this.productService.deletePhoto(product.id, data.id).subscribe(data => {
-        this.productService.getProduct(data).subscribe(data => {
-          this.product = data;
-        })
+        this.getProducts(data);
       });
     });
   }
