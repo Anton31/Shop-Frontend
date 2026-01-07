@@ -38,9 +38,9 @@
       <th *matHeaderCellDef mat-header-cell>Photo</th>
       <td *matCellDef="let product" mat-cell>
         @if (product.photos.length > 0) {
-          <img [src]="product.photos[0].url"/>
+          <a href="/product/{{product.id}}"><img [src]="product.photos[0].url"/></a>
         }
-        <button (click)="openCarousel(product)" mat-button>All photos</button>
+        <a href="/product/{{product.id}}">All photos</a>
         <button (click)="addPhotos(product)" mat-icon-button>
           <mat-icon>add</mat-icon>
         </button>

@@ -64,10 +64,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.isAdmin = this.authService.userSubject.pipe(map(user => user.role === 'admin'));
     this.isUser = this.authService.userSubject.pipe(map(user => user.role === 'user'));
     this.authService.userSubject.pipe();
-    this.authService.cartSubject.subscribe(data => {
-      this.cartProductIds = data.cartProductsIds;
-      this.totalQuantity.set(data.totalQuantity);
-    })
+
   }
 
   ngOnInit(): void {
@@ -231,16 +228,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.selectedDir.set('ASC');
   }
 
-  openCarousel(product: Product) {
-    this.dialog.open(GetProductComponent, {
-      height: '600px',
-      maxWidth: '1000px',
-      minWidth: '1000px',
-      data: {product: product}
-    }).afterClosed().subscribe(data => {
-      this.getProducts()
-    });
-  }
 
   addPhotos(product: Product) {
     this.photoForm = this.fb.group({
@@ -276,7 +263,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   getCart() {
-    this.authService.getCart();
+    this.orderService.getCart().subscribe(data=>{
+      this.cartProductIds = data.cartProductsIds;
+      this.totalQuantity.set(data.totalQuantity);
+    })
   }
 
   addItemToCart(product: Product) {

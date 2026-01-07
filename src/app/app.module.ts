@@ -32,7 +32,6 @@ import {CartComponent} from './cart/cart.component';
 import {DeletePhotosComponent} from './photos/delete-photos/delete-photos.component';
 import {ListOrdersComponent} from './orders/list-orders/list-orders.component';
 import {MatBadgeModule} from "@angular/material/badge";
-import {CheckoutComponent} from './checkout/checkout.component';
 import {authInterceptor} from "./service/auth-interceptor";
 import {OAuthModule} from "angular-oauth2-oidc";
 import {DeletePhotoComponent} from "./photos/delete-photo/delete-photo.component";
@@ -60,15 +59,14 @@ import {MatRadioModule} from "@angular/material/radio";
     CartComponent,
     DeletePhotosComponent,
     ListOrdersComponent,
-    CheckoutComponent,
     DeletePhotoComponent,
   ],
   bootstrap: [AppComponent], imports: [BrowserModule,
     RouterModule.forRoot([
       {path: '', component: ProductListComponent},
+      {path: 'product/:id', component: GetProductComponent},
       {path: 'types', component: TypeListComponent},
       {path: 'brands', component: BrandListComponent},
-      {path: 'checkout', component: CheckoutComponent},
       {path: 'orders', component: ListOrdersComponent}
     ]),
     OAuthModule.forRoot(),

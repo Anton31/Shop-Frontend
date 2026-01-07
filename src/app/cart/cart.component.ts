@@ -2,9 +2,10 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {ItemDto} from "../dto/item-dto";
 import {OrderService} from "../service/order-service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {Router} from "@angular/router";
+
 import {Cart} from "../model/cart";
-import {AuthService} from "../service/auth-service";
+
+import {FormBuilder, FormGroup} from "@angular/forms";
 
 
 @Component({
@@ -18,21 +19,20 @@ export class CartComponent implements OnInit {
   itemDto!: ItemDto;
   displayedColumns: string[] = ['name', 'actions'];
   cart!: Cart;
-
+  orderForm!: FormGroup;
   constructor(private orderService: OrderService,
-              private authService: AuthService,
-              private router: Router,
+              private fb: FormBuilder,
               private dialogRef: MatDialogRef<CartComponent>,
               @Inject(MAT_DIALOG_DATA) public data: AddItemDialog) {
     this.itemDto = new ItemDto(0, 0, 0);
-    this.authService.cartSubject.subscribe(data=>{
-      this.cart = data;
-    })
+
 
   }
 
   getCart() {
-    this.authService.getCart();
+    this.orderService.getCart().subscribe(data=>{
+      this.cart = data;
+    });
   }
 
   plusItem(itemId: number) {
@@ -51,9 +51,16 @@ export class CartComponent implements OnInit {
     });
   }
 
-  checkout() {
-    this.dialogRef.close();
-    this.router.navigate(['checkout']);
+  addOrder() {
+    this.orderForm = this.fb.group({
+      description: [''],
+      username: [this.cart.user.username],
+      email: [this.cart.user.email]
+    })
+    this.orderService.addOrder(this.orderForm).subscribe(data => {
+      this.dialogRef.close();
+
+    });
   }
 
   onNoClick() {
