@@ -3,14 +3,14 @@
 }
 
 #owlImage {
-  max-width: 240px;
-  max-height: 240px;
+  max-width: 300px;
+  max-height: 300px;
   width: auto;
   height: auto;
 }
 
 img {
-  margin-top: 10px;
+  margin-left: 20px;
   max-width: 120px;
   max-height: 120px;
   width: auto;
