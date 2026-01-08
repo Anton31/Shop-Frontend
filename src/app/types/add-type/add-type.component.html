@@ -1,5 +1,5 @@
 <h1 align="center">{{ title }}</h1>
-<form [formGroup]="data.typeForm">
+<form [formGroup]="typeForm">
   <p align="center">
     <input formControlName="id" type="hidden">
   </p>
@@ -7,9 +7,17 @@
     <mat-form-field>
       <mat-label>Name:</mat-label>
       <input formControlName="name" matInput>
+      @if (name.invalid && (name.dirty || name.touched)) {
+        @if (name.hasError('required')) {
+          <div>Name is required.</div>
+        }
+        @if (name.hasError('minlength')) {
+          <div>Name must be at least 3 characters long.</div>
+        }
+      }
     </mat-form-field>
 </form>
 <div align="center" mat-dialog-actions>
   <button (click)="onNoClick()" mat-button>No Thanks</button>
-  <button [mat-dialog-close]="data.typeForm" [disabled]="!data.typeForm.valid" mat-button>Ok</button>
+  <button [disabled]="!typeForm.valid" [mat-dialog-close]="typeForm" mat-button>Ok</button>
 </div>

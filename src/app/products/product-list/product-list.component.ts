@@ -63,7 +63,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
       this.cartProductIds = data.cartProductsIds;
       this.totalQuantity = data.totalQuantity;
     })
-
   }
 
   ngOnInit(): void {
@@ -235,7 +234,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.itemDto.productId = product.id;
     this.itemDto.itemId = 0;
     this.orderService.addItemToCart(this.itemDto).subscribe(data => {
-      this.snackBar.open(product.name + ' added to cart', '', {duration: 2000});
+      this.snackBar.open(product.name + ' added to cart', '', {duration: 3000});
       this.getCart();
     });
   }

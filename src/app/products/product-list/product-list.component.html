@@ -40,7 +40,7 @@
         @if (product.photos.length > 0) {
           <a [routerLink]="['/product', product.id]"><img [src]="product.photos[0].url"/></a>
         }
-        <a [routerLink]="['/product', product.id]">All photos</a>
+        <p><a [routerLink]="['/product', product.id]">All photos</a></p>
       </td>
     </ng-container>
     <ng-container matColumnDef="type">
@@ -77,7 +77,9 @@
               <mat-icon>add_shopping_cart</mat-icon>
             </button>
           } @else {
-            <button (click)="openCart()" mat-button>in cart</button>
+            <button (click)="openCart()" mat-button>
+              in cart
+            </button>
           }
         }
       </td>
@@ -85,10 +87,10 @@
     <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
     <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
   </table>
+  <p></p>
   @if (isAdmin | async) {
     <button (click)="addProduct()" mat-flat-button>Add product</button>
   }
-  <p></p>
 </div>
 
 
