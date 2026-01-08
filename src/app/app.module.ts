@@ -65,16 +65,15 @@ import {NotFoundComponent} from "./not-found/not-found.component";
   ],
   bootstrap: [AppComponent], imports: [BrowserModule,
     RouterModule.forRoot([
-      {path: '', component: ProductListComponent, pathMatch: 'full'},
       {path: 'product/:id', component: GetProductComponent},
-      {path: 'types', component: TypeListComponent},
+      {path: 'products', component: ProductListComponent},
       {path: 'brands', component: BrandListComponent},
       {path: 'orders', component: ListOrdersComponent},
-      {path: '**', component: NotFoundComponent}
+      {path: '', component: TypeListComponent},
+      {path: '**',  component: NotFoundComponent}
     ]),
     OAuthModule.forRoot(),
     ReactiveFormsModule,
-
     MatRadioModule,
     CarouselModule,
     FormsModule,
@@ -91,8 +90,7 @@ import {NotFoundComponent} from "./not-found/not-found.component";
     MatSnackBarModule,
     NgOptimizedImage,
     MatMenuModule,
-    MatBadgeModule,
-    RouterModule],
+    MatBadgeModule],
   providers: [
     provideHttpClient(withInterceptors([authInterceptor]))
   ]

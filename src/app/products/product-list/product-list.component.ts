@@ -42,12 +42,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
   totalQuantity = 0;
   orderDto: OrderDto;
   cart!: Cart;
-  photoForm!: FormGroup;
   isAdmin!: Observable<boolean>;
   isUser!: Observable<boolean>;
   productSubscription!: Subscription;
   typeSubscription!: Subscription;
-  cartSubscription!: Subscription;
+
 
   constructor(private fb: FormBuilder,
               private router: Router,
@@ -63,7 +62,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.authService.userSubject.pipe();
     this.authService.cartSubject.subscribe(data => {
       this.cartProductIds = data.cartProductsIds;
-      this.totalQuantity=data.totalQuantity;
+      this.totalQuantity = data.totalQuantity;
     })
 
   }
@@ -77,7 +76,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.productSubscription.unsubscribe();
     this.typeSubscription.unsubscribe();
-    this.cartSubscription.unsubscribe();
+
   }
 
   getProducts() {
@@ -92,8 +91,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   sortProducts(sortState: Sort) {
-    this.selectedSort=sortState.active;
-    this.selectedDir=sortState.direction;
+    this.selectedSort = sortState.active;
+    this.selectedDir = sortState.direction;
     this.productService.getProducts(
       this.selectedTypeId,
       this.selectedBrandId,
@@ -111,7 +110,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   getFilterBrands(typeId: number) {
-    this.selectedTypeId=typeId;
+    this.selectedTypeId = typeId;
     this.productService.getProductBrands(this.selectedTypeId, 'id', 'ASC').subscribe(data => {
       if (this.selectedTypeId > 0) {
         this.filterBrands = data;
@@ -126,7 +125,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       this.selectedTypeId = 0;
       this.selectedBrandId = 0;
     } else {
-      this.selectedTypeId=typeId;
+      this.selectedTypeId = typeId;
       this.selectedBrandId = 0;
     }
     this.getFilterBrands(this.selectedTypeId);

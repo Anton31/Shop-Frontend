@@ -10,7 +10,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {Sort} from "@angular/material/sort";
 import {map, Observable, Subscription} from "rxjs";
 import {AuthService} from "../../service/auth-service";
-import {Type} from "../../model/type";
+
 
 
 @Component({
@@ -26,7 +26,6 @@ export class BrandListComponent implements OnDestroy {
   currentDir = 'ASC';
   isAdmin!: Observable<boolean>;
   brandSubscription!: Subscription;
-  types: Type[] = [];
 
   constructor(private authService: AuthService,
               private productService: ProductService,
@@ -59,7 +58,6 @@ export class BrandListComponent implements OnDestroy {
 
   addBrand() {
     this.brandForm = this.fb.group({
-      typeId: [1],
       name: ['']
     });
     const dialogRef = this.dialog.open(AddBrandComponent, {
