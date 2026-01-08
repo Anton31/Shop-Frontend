@@ -6,7 +6,7 @@
       </mat-chip-option>
     }
   </mat-chip-listbox>
-  @if (selectedTypeId() > 0) {
+  @if (selectedTypeId > 0) {
     <mat-chip-listbox>
       @for (brand of filterBrands; track brand.id) {
         <mat-chip-option (click)="brandFilter(brand.id)">
@@ -17,7 +17,7 @@
   }
   <p align="center">
     @if ((isUser | async) || (isAdmin | async)) {
-      <button (click)="openCart()" mat-flat-button matBadge="{{totalQuantity()}}" matBadgePosition="after"
+      <button (click)="openCart()" mat-flat-button matBadge="{{totalQuantity}}" matBadgePosition="after"
               matBadgeSize="large">
         Cart
         <mat-icon>shopping_cart_checkout</mat-icon>

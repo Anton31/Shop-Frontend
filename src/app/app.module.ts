@@ -22,7 +22,7 @@ import {AddTypeComponent} from './types/add-type/add-type.component';
 import {AddBrandComponent} from './brands/add-brand/add-brand.component';
 import {TypeListComponent} from './types/type-list/type-list.component';
 import {BrandListComponent} from './brands/brand-list/brand-list.component';
-import {RouterModule} from "@angular/router";
+import {RouterLink, RouterModule} from "@angular/router";
 import {ProductListComponent} from './products/product-list/product-list.component';
 import {DeleteTypeComponent} from './types/delete-type/delete-type.component';
 import {DeleteBrandComponent} from './brands/delete-brand/delete-brand.component';
@@ -39,6 +39,7 @@ import {CarouselModule} from "ngx-owl-carousel-o";
 import {AddPhotosComponent} from "./photos/add-photos/add-photos.component";
 import {GetProductComponent} from "./products/get-product/get-product.component";
 import {MatRadioModule} from "@angular/material/radio";
+import {NotFoundComponent} from "./not-found/not-found.component";
 
 
 @NgModule({
@@ -60,17 +61,20 @@ import {MatRadioModule} from "@angular/material/radio";
     DeletePhotosComponent,
     ListOrdersComponent,
     DeletePhotoComponent,
+    NotFoundComponent
   ],
   bootstrap: [AppComponent], imports: [BrowserModule,
     RouterModule.forRoot([
-      {path: '', component: ProductListComponent},
+      {path: '', component: ProductListComponent, pathMatch: 'full'},
       {path: 'product/:id', component: GetProductComponent},
       {path: 'types', component: TypeListComponent},
       {path: 'brands', component: BrandListComponent},
-      {path: 'orders', component: ListOrdersComponent}
+      {path: 'orders', component: ListOrdersComponent},
+      {path: '**', component: NotFoundComponent}
     ]),
     OAuthModule.forRoot(),
     ReactiveFormsModule,
+
     MatRadioModule,
     CarouselModule,
     FormsModule,

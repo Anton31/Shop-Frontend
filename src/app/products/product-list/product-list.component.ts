@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, signal} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Product} from "../../model/product";
 import {Type} from "../../model/type";
 import {Brand} from "../../model/brand";
@@ -31,15 +31,15 @@ export class ProductListComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   filterTypes: Type[] = [];
   filterBrands: Brand[] = [];
-  selectedTypeId = signal(0);
-  selectedBrandId = signal(0);
-  selectedSort = signal('name');
-  selectedDir = signal('ASC');
+  selectedTypeId = 0;
+  selectedBrandId = 0;
+  selectedSort = 'name';
+  selectedDir = 'ASC';
   itemDto!: ItemDto;
   displayedColumns: string[] = ['name', 'price', 'photo', 'type', 'brand', 'actions', 'cart'];
   cartProductIds: number[] = [];
   productForm!: FormGroup;
-  totalQuantity = signal(0);
+  totalQuantity = 0;
   orderDto: OrderDto;
   cart!: Cart;
   photoForm!: FormGroup;
@@ -63,7 +63,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.authService.userSubject.pipe();
     this.authService.cartSubject.subscribe(data => {
       this.cartProductIds = data.cartProductsIds;
-      this.totalQuantity.set(data.totalQuantity);
+      this.totalQuantity=data.totalQuantity;
     })
 
   }
@@ -82,23 +82,23 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   getProducts() {
     this.productSubscription = this.productService.getProducts(
-      this.selectedTypeId(),
-      this.selectedBrandId(),
-      this.selectedSort(),
-      this.selectedDir())
+      this.selectedTypeId,
+      this.selectedBrandId,
+      this.selectedSort,
+      this.selectedDir)
       .subscribe(data => {
         this.products = data;
       })
   }
 
   sortProducts(sortState: Sort) {
-    this.selectedSort.set(sortState.active);
-    this.selectedDir.set(sortState.direction);
+    this.selectedSort=sortState.active;
+    this.selectedDir=sortState.direction;
     this.productService.getProducts(
-      this.selectedTypeId(),
-      this.selectedBrandId(),
-      this.selectedSort(),
-      this.selectedDir())
+      this.selectedTypeId,
+      this.selectedBrandId,
+      this.selectedSort,
+      this.selectedDir)
       .subscribe(data => {
         this.products = data;
       });
@@ -111,9 +111,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   getFilterBrands(typeId: number) {
-    this.selectedTypeId.set(typeId);
-    this.productService.getProductBrands(this.selectedTypeId(), 'id', 'ASC').subscribe(data => {
-      if (this.selectedTypeId() > 0) {
+    this.selectedTypeId=typeId;
+    this.productService.getProductBrands(this.selectedTypeId, 'id', 'ASC').subscribe(data => {
+      if (this.selectedTypeId > 0) {
         this.filterBrands = data;
       } else {
         this.filterBrands = [];
@@ -122,35 +122,35 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   typeFilter(typeId: number) {
-    if (typeId == this.selectedTypeId()) {
-      this.selectedTypeId.set(0);
-      this.selectedBrandId.set(0);
+    if (typeId == this.selectedTypeId) {
+      this.selectedTypeId = 0;
+      this.selectedBrandId = 0;
     } else {
-      this.selectedTypeId.set(typeId);
-      this.selectedBrandId.set(0);
+      this.selectedTypeId=typeId;
+      this.selectedBrandId = 0;
     }
-    this.getFilterBrands(this.selectedTypeId());
+    this.getFilterBrands(this.selectedTypeId);
     this.productService.getProducts(
-      this.selectedTypeId(),
-      this.selectedBrandId(),
-      this.selectedSort(),
-      this.selectedDir())
+      this.selectedTypeId,
+      this.selectedBrandId,
+      this.selectedSort,
+      this.selectedDir)
       .subscribe(data => {
         this.products = data;
       });
   }
 
   brandFilter(brandId: number) {
-    if (this.selectedBrandId() === brandId) {
-      this.selectedBrandId.set(0);
+    if (this.selectedBrandId === brandId) {
+      this.selectedBrandId = 0;
     } else {
-      this.selectedBrandId.set(brandId);
+      this.selectedBrandId = brandId;
     }
     this.productService.getProducts(
-      this.selectedTypeId(),
-      this.selectedBrandId(),
-      this.selectedSort(),
-      this.selectedDir())
+      this.selectedTypeId,
+      this.selectedBrandId,
+      this.selectedSort,
+      this.selectedDir)
       .subscribe(data => {
         this.products = data;
       });
@@ -217,16 +217,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
       this.productService.deleteProduct(data).subscribe(data => {
         this.getProducts();
         this.getFilterTypes();
-        this.getFilterBrands(this.selectedTypeId());
+        this.getFilterBrands(this.selectedTypeId);
       });
     });
   }
 
   resetFilters() {
-    this.selectedTypeId.set(0);
-    this.selectedBrandId.set(0);
-    this.selectedSort.set('name');
-    this.selectedDir.set('ASC');
+    this.selectedTypeId = 0;
+    this.selectedBrandId = 0;
   }
 
   getCart() {

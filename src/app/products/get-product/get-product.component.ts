@@ -29,7 +29,7 @@ export class GetProductComponent {
   title = '';
   photoForm!: FormGroup;
   isAdmin!: Observable<boolean>;
-  productId = signal(0);
+  productId = 0;
 
   constructor(private productService: ProductService,
               private authService: AuthService,
@@ -38,8 +38,8 @@ export class GetProductComponent {
               private activatedRoute: ActivatedRoute) {
     this.isAdmin = this.authService.userSubject.pipe(map(data => data.role === 'admin'));
     this.activatedRoute.params.subscribe((params) => {
-      this.productId.set(params['id']);
-      this.getProducts(this.productId());
+      this.productId = Number(params['id']);
+      this.getProducts(this.productId);
     });
   }
 
