@@ -38,9 +38,9 @@
       <th *matHeaderCellDef mat-header-cell>Photo</th>
       <td *matCellDef="let product" mat-cell>
         @if (product.photos.length > 0) {
-          <a routerLink="/product/{{product.id}}"><img [src]="product.photos[0].url"/></a>
+          <a [routerLink]="['/product', product.id]"><img [src]="product.photos[0].url"/></a>
         }
-        <a routerLink="/product/{{product.id}}">All photos</a>
+        <a [routerLink]="['/product', product.id]">All photos</a>
       </td>
     </ng-container>
     <ng-container matColumnDef="type">

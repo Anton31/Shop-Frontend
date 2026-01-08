@@ -66,10 +66,10 @@ import {NotFoundComponent} from "./not-found/not-found.component";
   bootstrap: [AppComponent], imports: [BrowserModule,
     RouterModule.forRoot([
       {path: 'product/:id', component: GetProductComponent},
-      {path: 'products', component: ProductListComponent},
+      {path: '', component: ProductListComponent},
       {path: 'brands', component: BrandListComponent},
       {path: 'orders', component: ListOrdersComponent},
-      {path: '', component: TypeListComponent},
+      {path: 'types', component: TypeListComponent},
       {path: '**',  component: NotFoundComponent}
     ]),
     OAuthModule.forRoot(),

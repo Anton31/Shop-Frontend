@@ -16,7 +16,6 @@ import {OrderDto} from "../../dto/order-dto";
 import {Cart} from "../../model/cart";
 import {AuthService} from "../../service/auth-service";
 import {map, Observable, Subscription} from "rxjs";
-import {Router} from "@angular/router";
 
 
 @Component({
@@ -49,7 +48,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
 
   constructor(private fb: FormBuilder,
-              private router: Router,
               private productService: ProductService,
               private orderService: OrderService,
               private authService: AuthService,
@@ -76,7 +74,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.productSubscription.unsubscribe();
     this.typeSubscription.unsubscribe();
-
   }
 
   getProducts() {
