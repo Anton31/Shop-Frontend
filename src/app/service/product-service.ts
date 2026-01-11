@@ -99,18 +99,13 @@ export class ProductService {
   }
 
   addType(data: any): Observable<any> {
-    const type = {
-      "name": data.controls.name.value
-    }
-    return this.http.post<any>(`${this.baseUrl}/products/type`, type);
+
+    return this.http.post<any>(`${this.baseUrl}/products/type`, data);
   }
 
   editType(data: any): Observable<any> {
-    const type = {
-      "id": data.controls.id.value,
-      "name": data.controls.name.value
-    }
-    return this.http.put<any>(`${this.baseUrl}/products/type`, type);
+
+    return this.http.put<any>(`${this.baseUrl}/products/type`, data);
   }
 
   deleteType(typeId: number): Observable<any> {
