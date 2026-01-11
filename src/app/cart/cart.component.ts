@@ -55,8 +55,8 @@ export class CartComponent implements OnInit {
   addOrder() {
     this.orderForm = this.fb.group({
       description: [''],
-      username: [this.cart.user.username],
-      email: [this.cart.user.email]
+      username: [''],
+      email: ['']
     })
     this.orderService.addOrder(this.orderForm).subscribe(data => {
       this.dialogRef.close();
