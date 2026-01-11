@@ -10,16 +10,14 @@ import {FormGroup} from "@angular/forms";
 })
 export class AddTypeComponent {
   title: string;
-  typeForm: FormGroup;
 
   constructor(public dialogRef: MatDialogRef<AddTypeComponent>,
               @Inject(MAT_DIALOG_DATA) public data: TypeDialogData) {
     this.title = data.new ? 'Add type' : 'Edit type';
-    this.typeForm = data.typeForm;
   }
 
   get name() {
-    return this.typeForm.get('name')!;
+    return this.data.typeForm.get('name')!;
   }
 
   onNoClick() {

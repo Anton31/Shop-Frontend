@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {SuccessResponse} from "../model/success-response";
+import {UserInfo} from "../dto/user-info";
 
 @Injectable({providedIn: 'root'})
 export class UserService {
@@ -9,6 +10,10 @@ export class UserService {
 
   constructor(private http: HttpClient) {
   }
+
+  getUser(): Observable<UserInfo> {
+    return this.http.get<UserInfo>(this.baseUrl + '/user');
+  };
 
   addUser(data: any): Observable<SuccessResponse> {
     const formData = new FormData();

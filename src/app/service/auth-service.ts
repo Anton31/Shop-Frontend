@@ -3,21 +3,20 @@ import {OAuthService} from "angular-oauth2-oidc";
 import {authConfig} from "./auth-config";
 import {BehaviorSubject} from "rxjs";
 import {UserInfo} from "../dto/user-info";
-import {HttpClient} from "@angular/common/http";
 import {Cart} from "../model/cart";
 import {OrderService} from "./order-service";
+import {UserService} from "./user-service";
 
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
 
-  baseUrl: string = 'http://localhost:8080';
   userSubject = new BehaviorSubject<UserInfo>(new UserInfo('', ''));
   cartSubject = new BehaviorSubject<Cart>(new Cart());
 
   private orderService = inject(OrderService);
   private oauthService = inject(OAuthService);
-  private http = inject(HttpClient);
+  private userService = inject(UserService);
 
   constructor() {
     this.oauthService.configure(authConfig);
@@ -48,10 +47,10 @@ export class AuthService {
   }
 
   getUser() {
-    this.http.get<UserInfo>(this.baseUrl + '/user').subscribe(data => {
+    this.userService.getUser().subscribe(data => {
       if (data != null) {
         this.userSubject.next(data);
       }
     })
-  };
+  }
 }
