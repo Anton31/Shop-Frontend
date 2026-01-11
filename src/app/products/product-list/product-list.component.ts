@@ -241,8 +241,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   openCart() {
     this.dialog.open(CartComponent, {
-      height: '600px',
-      width: '600px'
+      height: '900px',
+      maxWidth: '900px',
+      minWidth: '900px'
     }).afterClosed().subscribe(data => {
       this.getCart();
     });

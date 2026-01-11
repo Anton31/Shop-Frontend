@@ -1,8 +1,8 @@
 <div align="center">
-  <h3 mat-dialog-title>{{ title }}</h3>
-  <h4 mat-dialog-title>Quantity: {{ cart.totalQuantity }} </h4>
-  <h4 mat-dialog-title>Total price: {{ cart.totalPrice }} </h4>
-  <h4 *ngIf="cart.totalPrice==0">Cart is empty</h4>
+  <h2>{{ title }}</h2>
+  <h3>Quantity: {{ cart.totalQuantity }} </h3>
+  <h3>Total price: {{ cart.totalPrice }} </h3>
+  <h3 *ngIf="cart.totalPrice==0">Cart is empty</h3>
   <table [dataSource]="cart.items" class="mat-elevation-z8" mat-table>
     <ng-container align="center" matColumnDef="name">
       <th *matHeaderCellDef mat-header-cell>Name</th>
@@ -34,9 +34,16 @@
     <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
   </table>
   <p></p>
+  <form [formGroup]="orderForm">
+    <p align="center">
+    <mat-form-field>
+        <input type="text" formControlName="description" matInput required>
+    </mat-form-field>
+    </p>
+  </form>
   <div align="center" mat-dialog-actions>
     <button (click)="onNoClick()" mat-button>Return to shopping</button>
-    <button (click)="addOrder()" cdkFocusInitial mat-button>Order</button>
+    <button (click)="addOrder(this.orderForm)" mat-flat-button>Order</button>
   </div>
 </div>
 

@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, inject, Inject, OnInit} from '@angular/core';
 import {ItemDto} from "../dto/item-dto";
 import {OrderService} from "../service/order-service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
@@ -6,6 +6,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {Cart} from "../model/cart";
 
 import {FormBuilder, FormGroup} from "@angular/forms";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -21,13 +22,18 @@ export class CartComponent implements OnInit {
   cart!: Cart;
   orderForm!: FormGroup;
 
+  private router = inject(Router);
+
   constructor(private orderService: OrderService,
               private fb: FormBuilder,
               private dialogRef: MatDialogRef<CartComponent>,
               @Inject(MAT_DIALOG_DATA) public data: AddItemDialog) {
     this.itemDto = new ItemDto(0, 0, 0);
-
-
+    this.orderForm = this.fb.group({
+      description: [''],
+      username: [''],
+      email: ['']
+    });
   }
 
   getCart() {
@@ -52,15 +58,10 @@ export class CartComponent implements OnInit {
     });
   }
 
-  addOrder() {
-    this.orderForm = this.fb.group({
-      description: [''],
-      username: [''],
-      email: ['']
-    })
-    this.orderService.addOrder(this.orderForm).subscribe(data => {
+  addOrder(data: any) {
+    this.orderService.addOrder(data).subscribe(data => {
       this.dialogRef.close();
-
+      this.router.navigate(['orders']);
     });
   }
 
