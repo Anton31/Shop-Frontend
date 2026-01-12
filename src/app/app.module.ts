@@ -40,13 +40,12 @@ import {AddPhotosComponent} from "./photos/add-photos/add-photos.component";
 import {GetProductComponent} from "./products/get-product/get-product.component";
 import {MatRadioModule} from "@angular/material/radio";
 import {NotFoundComponent} from "./not-found/not-found.component";
-import {CheckoutComponent} from "./checkout/checkout.component";
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    CheckoutComponent,
     GetProductComponent,
     AddProductComponent,
     AddPhotosComponent,
@@ -72,7 +71,6 @@ import {CheckoutComponent} from "./checkout/checkout.component";
       {path: 'brands', component: BrandListComponent},
       {path: 'orders', component: ListOrdersComponent},
       {path: 'types', component: TypeListComponent},
-      {path: 'checkout', component: CheckoutComponent},
       {path: '**',  component: NotFoundComponent}
     ]),
     OAuthModule.forRoot(),

@@ -73,25 +73,12 @@ export class ProductService {
 
   addProduct(data: any): Observable<any> {
 
-    const product = {
-      "typeId": data.controls.typeId.value,
-      "brandId": data.controls.brandId.value,
-      "name": data.controls.name.value,
-      "price": data.controls.price.value
-    }
-    return this.http.post<any>(`${this.baseUrl}/products/product`, product);
+    return this.http.post<any>(`${this.baseUrl}/products/product`, data);
   }
 
   editProduct(data: any): Observable<any> {
 
-    const product = {
-      "id": data.controls.id.value,
-      "typeId": data.controls.typeId.value,
-      "brandId": data.controls.brandId.value,
-      "name": data.controls.name.value,
-      "price": data.controls.price.value
-    }
-    return this.http.put<any>(`${this.baseUrl}/products/product`, product);
+    return this.http.put<any>(`${this.baseUrl}/products/product`, data);
   }
 
   deleteProduct(productId: number): Observable<any> {

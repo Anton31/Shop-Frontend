@@ -26,7 +26,7 @@
     </p>
     <p align="center">
       <mat-form-field>
-        <mat-label>Name</mat-label>
+        <mat-label>Name:</mat-label>
         <input formControlName="name" matInput required>
       </mat-form-field>
     </p>
@@ -39,6 +39,6 @@
   </form>
   <div align="center" mat-dialog-actions>
     <button (click)="onNoClick()" mat-button>No Thanks</button>
-    <button [mat-dialog-close]="data.productForm" cdkFocusInitial mat-flat-button>Ok</button>
+    <button [disabled]="!data.productForm.valid" [mat-dialog-close]="data.productForm.value" mat-flat-button>Ok</button>
   </div>
 </div>

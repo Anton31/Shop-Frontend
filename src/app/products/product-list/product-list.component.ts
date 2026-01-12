@@ -10,7 +10,7 @@ import {DeleteProductComponent} from "../delete-product/delete-product.component
 import {Sort} from "@angular/material/sort";
 import {OrderService} from "../../service/order-service";
 import {ItemDto} from "../../dto/item-dto";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CartComponent} from "../../cart/cart.component";
 import {OrderDto} from "../../dto/order-dto";
 import {Cart} from "../../model/cart";
@@ -157,7 +157,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.productForm = this.fb.group({
       typeId: [1],
       brandId: [1],
-      name: [''],
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(16)]],
       price: [1000]
     })
     const dialogRef = this.dialog.open(AddProductComponent, {
@@ -184,7 +184,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       id: [product.id],
       typeId: [product.type.id],
       brandId: [product.brand.id],
-      name: [product.name],
+      name: [product.name, [Validators.required, Validators.minLength(3), Validators.maxLength(16)]],
       price: [product.price]
     })
     const dialogRef = this.dialog.open(AddProductComponent, {
@@ -241,9 +241,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   openCart() {
     this.dialog.open(CartComponent, {
-      height: '900px',
-      maxWidth: '900px',
-      minWidth: '900px'
+      height: '800px',
+      maxWidth: '1000px',
+      minWidth: '1000px'
     }).afterClosed().subscribe(data => {
       this.getCart();
     });
