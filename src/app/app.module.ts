@@ -40,6 +40,7 @@ import {AddPhotosComponent} from "./photos/add-photos/add-photos.component";
 import {GetProductComponent} from "./products/get-product/get-product.component";
 import {MatRadioModule} from "@angular/material/radio";
 import {NotFoundComponent} from "./not-found/not-found.component";
+import {CheckoutComponent} from "./checkout/checkout.component";
 
 
 
@@ -59,6 +60,7 @@ import {NotFoundComponent} from "./not-found/not-found.component";
     DeleteTypeComponent,
     DeleteBrandComponent,
     CartComponent,
+    CheckoutComponent,
     DeletePhotosComponent,
     ListOrdersComponent,
     DeletePhotoComponent,
@@ -70,6 +72,7 @@ import {NotFoundComponent} from "./not-found/not-found.component";
       {path: '', component: ProductListComponent},
       {path: 'brands', component: BrandListComponent},
       {path: 'orders', component: ListOrdersComponent},
+      {path: 'checkout', component: CheckoutComponent},
       {path: 'types', component: TypeListComponent},
       {path: '**',  component: NotFoundComponent}
     ]),

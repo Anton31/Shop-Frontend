@@ -1,0 +1,13 @@
+<div align="center">
+  <h1>Total quantity: {{ cart.totalQuantity }}</h1>
+  <h1>Total price: {{ cart.totalPrice }}</h1>
+  <br/>
+  @for (item of cart.items; track item.id) {
+    <h2>Product: {{ item.product.name }}</h2>
+    <h3>Price: {{ item.totalPrice }}</h3>
+    <h3>Quantity: {{ item.quantity }}</h3>
+    <br/>
+  }
+  <button (click)="openCart()" mat-button>Edit order</button>
+  <button (click)="addOrder()" mat-flat-button>Confirm order</button>
+</div>

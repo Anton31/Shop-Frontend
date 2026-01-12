@@ -25,7 +25,6 @@ export class AuthService {
     this.oauthService.events.subscribe(event => {
       if (event.type === 'token_received') {
         this.getUser();
-        this.getCart();
       }
     });
   }
@@ -51,6 +50,7 @@ export class AuthService {
       if (data != null) {
         this.userSubject.next(data);
       }
+      this.getCart();
     })
   }
 }

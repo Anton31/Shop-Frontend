@@ -34,16 +34,9 @@
     <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
   </table>
   <p></p>
-  <form [formGroup]="orderForm">
-    <p align="center">
-    <mat-form-field>
-        <input type="text" formControlName="description" matInput required>
-    </mat-form-field>
-    </p>
-  </form>
   <div align="center" mat-dialog-actions>
     <button (click)="onNoClick()" mat-button>Return to shopping</button>
-    <button (click)="addOrder(this.orderForm)" mat-flat-button>Order</button>
+    <button (click)="checkout()" mat-flat-button>Order</button>
   </div>
 </div>
 

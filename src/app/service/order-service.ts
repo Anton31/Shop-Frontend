@@ -24,11 +24,11 @@ export class OrderService {
     return this.http.post<Cart>(`${this.baseUrl}/cart`, dto);
   }
 
-  addOrder(data: any): Observable<Order> {
+  addOrder(): Observable<Order> {
     const formData = new FormData();
-    formData.append("description", data.controls.description.value);
-    formData.append("username", data.controls.username.value);
-    formData.append("email", data.controls.email.value);
+    formData.append("description", "order");
+    formData.append("username", "");
+    formData.append("email", "");
     return this.http.post<Order>(`${this.baseUrl}/cart/order`, formData);
   }
 

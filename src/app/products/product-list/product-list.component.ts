@@ -45,7 +45,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   isUser!: Observable<boolean>;
   productSubscription!: Subscription;
   typeSubscription!: Subscription;
-  cartSubscription!: Subscription;
 
 
   constructor(private fb: FormBuilder,
@@ -59,7 +58,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.isAdmin = this.authService.userSubject.pipe(map(user => user.role === 'admin'));
     this.isUser = this.authService.userSubject.pipe(map(user => user.role === 'user'));
     this.authService.userSubject.pipe();
-    this.cartSubscription = this.authService.cartSubject.subscribe(data => {
+    this.authService.cartSubject.subscribe(data => {
       this.cartProductIds = data.cartProductsIds;
       this.totalQuantity = data.totalQuantity;
     })
@@ -74,7 +73,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.productSubscription.unsubscribe();
     this.typeSubscription.unsubscribe();
-    this.cartSubscription.unsubscribe();
+
   }
 
   getProducts() {
@@ -225,9 +224,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   getCart() {
-    this.orderService.getCart().subscribe(data => {
-      this.authService.getCart();
-    })
+    this.authService.getCart();
   }
 
   addItemToCart(product: Product) {
