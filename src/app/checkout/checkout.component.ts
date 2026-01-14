@@ -13,7 +13,9 @@ import {CartComponent} from "../cart/cart.component";
 })
 export class CheckoutComponent implements OnInit {
   cart!: Cart;
-  private service = inject(OrderService);
+  displayedColumns: string[] = ['name', 'actions'];
+
+  private orderService = inject(OrderService);
   private router = inject(Router);
   private dialog = inject(MatDialog);
 
@@ -22,7 +24,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   getCart() {
-    this.service.getCart().subscribe(data => {
+    this.orderService.getCart().subscribe(data => {
       this.cart = data;
     })
   }
@@ -32,13 +34,13 @@ export class CheckoutComponent implements OnInit {
       maxWidth: '1000px',
       minWidth: '1000px',
       height: '800px'
-    }).afterClosed().subscribe(data=>{
+    }).afterClosed().subscribe(data => {
       this.getCart();
     });
   }
 
   addOrder() {
-    this.service.addOrder().subscribe(data => {
+    this.orderService.addOrder().subscribe(data => {
       this.router.navigate(['orders']);
     })
   }
