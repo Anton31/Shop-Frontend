@@ -1,9 +1,11 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {Component, inject, Inject, OnDestroy, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {ProductService} from "../../service/product-service";
 import {Brand} from "../../model/brand";
 import {Type} from "../../model/type";
 import {FormGroup} from "@angular/forms";
+import {DialogRef} from "@angular/cdk/dialog";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-add-product',
@@ -11,15 +13,18 @@ import {FormGroup} from "@angular/forms";
   styleUrls: ['./add-product.component.css'],
   standalone: false
 })
-export class AddProductComponent implements OnInit {
+export class AddProductComponent implements OnInit, OnDestroy {
   title: string;
   types!: Type[];
   brands!: Brand[];
   productForm: FormGroup;
+  typeSubscription!: Subscription;
+  brandSubscription!: Subscription;
 
-  constructor(public productService: ProductService,
-              public dialogRef: MatDialogRef<AddProductComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: ProductDialogData) {
+  private productService = inject(ProductService);
+  private dialogRef = inject(DialogRef);
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: ProductDialogData) {
     if (data.new) {
       this.title = 'Add product'
     } else {
@@ -28,22 +33,22 @@ export class AddProductComponent implements OnInit {
     this.productForm = data.productForm;
   }
 
+
   get name() {
     return this.productForm.get('name')!;
   }
 
   getTypes() {
-    this.productService.getAllTypes('name', 'ASC').subscribe(data => {
+    this.typeSubscription = this.productService.getAllTypes('name', 'ASC').subscribe(data => {
       this.types = data;
     });
   }
 
   getBrands() {
-    this.productService.getAllBrands('name', 'ASC').subscribe(data => {
+    this.brandSubscription = this.productService.getAllBrands('name', 'ASC').subscribe(data => {
       this.brands = data;
     });
   }
-
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -52,6 +57,11 @@ export class AddProductComponent implements OnInit {
   ngOnInit(): void {
     this.getTypes();
     this.getBrands();
+  }
+
+  ngOnDestroy(): void {
+    this.typeSubscription.unsubscribe();
+    this.brandSubscription.unsubscribe();
   }
 }
 
