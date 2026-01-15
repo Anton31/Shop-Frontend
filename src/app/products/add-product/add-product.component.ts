@@ -15,7 +15,7 @@ export class AddProductComponent implements OnInit {
   title: string;
   types!: Type[];
   brands!: Brand[];
-
+  productForm: FormGroup;
 
   constructor(public productService: ProductService,
               public dialogRef: MatDialogRef<AddProductComponent>,
@@ -25,6 +25,11 @@ export class AddProductComponent implements OnInit {
     } else {
       this.title = 'Edit product'
     }
+    this.productForm = data.productForm;
+  }
+
+  get name() {
+    return this.productForm.get('name')!;
   }
 
   getTypes() {

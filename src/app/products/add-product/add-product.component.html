@@ -28,6 +28,14 @@
       <mat-form-field>
         <mat-label>Name:</mat-label>
         <input formControlName="name" matInput required>
+        @if (name.invalid && (name.dirty || name.touched)) {
+          @if (name.hasError('required')) {
+            <div>Name is required.</div>
+          }
+          @if (name.hasError('minlength')) {
+            <div>Name must be at least 3 characters long.</div>
+          }
+        }
       </mat-form-field>
     </p>
     <p align="center">
