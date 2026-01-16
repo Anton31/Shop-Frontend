@@ -5,6 +5,8 @@ import {ItemDto} from "../dto/item-dto";
 import {Cart} from "../model/cart";
 import {Order} from "../model/order";
 
+
+
 @Injectable({providedIn: 'root'})
 export class OrderService {
   baseUrl: string = 'http://localhost:8080';
@@ -16,20 +18,17 @@ export class OrderService {
     return this.http.get<Cart>(`${this.baseUrl}/cart`);
   }
 
-  getOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.baseUrl}/cart/order`);
+  getOrders(): Observable<Order> {
+    return this.http.get<Order>(`${this.baseUrl}/cart/order`);
   }
 
   addItemToCart(dto: ItemDto): Observable<Cart> {
     return this.http.post<Cart>(`${this.baseUrl}/cart`, dto);
   }
 
-  addOrder(): Observable<Order> {
-    const formData = new FormData();
-    formData.append("description", "order");
-    formData.append("username", "");
-    formData.append("email", "");
-    return this.http.post<Order>(`${this.baseUrl}/cart/order`, formData);
+  addOrder(data: any): Observable<Order> {
+
+    return this.http.post<Order>(`${this.baseUrl}/cart/order`, data);
   }
 
   editItem(dto: ItemDto): Observable<Cart> {

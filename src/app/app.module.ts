@@ -69,11 +69,11 @@ import {CheckoutComponent} from "./checkout/checkout.component";
   bootstrap: [AppComponent], imports: [BrowserModule,
     RouterModule.forRoot([
       {path: 'product/:id', component: GetProductComponent},
-      {path: '', component: ProductListComponent},
-      {path: 'brands', component: BrandListComponent},
-      {path: 'orders', component: ListOrdersComponent},
-      {path: 'checkout', component: CheckoutComponent},
-      {path: 'types', component: TypeListComponent},
+      {path: '', component: ProductListComponent, title: 'products'},
+      {path: 'types', component: TypeListComponent, title: 'types'},
+      {path: 'brands', component: BrandListComponent, title: 'brands'},
+      {path: 'checkout', component: CheckoutComponent, title: 'checkout'},
+      {path: 'orders', component: ListOrdersComponent, title: 'orders'},
       {path: '**',  component: NotFoundComponent}
     ]),
     OAuthModule.forRoot(),

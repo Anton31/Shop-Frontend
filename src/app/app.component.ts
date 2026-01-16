@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, inject} from "@angular/core";
 
 
 import {AuthService} from "./service/auth-service";
@@ -9,8 +9,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {UserService} from "./service/user-service";
 
 import {UserInfo} from "./dto/user-info";
-import {map, Observable} from "rxjs";
-
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -21,15 +20,15 @@ import {map, Observable} from "rxjs";
 export class AppComponent {
   userForm!: FormGroup;
   user!: Observable<UserInfo>;
-  isLoggedIn: Observable<boolean>;
 
-  constructor(private authService: AuthService,
-              private userService: UserService,
-              private fb: FormBuilder,
-              private dialog: MatDialog,
-              private snackBar: MatSnackBar) {
+  private authService = inject(AuthService);
+  private userService = inject(UserService);
+  private fb = inject(FormBuilder);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+
+  constructor() {
     this.user = this.authService.userSubject.pipe();
-    this.isLoggedIn = this.authService.userSubject.pipe(map(x => x.role === 'admin' || x.role === 'user'));
   }
 
   login() {

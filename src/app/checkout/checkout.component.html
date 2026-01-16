@@ -1,4 +1,4 @@
-<div align="center">
+<div align="center" style="margin: 20px">
   <h2>Total quantity: {{ cart.totalQuantity }}</h2>
   <h2>Total price: {{ cart.totalPrice }}</h2>
   <br/>
@@ -24,6 +24,23 @@
     <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
   </table>
   <br/>
-  <button (click)="openCart()" mat-button>Edit order</button>
-  <button (click)="addOrder()" mat-flat-button>Confirm order</button>
+  <form [formGroup]="orderForm">
+    <mat-form-field>
+      <mat-label>Description:</mat-label>
+      <input formControlName="description" matInput>
+    </mat-form-field>
+    <br/>
+    <mat-form-field>
+      <mat-label>Username:</mat-label>
+      <input formControlName="username" matInput>
+    </mat-form-field>
+    <br/>
+    <mat-form-field>
+      <mat-label>Email:</mat-label>
+      <input formControlName="email" matInput>
+    </mat-form-field>
+  </form>
+  <br/>
+  <button (click)="openCart()" mat-stroked-button>Edit order</button>
+  <button (click)="addOrder(orderForm.value)" mat-flat-button>Confirm order</button>
 </div>

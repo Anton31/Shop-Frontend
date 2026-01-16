@@ -9,7 +9,7 @@ import {Order} from "../../model/order";
   standalone: false
 })
 export class ListOrdersComponent implements OnInit {
-  orders!: Order[];
+  order!: Order;
   displayedColumns: string[] = ['name', 'price', 'quantity', 'products', 'delete'];
 
   constructor(private orderService: OrderService) {
@@ -17,7 +17,7 @@ export class ListOrdersComponent implements OnInit {
 
   getOrders() {
     this.orderService.getOrders().subscribe(data => {
-      this.orders = data;
+      this.order = data;
     })
   }
 

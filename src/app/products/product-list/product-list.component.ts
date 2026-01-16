@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Product} from "../../model/product";
 import {Type} from "../../model/type";
 import {Brand} from "../../model/brand";
@@ -12,7 +12,6 @@ import {OrderService} from "../../service/order-service";
 import {ItemDto} from "../../dto/item-dto";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CartComponent} from "../../cart/cart.component";
-import {OrderDto} from "../../dto/order-dto";
 import {Cart} from "../../model/cart";
 import {AuthService} from "../../service/auth-service";
 import {map, Observable, Subscription} from "rxjs";
@@ -39,26 +38,26 @@ export class ProductListComponent implements OnInit, OnDestroy {
   cartProductIds: number[] = [];
   productForm!: FormGroup;
   totalQuantity = 0;
-  orderDto: OrderDto;
   cart!: Cart;
   isAdmin!: Observable<boolean>;
   isUser!: Observable<boolean>;
   productSubscription!: Subscription;
   typeSubscription!: Subscription;
+  cartSubscription!: Subscription;
 
+  private productService = inject(ProductService);
+  private authService = inject(AuthService);
+  private orderService = inject(OrderService);
+  private fb = inject(FormBuilder);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
-  constructor(private fb: FormBuilder,
-              private productService: ProductService,
-              private orderService: OrderService,
-              private authService: AuthService,
-              private dialog: MatDialog,
-              private snackBar: MatSnackBar) {
+  constructor() {
     this.itemDto = new ItemDto(0, 0, 0);
-    this.orderDto = new OrderDto('', '', '');
     this.isAdmin = this.authService.userSubject.pipe(map(user => user.role === 'admin'));
     this.isUser = this.authService.userSubject.pipe(map(user => user.role === 'user'));
     this.authService.userSubject.pipe();
-    this.authService.cartSubject.subscribe(data => {
+    this.cartSubscription = this.authService.cartSubject.subscribe(data => {
       this.cartProductIds = data.cartProductsIds;
       this.totalQuantity = data.totalQuantity;
     })
@@ -73,7 +72,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.productSubscription.unsubscribe();
     this.typeSubscription.unsubscribe();
-
+    this.cartSubscription.unsubscribe();
   }
 
   getProducts() {

@@ -1,34 +1,29 @@
 <div align="center" style="margin: 20px">
-  <table [dataSource]="orders" class="mat-elevation-z8" mat-table>
+  <table [dataSource]="order.items" class="mat-elevation-z8" mat-table>
     <ng-container matColumnDef="name">
       <th *matHeaderCellDef mat-header-cell> Name</th>
-      <td *matCellDef="let order" mat-cell> {{ order.description }}</td>
+      <td *matCellDef="let item" mat-cell> {{ item.product.name }}</td>
     </ng-container>
     <ng-container matColumnDef="price">
-      <th *matHeaderCellDef mat-header-cell> Total Price</th>
-      <td *matCellDef="let order" mat-cell>{{ order.totalPrice }}</td>
+      <th *matHeaderCellDef mat-header-cell>Total Price</th>
+      <td *matCellDef="let item" mat-cell>{{ item.totalPrice }}</td>
     </ng-container>
     <ng-container matColumnDef="quantity">
-      <th *matHeaderCellDef mat-header-cell>Total Quantity</th>
-      <td *matCellDef="let order" mat-cell> {{ order.totalQuantity }}</td>
+      <th *matHeaderCellDef mat-header-cell>Quantity</th>
+      <td *matCellDef="let item" mat-cell> {{ item.quantity }}</td>
     </ng-container>
     <ng-container matColumnDef="products">
-      <th *matHeaderCellDef mat-header-cell><span class="photos">Products</span></th>
-      <td *matCellDef="let order" mat-cell>
-        <span *ngFor="let item of order.items" class="photos">
-          Name: {{ item.product.name }}; Price: {{ item.totalPrice }}; Quantity: {{ item.quantity }};
+      <th *matHeaderCellDef mat-header-cell><span class="photos">Photo</span></th>
+      <td *matCellDef="let item" mat-cell>
         <p>
-          <span *ngFor="let photo of item.product.photos">
-          <img alt="no photo" src="{{photo.url}}"/>
-        </span>
+          <img alt="no photo" src="{{item.product.photos[0].photo.url}}"/>
         </p>
-    </span>
       </td>
     </ng-container>
     <ng-container matColumnDef="delete">
       <th *matHeaderCellDef mat-header-cell> Delete</th>
-      <td *matCellDef="let order" mat-cell>
-        <button (click)="deleteOrder(order.id)" color="primary" mat-icon-button>
+      <td *matCellDef="let item" mat-cell>
+        <button (click)="deleteOrder(item.id)" color="primary" mat-icon-button>
           <mat-icon>delete</mat-icon>
         </button>
       </td>
