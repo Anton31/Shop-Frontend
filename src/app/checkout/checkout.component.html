@@ -7,8 +7,7 @@
       <th *matHeaderCellDef mat-header-cell>Name</th>
       <td *matCellDef="let item" mat-cell>
         <p>
-          <img *ngIf="item.product.photos.length>0" alt="no photo"
-               src="{{item.product.photos[0].url}}"/></p>
+          <img *ngIf="item.product.photos.length>0" alt="no photo" src="{{item.product.photos[0].url}}"/></p>
         <p>{{ item.product.name }}</p>
       </td>
     </ng-container>
@@ -26,11 +25,6 @@
   <br/>
   <form [formGroup]="orderForm">
     <mat-form-field>
-      <mat-label>Description:</mat-label>
-      <input formControlName="description" matInput>
-    </mat-form-field>
-    <br/>
-    <mat-form-field>
       <mat-label>Username:</mat-label>
       <input formControlName="username" matInput>
     </mat-form-field>
@@ -41,6 +35,6 @@
     </mat-form-field>
   </form>
   <br/>
-  <button (click)="openCart()" mat-stroked-button>Edit order</button>
+  <button (click)="openCart()" mat-button>Edit order</button>
   <button (click)="addOrder(orderForm.value)" mat-flat-button>Confirm order</button>
 </div>

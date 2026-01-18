@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {OrderService} from "../../service/order-service";
 import {Order} from "../../model/order";
 
@@ -9,20 +9,19 @@ import {Order} from "../../model/order";
   standalone: false
 })
 export class ListOrdersComponent implements OnInit {
-  order!: Order;
-  displayedColumns: string[] = ['name', 'price', 'quantity', 'products', 'delete'];
+  orders: Order[] = [];
+  displayedColumns: string[] = ['name', 'price', 'quantity', 'photo', 'delete'];
 
-  constructor(private orderService: OrderService) {
-  }
+  private orderService = inject(OrderService);
 
   getOrders() {
     this.orderService.getOrders().subscribe(data => {
-      this.order = data;
+      this.orders = data;
     })
   }
 
-  deleteOrder(orderId: number) {
-    this.orderService.removeOrder(orderId).subscribe(data => {
+  deleteOrder(itemId: number) {
+    this.orderService.removeOrder(itemId).subscribe(() => {
       this.getOrders();
     })
   }

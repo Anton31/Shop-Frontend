@@ -1,36 +1,39 @@
 <div align="center" style="margin: 20px">
-  <table [dataSource]="order.items" class="mat-elevation-z8" mat-table>
-    <ng-container matColumnDef="name">
-      <th *matHeaderCellDef mat-header-cell> Name</th>
-      <td *matCellDef="let item" mat-cell> {{ item.product.name }}</td>
-    </ng-container>
-    <ng-container matColumnDef="price">
-      <th *matHeaderCellDef mat-header-cell>Total Price</th>
-      <td *matCellDef="let item" mat-cell>{{ item.totalPrice }}</td>
-    </ng-container>
-    <ng-container matColumnDef="quantity">
-      <th *matHeaderCellDef mat-header-cell>Quantity</th>
-      <td *matCellDef="let item" mat-cell> {{ item.quantity }}</td>
-    </ng-container>
-    <ng-container matColumnDef="products">
-      <th *matHeaderCellDef mat-header-cell><span class="photos">Photo</span></th>
-      <td *matCellDef="let item" mat-cell>
-        <p>
-          <img alt="no photo" src="{{item.product.photos[0].photo.url}}"/>
-        </p>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="delete">
-      <th *matHeaderCellDef mat-header-cell> Delete</th>
-      <td *matCellDef="let item" mat-cell>
-        <button (click)="deleteOrder(item.id)" color="primary" mat-icon-button>
-          <mat-icon>delete</mat-icon>
-        </button>
-      </td>
-    </ng-container>
-    <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-    <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
-  </table>
+  @for (order of orders; track order.id) {
+    <h3>Order {{ order.id }}</h3>
+    <table [dataSource]="order.items" class="mat-elevation-z8" mat-table>
+      <ng-container matColumnDef="name">
+        <th *matHeaderCellDef mat-header-cell> Name</th>
+        <td *matCellDef="let item" mat-cell> {{ item.product.name }}</td>
+      </ng-container>
+      <ng-container matColumnDef="price">
+        <th *matHeaderCellDef mat-header-cell>Total Price</th>
+        <td *matCellDef="let item" mat-cell>{{ item.totalPrice }}</td>
+      </ng-container>
+      <ng-container matColumnDef="quantity">
+        <th *matHeaderCellDef mat-header-cell>Quantity</th>
+        <td *matCellDef="let item" mat-cell> {{ item.quantity }}</td>
+      </ng-container>
+      <ng-container matColumnDef="photo">
+        <th *matHeaderCellDef mat-header-cell>Photo</th>
+        <td *matCellDef="let item" mat-cell>
+          @if (item.product.photos.length > 0) {
+            <img alt="no photo" src="{{item.product.photos[0].url}}"/>
+          }
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="delete">
+        <th *matHeaderCellDef mat-header-cell> Delete</th>
+        <td *matCellDef="let item" mat-cell>
+          <button (click)="deleteOrder(item.id)" color="primary" mat-icon-button>
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+    </table>
+  }
 </div>
 
 

@@ -22,7 +22,7 @@ import {AddTypeComponent} from './types/add-type/add-type.component';
 import {AddBrandComponent} from './brands/add-brand/add-brand.component';
 import {TypeListComponent} from './types/type-list/type-list.component';
 import {BrandListComponent} from './brands/brand-list/brand-list.component';
-import {RouterLink, RouterModule} from "@angular/router";
+import {RouterModule} from "@angular/router";
 import {ProductListComponent} from './products/product-list/product-list.component';
 import {DeleteTypeComponent} from './types/delete-type/delete-type.component';
 import {DeleteBrandComponent} from './brands/delete-brand/delete-brand.component';
@@ -41,7 +41,6 @@ import {GetProductComponent} from "./products/get-product/get-product.component"
 import {MatRadioModule} from "@angular/material/radio";
 import {NotFoundComponent} from "./not-found/not-found.component";
 import {CheckoutComponent} from "./checkout/checkout.component";
-
 
 
 @NgModule({
@@ -74,7 +73,7 @@ import {CheckoutComponent} from "./checkout/checkout.component";
       {path: 'brands', component: BrandListComponent, title: 'brands'},
       {path: 'checkout', component: CheckoutComponent, title: 'checkout'},
       {path: 'orders', component: ListOrdersComponent, title: 'orders'},
-      {path: '**',  component: NotFoundComponent}
+      {path: '**', component: NotFoundComponent}
     ]),
     OAuthModule.forRoot(),
     ReactiveFormsModule,
