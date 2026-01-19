@@ -1,6 +1,8 @@
 <div align="center" style="margin: 20px">
   @for (order of orders; track order.id) {
-    <h3>{{ order.name }}</h3>
+    <h3>Order {{ order.id }}</h3>
+    <h3>Total price: {{ order.totalPrice }}</h3>
+    <h3>Total quantity: {{ order.totalQuantity }}</h3>
     <table [dataSource]="order.items" class="mat-elevation-z8" mat-table>
       <ng-container matColumnDef="name">
         <th *matHeaderCellDef mat-header-cell> Name</th>
@@ -18,7 +20,7 @@
         <th *matHeaderCellDef mat-header-cell>Photo</th>
         <td *matCellDef="let item" mat-cell>
           @if (item.product.photos.length > 0) {
-            <img alt="no photo" src="{{item.product.photos[0].url}}"/>
+              <img alt="no photo" src="{{item.product.photos[0].url}}"/>
           }
         </td>
       </ng-container>
