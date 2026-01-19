@@ -25,6 +25,11 @@
   <br/>
   <form [formGroup]="orderForm">
     <mat-form-field>
+      <mat-label>Name:</mat-label>
+      <input formControlName="name" matInput>
+    </mat-form-field>
+    <br/>
+    <mat-form-field>
       <mat-label>Username:</mat-label>
       <input formControlName="username" matInput>
     </mat-form-field>

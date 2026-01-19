@@ -31,6 +31,7 @@ export class CheckoutComponent implements OnInit {
     this.orderService.getCart().subscribe(data => {
       this.cart = data;
       this.orderForm = this.fb.group({
+        name: [''],
         username: [this.cart.user.username],
         email: [this.cart.user.email]
       });
