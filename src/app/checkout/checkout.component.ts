@@ -3,7 +3,6 @@ import {OrderService} from "../service/order-service";
 import {Cart} from "../model/cart";
 import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
-import {CartComponent} from "../cart/cart.component";
 import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
@@ -37,13 +36,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   openCart() {
-    this.dialog.open(CartComponent, {
-      maxWidth: '1000px',
-      minWidth: '1000px',
-      height: '800px'
-    }).afterClosed().subscribe(data => {
-      this.getCart();
-    });
+    this.router.navigate(['cart']);
   }
 
   addOrder(data: any) {

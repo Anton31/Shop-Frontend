@@ -71,6 +71,7 @@ import {CheckoutComponent} from "./checkout/checkout.component";
       {path: '', component: ProductListComponent, title: 'products'},
       {path: 'types', component: TypeListComponent, title: 'types'},
       {path: 'brands', component: BrandListComponent, title: 'brands'},
+      {path: 'cart', component: CartComponent, title: 'cart'},
       {path: 'checkout', component: CheckoutComponent, title: 'checkout'},
       {path: 'orders', component: ListOrdersComponent, title: 'orders'},
       {path: '**', component: NotFoundComponent}

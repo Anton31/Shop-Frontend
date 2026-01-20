@@ -11,10 +11,10 @@ import {Sort} from "@angular/material/sort";
 import {OrderService} from "../../service/order-service";
 import {ItemDto} from "../../dto/item-dto";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {CartComponent} from "../../cart/cart.component";
 import {Cart} from "../../model/cart";
 import {AuthService} from "../../service/auth-service";
 import {map, Observable, Subscription} from "rxjs";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -51,6 +51,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
+  private router = inject(Router);
 
   constructor() {
     this.itemDto = new ItemDto(0, 0, 0);
@@ -236,12 +237,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   openCart() {
-    this.dialog.open(CartComponent, {
-      height: '800px',
-      maxWidth: '1000px',
-      minWidth: '1000px'
-    }).afterClosed().subscribe(data => {
-      this.getCart();
-    });
+    this.router.navigate(['cart']);
   }
 }

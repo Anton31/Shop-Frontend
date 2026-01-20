@@ -1,8 +1,6 @@
-import {Component, inject, Inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {ItemDto} from "../dto/item-dto";
 import {OrderService} from "../service/order-service";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-
 import {Cart} from "../model/cart";
 import {Router} from "@angular/router";
 
@@ -19,12 +17,10 @@ export class CartComponent implements OnInit {
   displayedColumns: string[] = ['name', 'actions'];
   cart!: Cart;
 
-
   private router = inject(Router);
+  private orderService = inject(OrderService);
 
-  constructor(private orderService: OrderService,
-              private dialogRef: MatDialogRef<CartComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: AddItemDialog) {
+  constructor() {
     this.itemDto = new ItemDto(0, 0, 0);
   }
 
@@ -51,19 +47,17 @@ export class CartComponent implements OnInit {
   }
 
   checkout() {
-    this.dialogRef.close();
     this.router.navigate(['checkout']);
   }
 
   onNoClick() {
-    this.dialogRef.close();
     this.router.navigate(['']);
   }
 
   removeFromCart(id: number) {
     this.orderService.removeItem(id).subscribe(data => {
       this.getCart();
-    })
+    });
   }
 
   ngOnInit(): void {
@@ -71,6 +65,4 @@ export class CartComponent implements OnInit {
   }
 }
 
-export interface AddItemDialog {
-  cart: Cart;
-}
+
