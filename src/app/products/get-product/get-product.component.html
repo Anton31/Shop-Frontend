@@ -3,15 +3,11 @@
   <div id="owlId">
     @if (product.photos.length > 0) {
       <mat-radio-group>
-        <mat-radio-button (click)="setItems(1)">
-          <h3>items: 1;</h3>
-        </mat-radio-button>
-        <mat-radio-button (click)="setItems(2)">
-          <h3>items: 2;</h3>
-        </mat-radio-button>
-        <mat-radio-button (click)="setItems(3)">
-          <h3>items: 3;</h3>
-        </mat-radio-button>
+        @for (item of items(); track $index) {
+          <mat-radio-button (click)="setItems(item)">
+            <h4>items: {{ item }};</h4>
+          </mat-radio-button>
+        }
       </mat-radio-group>
       <owl-carousel-o [options]="customOptions">
         @for (photo of product.photos; track photo.id) {

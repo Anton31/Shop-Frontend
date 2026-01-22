@@ -2,7 +2,6 @@ import {Component, inject, OnInit} from '@angular/core';
 import {OrderService} from "../service/order-service";
 import {Cart} from "../model/cart";
 import {Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
 import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
@@ -19,8 +18,6 @@ export class CheckoutComponent implements OnInit {
   private orderService = inject(OrderService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
-  private dialog = inject(MatDialog);
-
 
   ngOnInit(): void {
     this.getCart();

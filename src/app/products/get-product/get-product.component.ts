@@ -24,7 +24,7 @@ export class GetProductComponent {
     autoplay: true,
     nav: true
   }
-
+  items = signal([1, 2, 3]);
   product!: Product;
   title = '';
   photoForm!: FormGroup;
