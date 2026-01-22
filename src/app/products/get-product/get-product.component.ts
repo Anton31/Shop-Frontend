@@ -10,7 +10,7 @@ import {DeletePhotosComponent} from "../../photos/delete-photos/delete-photos.co
 import {DeletePhotoComponent} from "../../photos/delete-photo/delete-photo.component";
 import {Photo} from "../../model/photo";
 import {ActivatedRoute} from "@angular/router";
-import {AuthService} from "../../service/auth-service";
+import {UserService} from "../../service/user-service";
 
 @Component({
   selector: 'app-get-product',
@@ -32,11 +32,11 @@ export class GetProductComponent {
   productId = signal(0);
 
   constructor(private productService: ProductService,
-              private authService: AuthService,
+              private userService: UserService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private activatedRoute: ActivatedRoute) {
-    this.isAdmin = this.authService.userSubject.pipe(map(data => data.role === 'admin'));
+    this.userService.getUser();
     this.activatedRoute.params.subscribe((params) => {
       this.productId.set(Number(params['id']));
       this.getProducts(this.productId());

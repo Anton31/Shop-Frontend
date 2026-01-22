@@ -22,11 +22,7 @@ export class AuthService {
     this.oauthService.configure(authConfig);
     this.oauthService.loadDiscoveryDocumentAndTryLogin();
     this.oauthService.setupAutomaticSilentRefresh();
-    this.oauthService.events.subscribe(event => {
-      if (event.type === 'token_received') {
-        this.getUser();
-      }
-    });
+    this.getUser();
   }
 
   login() {
@@ -34,7 +30,8 @@ export class AuthService {
   }
 
   logout() {
-    this.oauthService.logOut();
+    window.location.href = 'http://localhost:8080/logout';
+
   }
 
   getCart() {
@@ -47,9 +44,7 @@ export class AuthService {
 
   getUser() {
     this.userService.getUser().subscribe(data => {
-      if (data != null) {
-        this.userSubject.next(data);
-      }
+      this.userSubject.next(data);
       this.getCart();
     })
   }

@@ -1,7 +1,6 @@
 import {Component, inject} from "@angular/core";
 
 
-import {AuthService} from "./service/auth-service";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {RegisterComponent} from "./register/register.component";
@@ -10,6 +9,7 @@ import {UserService} from "./service/user-service";
 
 import {UserInfo} from "./dto/user-info";
 import {Observable} from "rxjs";
+import {AuthService} from "./service/auth-service";
 
 @Component({
   selector: 'app-root',
@@ -19,7 +19,7 @@ import {Observable} from "rxjs";
 })
 export class AppComponent {
   userForm!: FormGroup;
-  user!: Observable<UserInfo>;
+  user!: UserInfo;
 
   private authService = inject(AuthService);
   private userService = inject(UserService);
@@ -28,7 +28,13 @@ export class AppComponent {
   private snackBar = inject(MatSnackBar);
 
   constructor() {
-    this.user = this.authService.userSubject.pipe();
+    this.get();
+  }
+
+  get() {
+    this.userService.getUser().subscribe(data=>{
+      this.user = data;
+    })
   }
 
   login() {

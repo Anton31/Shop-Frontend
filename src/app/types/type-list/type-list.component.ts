@@ -5,10 +5,10 @@ import {AddTypeComponent} from "../add-type/add-type.component";
 import {MatDialog} from "@angular/material/dialog";
 import {DeleteTypeComponent} from "../delete-type/delete-type.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {AuthService} from "../../service/auth-service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Sort} from "@angular/material/sort";
 import {map, Observable, Subscription} from "rxjs";
+import {UserService} from "../../service/user-service";
 
 @Component({
   selector: 'app-type-list',
@@ -22,15 +22,16 @@ export class TypeListComponent implements OnDestroy {
   typeForm!: FormGroup;
   currentSort = 'name';
   currentDir = 'ASC';
-  isAdmin!: Observable<boolean>;
+  role!: string | null;
   subscription!: Subscription;
 
-  constructor(private authService: AuthService,
+  constructor(
+              private userService: UserService,
               private productService: ProductService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
-    this.isAdmin = this.authService.userSubject.pipe(map(value => value.role === 'admin'));
+    this.role = localStorage.getItem('role');
     this.getTypes();
   }
 

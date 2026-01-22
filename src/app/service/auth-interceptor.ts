@@ -4,7 +4,7 @@ import {OAuthService} from "angular-oauth2-oidc";
 
 export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) {
 
-  let token = inject(OAuthService).getAccessToken();
+  const token = inject(OAuthService).getAccessToken();
 
   if (token) {
     req = req.clone({

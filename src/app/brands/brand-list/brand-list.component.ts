@@ -9,7 +9,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Sort} from "@angular/material/sort";
 import {map, Observable, Subscription} from "rxjs";
-import {AuthService} from "../../service/auth-service";
+import {UserService} from "../../service/user-service";
+
 
 
 
@@ -27,12 +28,12 @@ export class BrandListComponent implements OnDestroy {
   isAdmin!: Observable<boolean>;
   brandSubscription!: Subscription;
 
-  constructor(private authService: AuthService,
+  constructor(private userService: UserService,
               private productService: ProductService,
               private fb: FormBuilder,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
-    this.isAdmin = this.authService.userSubject.pipe(map(value => value.role === 'admin'));
+    this.isAdmin = this.userService.getUser().pipe(map(value => value.role === 'admin'));
     this.getBrands();
   }
 

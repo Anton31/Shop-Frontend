@@ -5,5 +5,6 @@ export const authConfig: AuthConfig = {
   redirectUri: window.location.origin,
   clientId: 'app-client',
   responseType: 'code',
-  scope: 'openid'
+  scope: 'openid',
+  strictDiscoveryDocumentValidation: false
 };

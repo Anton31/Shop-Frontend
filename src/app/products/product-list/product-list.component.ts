@@ -12,9 +12,9 @@ import {OrderService} from "../../service/order-service";
 import {ItemDto} from "../../dto/item-dto";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Cart} from "../../model/cart";
-import {AuthService} from "../../service/auth-service";
 import {map, Observable, Subscription} from "rxjs";
 import {Router} from "@angular/router";
+import {AuthService} from "../../service/auth-service";
 
 
 @Component({
@@ -39,6 +39,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   productForm!: FormGroup;
   totalQuantity = 0;
   cart!: Cart;
+  role!: string | null;
   isAdmin!: Observable<boolean>;
   isUser!: Observable<boolean>;
   productSubscription!: Subscription;
@@ -55,12 +56,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   constructor() {
     this.itemDto = new ItemDto(0, 0, 0);
-    this.isAdmin = this.authService.userSubject.pipe(map(user => user.role === 'admin'));
-    this.isUser = this.authService.userSubject.pipe(map(user => user.role === 'user'));
-    this.authService.userSubject.pipe();
-    this.cartSubscription = this.authService.cartSubject.subscribe(data => {
-      this.cartProductIds = data.cartProductsIds;
+    this.isAdmin = this.authService.userSubject.pipe(map(data => data.role === 'admin'));
+    this.isUser = this.authService.userSubject.pipe(map(data => data.role === 'user'));
+    this.cartSubscription = this.authService.cartSubject.subscribe(data=>{
       this.totalQuantity = data.totalQuantity;
+      this.cartProductIds = data.cartProductsIds;
     })
   }
 
@@ -68,6 +68,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.getProducts();
     this.getFilterTypes();
     this.getCart();
+
   }
 
   ngOnDestroy(): void {

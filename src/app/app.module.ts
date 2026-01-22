@@ -33,7 +33,6 @@ import {DeletePhotosComponent} from './photos/delete-photos/delete-photos.compon
 import {ListOrdersComponent} from './orders/list-orders/list-orders.component';
 import {MatBadgeModule} from "@angular/material/badge";
 import {authInterceptor} from "./service/auth-interceptor";
-import {OAuthModule} from "angular-oauth2-oidc";
 import {DeletePhotoComponent} from "./photos/delete-photo/delete-photo.component";
 import {CarouselModule} from "ngx-owl-carousel-o";
 import {AddPhotosComponent} from "./photos/add-photos/add-photos.component";
@@ -41,6 +40,7 @@ import {GetProductComponent} from "./products/get-product/get-product.component"
 import {MatRadioModule} from "@angular/material/radio";
 import {NotFoundComponent} from "./not-found/not-found.component";
 import {CheckoutComponent} from "./checkout/checkout.component";
+import {OAuthModule} from "angular-oauth2-oidc";
 
 
 @NgModule({
@@ -68,7 +68,8 @@ import {CheckoutComponent} from "./checkout/checkout.component";
   bootstrap: [AppComponent], imports: [BrowserModule,
     RouterModule.forRoot([
       {path: 'product/:id', component: GetProductComponent},
-      {path: '', component: ProductListComponent, title: 'products'},
+      {path: '', redirectTo: '/products', pathMatch: 'full'},
+      {path: 'products', component: ProductListComponent, title: 'products'},
       {path: 'types', component: TypeListComponent, title: 'types'},
       {path: 'brands', component: BrandListComponent, title: 'brands'},
       {path: 'cart', component: CartComponent, title: 'cart'},

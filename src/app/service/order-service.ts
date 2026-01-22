@@ -25,7 +25,6 @@ export class OrderService {
   }
 
   addOrder(data: any): Observable<Order[]> {
-
     return this.http.post<Order[]>(`${this.baseUrl}/cart/order`, data);
   }
 

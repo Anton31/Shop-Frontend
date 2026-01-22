@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {inject, Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {SuccessResponse} from "../model/success-response";
@@ -8,12 +8,12 @@ import {UserInfo} from "../dto/user-info";
 export class UserService {
   baseUrl: string = 'http://localhost:8080';
 
-  constructor(private http: HttpClient) {
-  }
+  private http = inject(HttpClient);
 
   getUser(): Observable<UserInfo> {
     return this.http.get<UserInfo>(this.baseUrl + '/user');
   };
+
 
   addUser(data: any): Observable<SuccessResponse> {
     const formData = new FormData();
