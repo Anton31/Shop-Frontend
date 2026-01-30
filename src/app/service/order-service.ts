@@ -21,7 +21,7 @@ export class OrderService {
   }
 
   addItemToCart(dto: ItemDto): Observable<Cart> {
-    return this.http.post<Cart>(`${this.baseUrl}/cart`, dto);
+    return this.http.get<Cart>(`${this.baseUrl}/cart/add/${dto.productId}`);
   }
 
   addOrder(data: any): Observable<Order[]> {
@@ -29,11 +29,11 @@ export class OrderService {
   }
 
   editItem(dto: ItemDto): Observable<Cart> {
-    return this.http.put<Cart>(`${this.baseUrl}/cart`, dto);
+    return this.http.get<Cart>(`${this.baseUrl}/cart/edit/${dto.itemId}/${dto.quantity}`);
   }
 
   removeItem(itemId: number): Observable<any> {
-    return this.http.delete<any>(`${this.baseUrl}/cart/${itemId}`);
+    return this.http.get<any>(`${this.baseUrl}/cart/delete/${itemId}`);
   }
 
   removeOrder(itemId: number): Observable<any> {

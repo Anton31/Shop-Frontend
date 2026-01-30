@@ -16,6 +16,7 @@
     </mat-chip-listbox>
   }
   <p align="center">
+    <button (click)="get()">get user</button>
     @if ((isUser | async) || (isAdmin | async)) {
       <button (click)="openCart()" mat-flat-button matBadge="{{totalQuantity}}" matBadgePosition="after"
               matBadgeSize="large">

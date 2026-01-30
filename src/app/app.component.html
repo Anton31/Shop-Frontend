@@ -7,9 +7,9 @@
   <a class="button" routerLink="/orders">Orders</a>
 </nav>
 <div align="right" style="margin: 20px">
-<button (click)="get()">get user</button>
+
     <button [matMenuTriggerFor]="menu" color="primary" mat-stroked-button>
-      {{ user.username }} : {{ user.role }}
+      {{ (user | async)?.username }} : {{ (user | async)?.role }}
     </button>
     <mat-menu #menu="matMenu">
       <p>
@@ -27,6 +27,5 @@
       login
     </button>
     <button (click)="addUser()" color="primary" mat-stroked-button>Sign Up</button>
-
 </div>
 <router-outlet></router-outlet>

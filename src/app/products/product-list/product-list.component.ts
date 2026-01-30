@@ -15,6 +15,7 @@ import {Cart} from "../../model/cart";
 import {map, Observable, Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import {AuthService} from "../../service/auth-service";
+import {UserService} from "../../service/user-service";
 
 
 @Component({
@@ -48,6 +49,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   private productService = inject(ProductService);
   private authService = inject(AuthService);
+  private userService = inject(UserService);
   private orderService = inject(OrderService);
   private fb = inject(FormBuilder);
   private dialog = inject(MatDialog);
@@ -223,7 +225,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.selectedTypeId = 0;
     this.selectedBrandId = 0;
   }
-
+  get() {
+    this.userService.getUser().subscribe(data=>{
+      alert(data.username + '_'+ data.role);
+    })
+  }
   getCart() {
     this.authService.getCart();
   }

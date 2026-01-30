@@ -19,7 +19,7 @@ import {AuthService} from "./service/auth-service";
 })
 export class AppComponent {
   userForm!: FormGroup;
-  user!: UserInfo;
+  user!: Observable<UserInfo>;
 
   private authService = inject(AuthService);
   private userService = inject(UserService);
@@ -28,14 +28,15 @@ export class AppComponent {
   private snackBar = inject(MatSnackBar);
 
   constructor() {
-    this.get();
+    this.user = this.authService.userSubject.pipe();
   }
 
   get() {
     this.userService.getUser().subscribe(data=>{
-      this.user = data;
+      alert(data.username + '_'+ data.role);
     })
-  }
+    }
+
 
   login() {
     this.authService.login();
