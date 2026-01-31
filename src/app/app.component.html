@@ -9,7 +9,7 @@
 <div align="right" style="margin: 20px">
 
     <button [matMenuTriggerFor]="menu" color="primary" mat-stroked-button>
-      {{ (user | async)?.username }} : {{ (user | async)?.role }}
+      {{ (user | async)?.sub }}
     </button>
     <mat-menu #menu="matMenu">
       <p>

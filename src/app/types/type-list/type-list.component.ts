@@ -8,7 +8,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Sort} from "@angular/material/sort";
 import {map, Observable, Subscription} from "rxjs";
-import {UserService} from "../../service/user-service";
+import {AuthService} from "../../service/auth-service";
 
 @Component({
   selector: 'app-type-list',
@@ -22,16 +22,16 @@ export class TypeListComponent implements OnDestroy {
   typeForm!: FormGroup;
   currentSort = 'name';
   currentDir = 'ASC';
-  role!: string | null;
+  isLoggedIn: Observable<boolean>;
   subscription!: Subscription;
 
   constructor(
-              private userService: UserService,
-              private productService: ProductService,
-              private fb: FormBuilder,
-              private dialog: MatDialog,
-              private snackBar: MatSnackBar) {
-    this.role = localStorage.getItem('role');
+    private authService: AuthService,
+    private productService: ProductService,
+    private fb: FormBuilder,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar) {
+    this.isLoggedIn = this.authService.userSubject.pipe(map(data => data.sub === 'Igor'));
     this.getTypes();
   }
 

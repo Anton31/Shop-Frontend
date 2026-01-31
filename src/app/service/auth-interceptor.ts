@@ -6,11 +6,13 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) 
 
   const token = inject(OAuthService).getAccessToken();
 
-  if (token) {
+  if (token != null) {
     req = req.clone({
       setHeaders: {Authorization: `Bearer ${token}`}
     });
+    // alert(req.headers.get('Authorization'));
   }
+
   return next(req);
 }
 

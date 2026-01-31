@@ -58,9 +58,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   constructor() {
     this.itemDto = new ItemDto(0, 0, 0);
-    this.isAdmin = this.authService.userSubject.pipe(map(data => data.role === 'admin'));
-    this.isUser = this.authService.userSubject.pipe(map(data => data.role === 'user'));
-
+    this.isAdmin = this.authService.userSubject.pipe(map(data => data.sub === 'Igor'));
+    this.isUser = this.authService.userSubject.pipe(map(data => data.sub === 'Anton'));
   }
 
   ngOnInit(): void {
@@ -222,14 +221,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.selectedTypeId = 0;
     this.selectedBrandId = 0;
   }
+
   get() {
-    this.orderService.getCart().subscribe(data=>{
-      this.cartProductIds = data.cartProductsIds;
-      this.totalQuantity = data.totalQuantity;
-    })
+    alert(this.authService.getToken());
   }
+
   getCart() {
-    this.orderService.getCart().subscribe(data=>{
+    this.cartSubscription = this.orderService.getCart().subscribe(data=>{
       this.totalQuantity = data.totalQuantity;
       this.cartProductIds = data.cartProductsIds;
     });

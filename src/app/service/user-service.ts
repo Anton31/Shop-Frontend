@@ -11,7 +11,7 @@ export class UserService {
   private http = inject(HttpClient);
 
   getUser(): Observable<UserInfo> {
-    return this.http.get<UserInfo>(this.baseUrl + '/user');
+    return this.http.get<UserInfo>(this.baseUrl + '/userinfo');
   };
 
 

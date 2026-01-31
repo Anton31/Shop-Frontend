@@ -1,7 +1,7 @@
 import {inject, Injectable} from "@angular/core";
 import {OAuthService} from "angular-oauth2-oidc";
 import {authConfig} from "./auth-config";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, filter} from "rxjs";
 import {UserInfo} from "../dto/user-info";
 import {Cart} from "../model/cart";
 import {OrderService} from "./order-service";
@@ -11,7 +11,7 @@ import {UserService} from "./user-service";
 @Injectable({providedIn: 'root'})
 export class AuthService {
 
-  userSubject = new BehaviorSubject<UserInfo>(new UserInfo('', ''));
+  userSubject = new BehaviorSubject<UserInfo>(new UserInfo(''));
   cartSubject = new BehaviorSubject<Cart>(new Cart());
 
   private orderService = inject(OrderService);
@@ -22,7 +22,15 @@ export class AuthService {
     this.oauthService.configure(authConfig);
     this.oauthService.loadDiscoveryDocumentAndTryLogin();
     this.oauthService.setupAutomaticSilentRefresh();
+    this.oauthService.events.pipe(filter(event => event.type === "token_received"))
+      .subscribe(data => {
+      this.getUser();
+      // this.getCart();
+    })
+  }
 
+  getToken() {
+    return this.oauthService.getAccessToken();
   }
 
   login() {
@@ -31,7 +39,7 @@ export class AuthService {
   }
 
   logout() {
-    window.location.href = 'http://localhost:8080/logout';
+    this.oauthService.logOut();
 
   }
 
@@ -43,10 +51,11 @@ export class AuthService {
   //   });
   // }
 
-  // getUser() {
-  //   this.userService.getUser().subscribe(data => {
-  //     this.userSubject.next(data);
-  //     this.getCart();
-  //   })
-  // }
+  getUser() {
+    this.userService.getUser().subscribe(data => {
+      if (data != null) {
+        this.userSubject.next(new UserInfo(data.sub));
+      }
+    })
+  }
 }

@@ -33,7 +33,7 @@ export class AppComponent {
 
   get() {
     this.userService.getUser().subscribe(data=>{
-      alert(data.username + '_'+ data.role);
+      alert(data.sub);
     })
     }
 
