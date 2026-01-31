@@ -1,7 +1,7 @@
 import {inject, Injectable} from "@angular/core";
 import {OAuthService} from "angular-oauth2-oidc";
 import {authConfig} from "./auth-config";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, filter} from "rxjs";
 import {UserInfo} from "../dto/user-info";
 import {Cart} from "../model/cart";
 import {OrderService} from "./order-service";
@@ -22,7 +22,10 @@ export class AuthService {
     this.oauthService.configure(authConfig);
     this.oauthService.loadDiscoveryDocumentAndTryLogin();
     this.oauthService.setupAutomaticSilentRefresh();
-
+    this.oauthService.events.pipe(filter(event => event.type === "token_received")).subscribe(data => {
+      this.getUser();
+      this.getCart();
+    })
   }
 
   login() {
@@ -35,18 +38,17 @@ export class AuthService {
 
   }
 
-  // getCart() {
-  //   this.orderService.getCart().subscribe(data => {
-  //     if (data != null) {
-  //       this.cartSubject.next(data);
-  //     }
-  //   });
-  // }
+  getCart() {
+    this.orderService.getCart().subscribe(data => {
+      if (data != null) {
+        this.cartSubject.next(data);
+      }
+    });
+  }
 
-  // getUser() {
-  //   this.userService.getUser().subscribe(data => {
-  //     this.userSubject.next(data);
-  //     this.getCart();
-  //   })
-  // }
+  getUser() {
+    this.userService.getUser().subscribe(data => {
+      this.userSubject.next(data);
+    })
+  }
 }
