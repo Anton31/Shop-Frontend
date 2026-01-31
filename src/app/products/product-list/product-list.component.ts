@@ -60,10 +60,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.itemDto = new ItemDto(0, 0, 0);
     this.isAdmin = this.authService.userSubject.pipe(map(data => data.role === 'admin'));
     this.isUser = this.authService.userSubject.pipe(map(data => data.role === 'user'));
-    this.cartSubscription = this.authService.cartSubject.subscribe(data=>{
-      this.totalQuantity = data.totalQuantity;
-      this.cartProductIds = data.cartProductsIds;
-    })
+
   }
 
   ngOnInit(): void {
@@ -226,12 +223,16 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.selectedBrandId = 0;
   }
   get() {
-    this.userService.getUser().subscribe(data=>{
-      alert(data.username + '_'+ data.role);
+    this.orderService.getCart().subscribe(data=>{
+      this.cartProductIds = data.cartProductsIds;
+      this.totalQuantity = data.totalQuantity;
     })
   }
   getCart() {
-    this.authService.getCart();
+    this.orderService.getCart().subscribe(data=>{
+      this.totalQuantity = data.totalQuantity;
+      this.cartProductIds = data.cartProductsIds;
+    });
   }
 
   addItemToCart(product: Product) {

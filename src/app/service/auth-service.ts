@@ -22,11 +22,12 @@ export class AuthService {
     this.oauthService.configure(authConfig);
     this.oauthService.loadDiscoveryDocumentAndTryLogin();
     this.oauthService.setupAutomaticSilentRefresh();
-    this.getUser();
+
   }
 
   login() {
     this.oauthService.initCodeFlow();
+
   }
 
   logout() {
@@ -34,18 +35,18 @@ export class AuthService {
 
   }
 
-  getCart() {
-    this.orderService.getCart().subscribe(data => {
-      if (data != null) {
-        this.cartSubject.next(data);
-      }
-    });
-  }
+  // getCart() {
+  //   this.orderService.getCart().subscribe(data => {
+  //     if (data != null) {
+  //       this.cartSubject.next(data);
+  //     }
+  //   });
+  // }
 
-  getUser() {
-    this.userService.getUser().subscribe(data => {
-      this.userSubject.next(data);
-      this.getCart();
-    })
-  }
+  // getUser() {
+  //   this.userService.getUser().subscribe(data => {
+  //     this.userSubject.next(data);
+  //     this.getCart();
+  //   })
+  // }
 }
