@@ -1,9 +1,10 @@
 export class UserInfo {
-  sub: string;
+  username: string;
+  role: string;
 
 
-  constructor(sub: string) {
-    this.sub = sub;
-
+  constructor(username: string, role: string) {
+    this.username = username;
+    this.role = role;
   }
 }

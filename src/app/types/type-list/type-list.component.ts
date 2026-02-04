@@ -31,7 +31,7 @@ export class TypeListComponent implements OnDestroy {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private snackBar: MatSnackBar) {
-    this.isLoggedIn = this.authService.userSubject.pipe(map(data => data.sub === 'Igor'));
+    this.isLoggedIn = this.authService.userSubject.pipe(map(data => data.role === 'admin'));
     this.getTypes();
   }
 

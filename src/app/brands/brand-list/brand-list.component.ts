@@ -33,7 +33,7 @@ export class BrandListComponent implements OnDestroy {
               private fb: FormBuilder,
               private dialog: MatDialog,
               private snackBar: MatSnackBar) {
-    this.isLoggedIn = this.userService.getUser().pipe(map(value => value.sub !== ''));
+    this.isLoggedIn = this.userService.getUser().pipe(map(value => value.role === 'admin'));
     this.getBrands();
   }
 

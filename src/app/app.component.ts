@@ -31,11 +31,7 @@ export class AppComponent {
     this.user = this.authService.userSubject.pipe();
   }
 
-  get() {
-    this.userService.getUser().subscribe(data=>{
-      alert(data.sub);
-    })
-    }
+
 
 
   login() {

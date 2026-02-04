@@ -11,7 +11,7 @@ import {UserService} from "./user-service";
 @Injectable({providedIn: 'root'})
 export class AuthService {
 
-  userSubject = new BehaviorSubject<UserInfo>(new UserInfo(''));
+  userSubject = new BehaviorSubject<UserInfo>(new UserInfo('', ''));
   cartSubject = new BehaviorSubject<Cart>(new Cart());
 
   private orderService = inject(OrderService);
@@ -21,12 +21,11 @@ export class AuthService {
   constructor() {
     this.oauthService.configure(authConfig);
     this.oauthService.loadDiscoveryDocumentAndTryLogin();
-    this.oauthService.setupAutomaticSilentRefresh();
-    this.oauthService.events.pipe(filter(event => event.type === "token_received"))
+    this.oauthService.events.pipe(filter(event => event.type === 'token_received'))
       .subscribe(data => {
-      this.getUser();
-      // this.getCart();
-    })
+        this.getUser();
+        this.getCart();
+      })
   }
 
   getToken() {
@@ -35,26 +34,24 @@ export class AuthService {
 
   login() {
     this.oauthService.initCodeFlow();
-
   }
 
   logout() {
     this.oauthService.logOut();
-
   }
 
-  // getCart() {
-  //   this.orderService.getCart().subscribe(data => {
-  //     if (data != null) {
-  //       this.cartSubject.next(data);
-  //     }
-  //   });
-  // }
+  getCart() {
+    this.orderService.getCart().subscribe(data => {
+      if (data != null) {
+        this.cartSubject.next(data);
+      }
+    });
+  }
 
   getUser() {
     this.userService.getUser().subscribe(data => {
       if (data != null) {
-        this.userSubject.next(new UserInfo(data.sub));
+        this.userSubject.next(data);
       }
     })
   }
