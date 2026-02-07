@@ -1,16 +1,17 @@
-import {Component, signal} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {OwlOptions} from "ngx-owl-carousel-o";
 import {ProductService} from "../../service/product-service";
 import {Product} from "../../model/product";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
-import {map, Observable} from "rxjs";
+import {Observable} from "rxjs";
 import {AddPhotosComponent} from "../../photos/add-photos/add-photos.component";
 import {DeletePhotosComponent} from "../../photos/delete-photos/delete-photos.component";
 import {DeletePhotoComponent} from "../../photos/delete-photo/delete-photo.component";
 import {Photo} from "../../model/photo";
 import {ActivatedRoute} from "@angular/router";
-import {UserService} from "../../service/user-service";
+import {AuthService} from "../../service/auth-service";
+import {UserInfo} from "../../dto/user-info";
 
 @Component({
   selector: 'app-get-product',
@@ -24,19 +25,21 @@ export class GetProductComponent {
     autoplay: true,
     nav: true
   }
-  items = signal([1, 2, 3]);
+  items: number[] = [1, 2, 3];
   product!: Product;
   title = '';
   photoForm!: FormGroup;
-  isAdmin!: Observable<boolean>;
+  isAdmin!: Observable<UserInfo>;
   productId = signal(0);
 
-  constructor(private productService: ProductService,
-              private userService: UserService,
-              private fb: FormBuilder,
-              private dialog: MatDialog,
-              private activatedRoute: ActivatedRoute) {
-    this.userService.getUser();
+  private authService = inject(AuthService);
+  private productService = inject(ProductService);
+  private fb = inject(FormBuilder);
+  private dialog = inject(MatDialog);
+  private activatedRoute = inject(ActivatedRoute);
+
+  constructor() {
+    this.isAdmin = this.authService.userSubject.pipe();
     this.activatedRoute.params.subscribe((params) => {
       this.productId.set(Number(params['id']));
       this.getProducts(this.productId());
@@ -51,7 +54,7 @@ export class GetProductComponent {
 
   addPhotos(product: Product) {
     this.photoForm = this.fb.group({
-      productId: [product.id],
+      productId: [this.productId()],
       photos: [null]
     });
     this.dialog.open(AddPhotosComponent, {

@@ -3,7 +3,7 @@
   <div id="owlId">
     @if (product.photos.length > 0) {
       <mat-radio-group>
-        @for (item of items(); track $index) {
+        @for (item of items; track $index) {
           <mat-radio-button (click)="setItems(item)">
             <h4>items: {{ item }};</h4>
           </mat-radio-button>
