@@ -20,6 +20,7 @@
       <h2>no photos</h2>
     }
   </div>
+  <br/>
   <div align="center">
     @if (isAdmin | async) {
       @for (photo of product.photos; track photo.id) {

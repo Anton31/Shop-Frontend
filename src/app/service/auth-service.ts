@@ -21,6 +21,7 @@ export class AuthService {
   constructor() {
     this.oauthService.configure(authConfig);
     this.oauthService.loadDiscoveryDocumentAndTryLogin();
+    this.oauthService.setupAutomaticSilentRefresh();
     this.oauthService.events.pipe(filter(event => event.type === 'token_received'))
       .subscribe(data => {
         this.getUser();

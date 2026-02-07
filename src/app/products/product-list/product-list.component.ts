@@ -76,9 +76,15 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.typeSubscription.unsubscribe();
     this.cartSubscription.unsubscribe();
   }
-get(){
+
+  get() {
     alert(this.authService.getToken());
-}
+  }
+
+  getCart() {
+    this.authService.getCart();
+  }
+
   getProducts() {
     this.productSubscription = this.productService.getProducts(
       this.selectedTypeId,
@@ -226,9 +232,6 @@ get(){
     this.selectedBrandId = 0;
   }
 
-  getCart() {
-    this.authService.getCart();
-  }
 
   addItemToCart(product: Product) {
     this.itemDto.productId = product.id;

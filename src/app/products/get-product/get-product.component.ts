@@ -30,7 +30,7 @@ export class GetProductComponent {
   title = '';
   photoForm!: FormGroup;
   isAdmin!: Observable<UserInfo>;
-  productId = signal(0);
+  productId = 0;
 
   private authService = inject(AuthService);
   private productService = inject(ProductService);
@@ -41,8 +41,8 @@ export class GetProductComponent {
   constructor() {
     this.isAdmin = this.authService.userSubject.pipe();
     this.activatedRoute.params.subscribe((params) => {
-      this.productId.set(Number(params['id']));
-      this.getProducts(this.productId());
+      this.productId = Number(params['id']);
+      this.getProducts(this.productId);
     });
   }
 
@@ -54,7 +54,7 @@ export class GetProductComponent {
 
   addPhotos(product: Product) {
     this.photoForm = this.fb.group({
-      productId: [this.productId()],
+      productId: [this.productId],
       photos: [null]
     });
     this.dialog.open(AddPhotosComponent, {

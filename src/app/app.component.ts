@@ -31,9 +31,6 @@ export class AppComponent {
     this.user = this.authService.userSubject.pipe();
   }
 
-
-
-
   login() {
     this.authService.login();
   }
