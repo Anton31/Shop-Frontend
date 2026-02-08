@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {ProductService} from "../../service/product-service";
 import {Brand} from "../../model/brand";
 import {AddBrandComponent} from "../add-brand/add-brand.component";
@@ -6,12 +6,10 @@ import {MatDialog} from "@angular/material/dialog";
 import {DeleteBrandComponent} from "../delete-brand/delete-brand.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Sort} from "@angular/material/sort";
 import {map, Observable, Subscription} from "rxjs";
-import {UserService} from "../../service/user-service";
-
-
+import {AuthService} from "../../service/auth-service";
 
 
 @Component({
@@ -20,7 +18,7 @@ import {UserService} from "../../service/user-service";
   styleUrls: ['./brand-list.component.css'],
   standalone: false
 })
-export class BrandListComponent implements OnDestroy {
+export class BrandListComponent implements OnInit, OnDestroy {
   brands: Brand[] = [];
   brandForm!: FormGroup;
   displayedColumns: string[] = ['name', 'edit', 'delete'];
@@ -28,22 +26,22 @@ export class BrandListComponent implements OnDestroy {
   isLoggedIn!: Observable<boolean>;
   brandSubscription!: Subscription;
 
-  constructor(private userService: UserService,
-              private productService: ProductService,
-              private fb: FormBuilder,
-              private dialog: MatDialog,
-              private snackBar: MatSnackBar) {
-    this.isLoggedIn = this.userService.getUser().pipe(map(value => value.role === 'admin'));
+  private authService = inject(AuthService);
+  private productService = inject(ProductService);
+  private fb = inject(FormBuilder);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+
+  constructor() {
+    this.isLoggedIn = this.authService.userSubject.pipe(map(value => value.role === 'admin'));
+  }
+
+  ngOnInit(): void {
     this.getBrands();
   }
 
   ngOnDestroy(): void {
     this.brandSubscription.unsubscribe();
-  }
-
-  sortBrands(sortState: Sort) {
-    this.currentDir = sortState.direction;
-    this.getBrands();
   }
 
   getBrands() {
@@ -53,13 +51,18 @@ export class BrandListComponent implements OnDestroy {
       });
   }
 
+  sortBrands(sortState: Sort) {
+    this.currentDir = sortState.direction;
+    this.getBrands();
+  }
+
   reset() {
     this.currentDir = 'ASC';
   }
 
   addBrand() {
     this.brandForm = this.fb.group({
-      name: ['']
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
     });
     const dialogRef = this.dialog.open(AddBrandComponent, {
       height: '500px',
@@ -82,7 +85,7 @@ export class BrandListComponent implements OnDestroy {
   editBrand(brand: Brand) {
     this.brandForm = this.fb.group({
       id: [brand.id],
-      name: [brand.name]
+      name: [brand.name, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
     })
     const dialogRef = this.dialog.open(AddBrandComponent, {
       height: '500px',

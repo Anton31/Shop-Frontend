@@ -11,13 +11,13 @@
         @if (name.hasError('required')) {
           <div>Name is required.</div>
         }
-        @if (name.hasError('minlength')) {
-          <div>Name must be at least 3 characters long.</div>
+        @if (name.hasError('minlength') || name.hasError('maxlength')) {
+          <div>Name must be between 3 and 16 characters</div>
         }
       }
     </mat-form-field>
 </form>
 <div align="center" mat-dialog-actions>
   <button (click)="onNoClick()" mat-button>No Thanks</button>
-  <button [disabled]="!data.typeForm.valid" [mat-dialog-close]="data.typeForm.value" mat-button>Ok</button>
+  <button [disabled]="!data.typeForm.valid" [mat-dialog-close]="data.typeForm.value" mat-flat-button>Ok</button>
 </div>

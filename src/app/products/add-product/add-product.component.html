@@ -33,7 +33,7 @@
             <div>Name is required.</div>
           }
           @if (name.hasError('minlength') || name.hasError('maxlength')) {
-            <div>Name length be between 3 and 16 characters.</div>
+            <div>Name must be between 3 and 16 characters</div>
           }
         }
       </mat-form-field>

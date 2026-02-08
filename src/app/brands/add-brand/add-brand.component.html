@@ -7,10 +7,18 @@
     <mat-form-field>
       <mat-label>Name:</mat-label>
       <input formControlName="name" matInput>
+      @if (name.invalid && (name.dirty || name.touched)) {
+        @if (name.hasError('required')) {
+          <div>Name is required.</div>
+        }
+        @if (name.hasError('minlength') || name.hasError('maxlength')) {
+          <div>Name must be between 3 and 16 characters</div>
+        }
+      }
     </mat-form-field>
   </p>
 </form>
 <div align="center" mat-dialog-actions>
   <button (click)="onNoClick()" mat-button>No Thanks</button>
-  <button [mat-dialog-close]="data.brandForm.value" mat-button>Ok</button>
+  <button [disabled]="!data.brandForm.valid" [mat-dialog-close]="data.brandForm.value" mat-button>Ok</button>
 </div>

@@ -16,6 +16,10 @@ export class AddBrandComponent {
     this.title = data.new ? 'Add brand' : 'Edit brand';
   }
 
+  get name() {
+    return this.data.brandForm.get('name')!;
+  }
+
   onNoClick() {
     this.dialogRef.close();
   }
