@@ -41,7 +41,7 @@ export class AppComponent {
 
   addUser() {
     this.userForm = this.fb.group({
-      role: ['admin'],
+      role: ['user'],
       username: [''],
       email: [''],
       password: [''],
@@ -63,6 +63,7 @@ export class AppComponent {
 
   editUser() {
     this.userForm = this.fb.group({
+      role: ['user'],
       password: [''],
       passwordConfirmed: [''],
     })

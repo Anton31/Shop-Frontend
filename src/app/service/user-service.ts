@@ -14,22 +14,12 @@ export class UserService {
     return this.http.get<UserInfo>(this.baseUrl + '/user');
   };
 
-
   addUser(data: any): Observable<SuccessResponse> {
-    const formData = new FormData();
-    formData.append("role", data.controls.role.value);
-    formData.append("username", data.controls.username.value);
-    formData.append("email", data.controls.email.value);
-    formData.append("password", data.controls.password.value);
-    formData.append("passwordConfirmed", data.controls.passwordConfirmed.value);
-    return this.http.post<any>(this.baseUrl + '/user', formData);
+    return this.http.post<any>(this.baseUrl + '/user', data);
   }
 
   editUser(data: any): Observable<SuccessResponse> {
-    const formData = new FormData();
-    formData.append("password", data.controls.password.value);
-    formData.append("passwordConfirmed", data.controls.passwordConfirmed.value);
-    return this.http.put<any>(this.baseUrl + '/user', formData);
+    return this.http.put<any>(this.baseUrl + '/user', data);
   }
 
   resendRegistrationToken(token: string): Observable<SuccessResponse> {

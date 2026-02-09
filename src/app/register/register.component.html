@@ -1,6 +1,6 @@
 <h3 align="center">{{ title }}</h3>
 <form [formGroup]="data.userForm">
-  <div *ngIf="title=='register'" align="center">
+  <div align="center">
     <mat-form-field>
       <mat-label>Role:</mat-label>
       <mat-select formControlName="role">
@@ -36,5 +36,5 @@
 </form>
 <div align="center" mat-dialog-actions>
   <button (click)="onNoClick()" mat-button>No Thanks</button>
-  <button [mat-dialog-close]="data.userForm" cdkFocusInitial mat-button>Ok</button>
+  <button [mat-dialog-close]="data.userForm.value" mat-flat-button>Ok</button>
 </div>
