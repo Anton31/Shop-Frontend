@@ -11,18 +11,14 @@ export class UserService {
   private http = inject(HttpClient);
 
   getUser(): Observable<UserInfo> {
-    return this.http.get<UserInfo>(this.baseUrl + '/user');
-  };
+    return this.http.get<UserInfo>(`${this.baseUrl}/user`);
+  }
 
   addUser(data: any): Observable<SuccessResponse> {
-    return this.http.post<any>(this.baseUrl + '/user', data);
+    return this.http.post<any>(`${this.baseUrl}/user`, data);
   }
 
   editUser(data: any): Observable<SuccessResponse> {
-    return this.http.put<any>(this.baseUrl + '/user', data);
-  }
-
-  resendRegistrationToken(token: string): Observable<SuccessResponse> {
-    return this.http.get<SuccessResponse>(this.baseUrl + '/user/resendRegistrationToken?token=' + token);
+    return this.http.put<any>(`${this.baseUrl}/user`, data);
   }
 }

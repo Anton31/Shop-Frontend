@@ -77,10 +77,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.cartSubscription.unsubscribe();
   }
 
-  get() {
-    alert(this.authService.getToken());
-  }
-
   getCart() {
     this.authService.getCart();
   }

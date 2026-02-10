@@ -48,7 +48,7 @@ export class AppComponent {
       passwordConfirmed: [''],
     })
     const dialogRef = this.dialog.open(RegisterComponent, {
-      height: '500px',
+      height: '600px',
       width: '500px',
       data: {userForm: this.userForm, new: true}
     }).afterClosed().subscribe(data => {
@@ -68,7 +68,7 @@ export class AppComponent {
       passwordConfirmed: [''],
     })
     const dialogRef = this.dialog.open(RegisterComponent, {
-      height: '500px',
+      height: '600px',
       width: '500px',
       data: {userForm: this.userForm, new: false}
     }).afterClosed().subscribe(data => {

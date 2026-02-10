@@ -29,10 +29,6 @@ export class AuthService {
       })
   }
 
-  getToken() {
-    return this.oauthService.getAccessToken();
-  }
-
   login() {
     this.oauthService.initCodeFlow();
   }

@@ -1,6 +1,7 @@
-<h3 align="center">{{ title }}</h3>
+<h3 mat-dialog-title>{{ title }}</h3>
+<div align="center">
 <form [formGroup]="data.userForm">
-  <div align="center">
+  <div>
     <mat-form-field>
       <mat-label>Role:</mat-label>
       <mat-select formControlName="role">
@@ -9,25 +10,25 @@
       </mat-select>
     </mat-form-field>
   </div>
-  <div *ngIf="title=='register'" align="center">
+  <div *ngIf="title=='register'">
     <mat-form-field>
       <mat-label>User:</mat-label>
       <input formControlName="username" matInput>
     </mat-form-field>
   </div>
-  <div *ngIf="title=='register'" align="center">
+  <div *ngIf="title=='register'">
     <mat-form-field>
       <mat-label>Email:</mat-label>
       <input formControlName="email" matInput>
     </mat-form-field>
   </div>
-  <div align="center">
+  <div>
     <mat-form-field>
       <mat-label>Password:</mat-label>
       <input formControlName="password" matInput>
     </mat-form-field>
   </div>
-  <div align="center">
+  <div>
     <mat-form-field>
       <mat-label>Confirm password:</mat-label>
       <input formControlName="passwordConfirmed" matInput>
@@ -37,4 +38,5 @@
 <div align="center" mat-dialog-actions>
   <button (click)="onNoClick()" mat-button>No Thanks</button>
   <button [mat-dialog-close]="data.userForm.value" mat-flat-button>Ok</button>
+</div>
 </div>
