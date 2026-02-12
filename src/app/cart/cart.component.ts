@@ -3,6 +3,7 @@ import {ItemDto} from "../dto/item-dto";
 import {OrderService} from "../service/order-service";
 import {Cart} from "../model/cart";
 import {Router} from "@angular/router";
+import {DialogRef} from "@angular/cdk/dialog";
 
 
 @Component({
@@ -19,6 +20,7 @@ export class CartComponent implements OnInit {
 
   private router = inject(Router);
   private orderService = inject(OrderService);
+  private dialogRef = inject(DialogRef);
 
   constructor() {
     this.itemDto = new ItemDto(0, 0, 0);
@@ -47,11 +49,12 @@ export class CartComponent implements OnInit {
   }
 
   checkout() {
+    this.dialogRef.close();
     this.router.navigate(['checkout']);
   }
 
   onNoClick() {
-    this.router.navigate(['']);
+    this.dialogRef.close();
   }
 
   removeFromCart(id: number) {
@@ -64,5 +67,9 @@ export class CartComponent implements OnInit {
     this.getCart();
   }
 }
+
+// export interface CartDialogData {
+//   cart: Cart
+// }
 
 

@@ -15,6 +15,7 @@ import {Cart} from "../../model/cart";
 import {map, Observable, Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import {AuthService} from "../../service/auth-service";
+import {CartComponent} from "../../cart/cart.component";
 
 
 @Component({
@@ -239,6 +240,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   openCart() {
-    this.router.navigate(['cart']);
+    this.dialog.open(CartComponent, {
+      maxWidth: '800px',
+      minWidth: '800px',
+      height: '800px',
+    })
   }
 }

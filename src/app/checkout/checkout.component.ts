@@ -3,6 +3,8 @@ import {OrderService} from "../service/order-service";
 import {Cart} from "../model/cart";
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
+import {CartComponent} from "../cart/cart.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-checkout',
@@ -18,6 +20,7 @@ export class CheckoutComponent implements OnInit {
   private orderService = inject(OrderService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
+  private dialog = inject(MatDialog);
 
   ngOnInit(): void {
     this.getCart();
@@ -32,9 +35,17 @@ export class CheckoutComponent implements OnInit {
     })
   }
 
+
   openCart() {
-    this.router.navigate(['cart']);
+    this.dialog.open(CartComponent, {
+      maxWidth: '800px',
+      minWidth: '800px',
+      height: '800px',
+    }).afterClosed().subscribe(data=>{
+      this.getCart();
+    })
   }
+
 
   addOrder(data: any) {
     this.orderService.addOrder(data).subscribe(data => {
