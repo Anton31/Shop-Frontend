@@ -30,6 +30,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   filterTypes: Type[] = [];
   filterBrands: Brand[] = [];
+  allTypes = true;
   selectedTypeId = 0;
   selectedBrandId = 0;
   selectedSort = 'name';
@@ -40,7 +41,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   productForm!: FormGroup;
   totalQuantity = 0;
   cart!: Cart;
-  role!: string | null;
   isAdmin!: Observable<boolean>;
   isUser!: Observable<boolean>;
   productSubscription!: Subscription;
@@ -125,9 +125,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   typeFilter(typeId: number) {
     if (typeId == this.selectedTypeId) {
+      this.allTypes = true;
       this.selectedTypeId = 0;
       this.selectedBrandId = 0;
     } else {
+      this.allTypes = false;
       this.selectedTypeId = typeId;
       this.selectedBrandId = 0;
     }

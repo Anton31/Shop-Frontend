@@ -35,17 +35,15 @@ export class CheckoutComponent implements OnInit {
     })
   }
 
-
   openCart() {
     this.dialog.open(CartComponent, {
       maxWidth: '800px',
       minWidth: '800px',
       height: '800px',
-    }).afterClosed().subscribe(data=>{
+    }).afterClosed().subscribe(data => {
       this.getCart();
     })
   }
-
 
   addOrder(data: any) {
     this.orderService.addOrder(data).subscribe(data => {

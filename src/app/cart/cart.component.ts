@@ -68,8 +68,5 @@ export class CartComponent implements OnInit {
   }
 }
 
-// export interface CartDialogData {
-//   cart: Cart
-// }
 
 
