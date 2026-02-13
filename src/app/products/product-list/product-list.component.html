@@ -1,6 +1,5 @@
 <div style="padding: 20px">
   <mat-chip-listbox>
-    <mat-chip-option [selected]="allTypes">All types</mat-chip-option>
     @for (type of filterTypes; track type.id) {
       <mat-chip-option (click)="typeFilter(type.id)">
         {{ type.name }}

@@ -16,24 +16,24 @@ export class OrderService {
     return this.http.get<Cart>(`${this.baseUrl}/cart`);
   }
 
-  getOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.baseUrl}/cart/order`);
+  addItemToCart(dto: ItemDto): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/cart`, dto);
   }
 
-  addItemToCart(dto: ItemDto): Observable<Cart> {
-    return this.http.post<Cart>(`${this.baseUrl}/cart`, dto);
-  }
-
-  addOrder(data: any): Observable<Order[]> {
-    return this.http.post<Order[]>(`${this.baseUrl}/cart/order`, data);
-  }
-
-  editItem(dto: ItemDto): Observable<Cart> {
-    return this.http.put<Cart>(`${this.baseUrl}/cart`, dto);
+  editItem(dto: ItemDto): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/cart`, dto);
   }
 
   removeItem(itemId: number): Observable<any> {
     return this.http.delete<any>(`${this.baseUrl}/cart/${itemId}`);
+  }
+
+  getOrders(): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.baseUrl}/cart/order`);
+  }
+
+  addOrder(data: any): Observable<Order[]> {
+    return this.http.post<Order[]>(`${this.baseUrl}/cart/order`, data);
   }
 
   removeOrder(itemId: number): Observable<any> {
