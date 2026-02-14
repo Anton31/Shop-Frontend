@@ -1,8 +1,8 @@
 <div align="center">
   <h2 mat-dialog-title>{{ title }}</h2>
-  <h3>Total quantity: {{ cart.totalQuantity }} </h3>
-  <h3>Total price: {{ cart.totalPrice }} </h3>
-  <h3 *ngIf="cart.totalPrice==0">Cart is empty</h3>
+  <h3 *ngIf="cart.totalQuantity>0" mat-dialog-title>Total quantity: {{ cart.totalQuantity }} </h3>
+  <h3 *ngIf="cart.totalPrice>0" mat-dialog-title>Total price: {{ cart.totalPrice }} </h3>
+  <h3 *ngIf="cart.totalPrice==0" mat-dialog-title>Cart is empty</h3>
   <table [dataSource]="cart.items" class="mat-elevation-z8" mat-table>
     <ng-container align="center" matColumnDef="name">
       <th *matHeaderCellDef mat-header-cell>Name</th>

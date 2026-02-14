@@ -32,8 +32,8 @@ export class OrderService {
     return this.http.get<Order[]>(`${this.baseUrl}/cart/order`);
   }
 
-  addOrder(data: any): Observable<Order[]> {
-    return this.http.post<Order[]>(`${this.baseUrl}/cart/order`, data);
+  addOrder(data: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/cart/order`, data);
   }
 
   removeOrder(itemId: number): Observable<any> {

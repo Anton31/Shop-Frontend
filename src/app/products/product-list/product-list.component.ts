@@ -13,7 +13,6 @@ import {ItemDto} from "../../dto/item-dto";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Cart} from "../../model/cart";
 import {map, Observable, Subscription} from "rxjs";
-import {Router} from "@angular/router";
 import {AuthService} from "../../service/auth-service";
 import {CartComponent} from "../../cart/cart.component";
 
@@ -30,7 +29,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   filterTypes: Type[] = [];
   filterBrands: Brand[] = [];
-  allTypes = true;
   selectedTypeId = 0;
   selectedBrandId = 0;
   selectedSort = 'name';
@@ -53,7 +51,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
-  private router = inject(Router);
 
   constructor() {
     this.itemDto = new ItemDto(0, 0, 0);
@@ -115,21 +112,15 @@ export class ProductListComponent implements OnInit, OnDestroy {
   getFilterBrands(typeId: number) {
     this.selectedTypeId = typeId;
     this.productService.getProductBrands(this.selectedTypeId, 'id', 'ASC').subscribe(data => {
-      if (this.selectedTypeId > 0) {
-        this.filterBrands = data;
-      } else {
-        this.filterBrands = [];
-      }
+      this.filterBrands = data;
     });
   }
 
   typeFilter(typeId: number) {
     if (typeId == this.selectedTypeId) {
-      this.allTypes = true;
       this.selectedTypeId = 0;
       this.selectedBrandId = 0;
     } else {
-      this.allTypes = false;
       this.selectedTypeId = typeId;
       this.selectedBrandId = 0;
     }
@@ -175,7 +166,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
       }
     }).afterClosed().subscribe(data => {
       this.productService.addProduct(data).subscribe(data => {
-          this.resetFilters();
           this.getProducts();
           this.getFilterTypes();
         },
@@ -200,7 +190,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
       data: {productForm: this.productForm, new: false}
     }).afterClosed().subscribe(data => {
       this.productService.editProduct(data).subscribe(data => {
-          this.resetFilters();
           this.getProducts();
           this.getFilterTypes();
         },
@@ -221,16 +210,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
       this.productService.deleteProduct(data).subscribe(data => {
         this.getProducts();
         this.getFilterTypes();
-        this.getFilterBrands(this.selectedTypeId);
       });
     });
   }
-
-  resetFilters() {
-    this.selectedTypeId = 0;
-    this.selectedBrandId = 0;
-  }
-
 
   addItemToCart(product: Product) {
     this.itemDto.productId = product.id;
@@ -246,6 +228,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
       maxWidth: '800px',
       minWidth: '800px',
       height: '800px',
+    }).afterClosed().subscribe(data => {
+      this.getCart();
     })
   }
 }
