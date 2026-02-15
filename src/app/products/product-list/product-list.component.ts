@@ -12,7 +12,7 @@ import {OrderService} from "../../service/order-service";
 import {ItemDto} from "../../dto/item-dto";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Cart} from "../../model/cart";
-import {map, Observable, Subscription} from "rxjs";
+import {Subscription} from "rxjs";
 import {AuthService} from "../../service/auth-service";
 import {CartComponent} from "../../cart/cart.component";
 
@@ -34,17 +34,16 @@ export class ProductListComponent implements OnInit, OnDestroy {
   selectedSort = 'name';
   selectedDir = 'ASC';
   itemDto!: ItemDto;
-  displayedColumns: string[] = ['name', 'price', 'photo', 'type', 'brand', 'actions', 'cart'];
-  cartProductIds: number[] = [];
+  displayedColumns!: string[];
+  cartProductIds: number [] = [];
   productForm!: FormGroup;
   totalQuantity = 0;
   cart!: Cart;
-  isAdmin!: Observable<boolean>;
-  isUser!: Observable<boolean>;
+  role = '';
   productSubscription!: Subscription;
   typeSubscription!: Subscription;
   cartSubscription!: Subscription;
-
+  userSubscription!: Subscription;
   private productService = inject(ProductService);
   private authService = inject(AuthService);
   private orderService = inject(OrderService);
@@ -54,8 +53,16 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   constructor() {
     this.itemDto = new ItemDto(0, 0, 0);
-    this.isAdmin = this.authService.userSubject.pipe(map(data => data.role === 'admin'));
-    this.isUser = this.authService.userSubject.pipe(map(data => data.role === 'user'));
+    this.userSubscription = this.authService.userSubject.subscribe(data => {
+      this.role = data.role;
+      if (data.role === 'admin') {
+        this.displayedColumns = ['name', 'price', 'photo', 'type', 'brand', 'actions', 'cart'];
+      } else if (data.role === 'user') {
+        this.displayedColumns = ['name', 'price', 'photo', 'type', 'brand', 'cart'];
+      } else {
+        this.displayedColumns = ['name', 'price', 'photo', 'type', 'brand'];
+      }
+    });
     this.cartSubscription = this.authService.cartSubject.subscribe(data => {
       this.totalQuantity = data.totalQuantity;
       this.cartProductIds = data.cartProductsIds;
@@ -73,6 +80,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.productSubscription.unsubscribe();
     this.typeSubscription.unsubscribe();
     this.cartSubscription.unsubscribe();
+    this.userSubscription.unsubscribe();
   }
 
   getCart() {
