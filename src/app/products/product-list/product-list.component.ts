@@ -12,7 +12,7 @@ import {OrderService} from "../../service/order-service";
 import {ItemDto} from "../../dto/item-dto";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Cart} from "../../model/cart";
-import {map, Observable, Subscription} from "rxjs";
+import {Subscription} from "rxjs";
 import {AuthService} from "../../service/auth-service";
 import {CartComponent} from "../../cart/cart.component";
 
@@ -34,17 +34,16 @@ export class ProductListComponent implements OnInit, OnDestroy {
   selectedSort = 'name';
   selectedDir = 'ASC';
   itemDto!: ItemDto;
-  displayedColumns: string[] = ['name', 'price', 'photo', 'type', 'brand', 'actions', 'cart'];
-  cartProductIds: number[] = [];
+  displayedColumns!: string[];
+  cartProductIds: number [] = [];
   productForm!: FormGroup;
   totalQuantity = 0;
   cart!: Cart;
-  isAdmin!: Observable<boolean>;
-  isUser!: Observable<boolean>;
+  role = '';
   productSubscription!: Subscription;
   typeSubscription!: Subscription;
   cartSubscription!: Subscription;
-
+  userSubscription!: Subscription;
   private productService = inject(ProductService);
   private authService = inject(AuthService);
   private orderService = inject(OrderService);
@@ -54,25 +53,35 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   constructor() {
     this.itemDto = new ItemDto(0, 0, 0);
-    this.isAdmin = this.authService.userSubject.pipe(map(data => data.role === 'admin'));
-    this.isUser = this.authService.userSubject.pipe(map(data => data.role === 'user'));
+
+    this.userSubscription = this.authService.userSubject.subscribe(data => {
+      this.role = data.role;
+      if (data.role === 'admin') {
+        this.displayedColumns = ['name', 'price', 'photo', 'type', 'brand', 'actions', 'cart'];
+      } else if (data.role === 'user') {
+        this.displayedColumns = ['name', 'price', 'photo', 'type', 'brand', 'cart'];
+      } else {
+        this.displayedColumns = ['name', 'price', 'photo', 'type', 'brand'];
+      }
+    });
+
     this.cartSubscription = this.authService.cartSubject.subscribe(data => {
       this.totalQuantity = data.totalQuantity;
       this.cartProductIds = data.cartProductsIds;
-    })
+    });
   }
 
   ngOnInit(): void {
     this.getProducts();
-    this.getFilterTypes();
+    this.getProductTypes();
     this.getCart();
-
   }
 
   ngOnDestroy(): void {
     this.productSubscription.unsubscribe();
     this.typeSubscription.unsubscribe();
     this.cartSubscription.unsubscribe();
+    this.userSubscription.unsubscribe();
   }
 
   getCart() {
@@ -81,10 +90,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   getProducts() {
     this.productSubscription = this.productService.getProducts(
-      this.selectedTypeId,
-      this.selectedBrandId,
-      this.selectedSort,
-      this.selectedDir)
+      this.selectedTypeId, this.selectedBrandId, this.selectedSort, this.selectedDir)
       .subscribe(data => {
         this.products = data;
       })
@@ -93,30 +99,31 @@ export class ProductListComponent implements OnInit, OnDestroy {
   sortProducts(sortState: Sort) {
     this.selectedSort = sortState.active;
     this.selectedDir = sortState.direction;
+
     this.productService.getProducts(
-      this.selectedTypeId,
-      this.selectedBrandId,
-      this.selectedSort,
-      this.selectedDir)
+      this.selectedTypeId, this.selectedBrandId, this.selectedSort, this.selectedDir)
       .subscribe(data => {
         this.products = data;
       });
   }
 
-  getFilterTypes() {
-    this.typeSubscription = this.productService.getProductTypes('id', 'ASC').subscribe(data => {
+  getProductTypes() {
+    this.typeSubscription = this.productService.getProductTypes('id', 'ASC')
+      .subscribe(data => {
       this.filterTypes = data;
     });
   }
 
-  getFilterBrands(typeId: number) {
+  getProductBrands(typeId: number) {
     this.selectedTypeId = typeId;
-    this.productService.getProductBrands(this.selectedTypeId, 'id', 'ASC').subscribe(data => {
+
+    this.productService.getProductBrands(this.selectedTypeId, 'id', 'ASC')
+      .subscribe(data => {
       this.filterBrands = data;
     });
   }
 
-  typeFilter(typeId: number) {
+  filterByType(typeId: number) {
     if (typeId == this.selectedTypeId) {
       this.selectedTypeId = 0;
       this.selectedBrandId = 0;
@@ -124,28 +131,25 @@ export class ProductListComponent implements OnInit, OnDestroy {
       this.selectedTypeId = typeId;
       this.selectedBrandId = 0;
     }
-    this.getFilterBrands(this.selectedTypeId);
+
+    this.getProductBrands(this.selectedTypeId);
+
     this.productService.getProducts(
-      this.selectedTypeId,
-      this.selectedBrandId,
-      this.selectedSort,
-      this.selectedDir)
+      this.selectedTypeId, this.selectedBrandId, this.selectedSort, this.selectedDir)
       .subscribe(data => {
         this.products = data;
       });
   }
 
-  brandFilter(brandId: number) {
+  filterByTypeAndBrand(brandId: number) {
     if (this.selectedBrandId === brandId) {
       this.selectedBrandId = 0;
     } else {
       this.selectedBrandId = brandId;
     }
+
     this.productService.getProducts(
-      this.selectedTypeId,
-      this.selectedBrandId,
-      this.selectedSort,
-      this.selectedDir)
+      this.selectedTypeId, this.selectedBrandId, this.selectedSort, this.selectedDir)
       .subscribe(data => {
         this.products = data;
       });
@@ -157,17 +161,18 @@ export class ProductListComponent implements OnInit, OnDestroy {
       brandId: [1],
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(16)]],
       price: [1000]
-    })
-    const dialogRef = this.dialog.open(AddProductComponent, {
+    });
+
+    this.dialog.open(AddProductComponent, {
       height: '600px',
-      width: '600px',
+      width: '500px',
       data: {
         productForm: this.productForm, new: true
       }
     }).afterClosed().subscribe(data => {
       this.productService.addProduct(data).subscribe(data => {
           this.getProducts();
-          this.getFilterTypes();
+          this.getProductTypes();
         },
         error => {
           this.snackBar.open(error.error.message, '', {duration: 3000})
@@ -184,14 +189,15 @@ export class ProductListComponent implements OnInit, OnDestroy {
       name: [product.name, [Validators.required, Validators.minLength(3), Validators.maxLength(16)]],
       price: [product.price]
     })
-    const dialogRef = this.dialog.open(AddProductComponent, {
+
+    this.dialog.open(AddProductComponent, {
       height: '600px',
-      width: '600px',
+      width: '500px',
       data: {productForm: this.productForm, new: false}
     }).afterClosed().subscribe(data => {
       this.productService.editProduct(data).subscribe(data => {
           this.getProducts();
-          this.getFilterTypes();
+          this.getProductTypes();
         },
         error => {
           this.snackBar.open(error.error.message, '', {duration: 3000})
@@ -202,14 +208,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
   deleteProduct(product: Product) {
     this.dialog.open(DeleteProductComponent, {
       height: '600px',
-      width: '600px',
+      width: '500px',
       data: {
         product: product
       }
     }).afterClosed().subscribe(data => {
       this.productService.deleteProduct(data).subscribe(data => {
         this.getProducts();
-        this.getFilterTypes();
+        this.getProductTypes();
       });
     });
   }
@@ -230,6 +236,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
       height: '800px',
     }).afterClosed().subscribe(data => {
       this.getCart();
-    })
+    });
   }
 }
