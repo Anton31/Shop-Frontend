@@ -12,7 +12,7 @@ import {OrderService} from "../../service/order-service";
 import {ItemDto} from "../../dto/item-dto";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Cart} from "../../model/cart";
-import {Subscription} from "rxjs";
+import {map, Observable, Subscription} from "rxjs";
 import {AuthService} from "../../service/auth-service";
 import {CartComponent} from "../../cart/cart.component";
 
@@ -34,16 +34,15 @@ export class ProductListComponent implements OnInit, OnDestroy {
   selectedSort = 'name';
   selectedDir = 'ASC';
   itemDto!: ItemDto;
-  displayedColumns!: string[];
+  displayedColumns: string[] = [];
   cartProductIds: number [] = [];
   productForm!: FormGroup;
   totalQuantity = 0;
   cart!: Cart;
-  role = '';
+  isAdmin!: Observable<boolean>;
   productSubscription!: Subscription;
   typeSubscription!: Subscription;
   cartSubscription!: Subscription;
-  userSubscription!: Subscription;
   private productService = inject(ProductService);
   private authService = inject(AuthService);
   private orderService = inject(OrderService);
@@ -53,17 +52,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   constructor() {
     this.itemDto = new ItemDto(0, 0, 0);
-
-    this.userSubscription = this.authService.userSubject.subscribe(data => {
-      this.role = data.role;
-      if (data.role === 'admin') {
-        this.displayedColumns = ['name', 'price', 'photo', 'type', 'brand', 'actions', 'cart'];
-      } else if (data.role === 'user') {
-        this.displayedColumns = ['name', 'price', 'photo', 'type', 'brand', 'cart'];
-      } else {
-        this.displayedColumns = ['name', 'price', 'photo', 'type', 'brand'];
-      }
-    });
+    this.displayedColumns = ['name', 'photo', 'price', 'type', 'brand', 'actions', 'cart'];
+    this.isAdmin = this.authService.userSubject.pipe(map(data => data.role === 'admin'));
 
     this.cartSubscription = this.authService.cartSubject.subscribe(data => {
       this.totalQuantity = data.totalQuantity;
@@ -81,7 +71,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.productSubscription.unsubscribe();
     this.typeSubscription.unsubscribe();
     this.cartSubscription.unsubscribe();
-    this.userSubscription.unsubscribe();
   }
 
   getCart() {
@@ -99,28 +88,22 @@ export class ProductListComponent implements OnInit, OnDestroy {
   sortProducts(sortState: Sort) {
     this.selectedSort = sortState.active;
     this.selectedDir = sortState.direction;
-
-    this.productService.getProducts(
-      this.selectedTypeId, this.selectedBrandId, this.selectedSort, this.selectedDir)
-      .subscribe(data => {
-        this.products = data;
-      });
+    this.getProducts();
   }
 
   getProductTypes() {
     this.typeSubscription = this.productService.getProductTypes('id', 'ASC')
       .subscribe(data => {
-      this.filterTypes = data;
-    });
+        this.filterTypes = data;
+      });
   }
 
   getProductBrands(typeId: number) {
     this.selectedTypeId = typeId;
-
     this.productService.getProductBrands(this.selectedTypeId, 'id', 'ASC')
       .subscribe(data => {
-      this.filterBrands = data;
-    });
+        this.filterBrands = data;
+      });
   }
 
   filterByType(typeId: number) {
@@ -131,14 +114,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
       this.selectedTypeId = typeId;
       this.selectedBrandId = 0;
     }
-
     this.getProductBrands(this.selectedTypeId);
-
-    this.productService.getProducts(
-      this.selectedTypeId, this.selectedBrandId, this.selectedSort, this.selectedDir)
-      .subscribe(data => {
-        this.products = data;
-      });
+    this.getProducts();
   }
 
   filterByTypeAndBrand(brandId: number) {
@@ -147,19 +124,15 @@ export class ProductListComponent implements OnInit, OnDestroy {
     } else {
       this.selectedBrandId = brandId;
     }
-
-    this.productService.getProducts(
-      this.selectedTypeId, this.selectedBrandId, this.selectedSort, this.selectedDir)
-      .subscribe(data => {
-        this.products = data;
-      });
+    this.getProducts();
   }
 
   addProduct() {
     this.productForm = this.fb.group({
       typeId: [1],
       brandId: [1],
-      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(16)]],
+      name: ['', [Validators.required,
+        Validators.minLength(3), Validators.maxLength(16)]],
       price: [1000]
     });
 
@@ -169,16 +142,16 @@ export class ProductListComponent implements OnInit, OnDestroy {
       data: {
         productForm: this.productForm, new: true
       }
-    }).afterClosed().subscribe(data => {
-      this.productService.addProduct(data).subscribe(data => {
-          this.getProducts();
-          this.getProductTypes();
-        },
-        error => {
-          this.snackBar.open(error.error.message, '', {duration: 3000})
-        }
-      )
-    });
+    }).afterClosed().subscribe({
+        next: (data) =>
+          this.productService.addProduct(data).subscribe(data => {
+            this.getProducts();
+            this.getProductTypes();
+          }),
+        error: (e) =>
+          this.snackBar.open(e.error.message, '', {duration: 3000})
+      }
+    )
   }
 
   editProduct(product: Product) {
@@ -186,7 +159,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
       id: [product.id],
       typeId: [product.type.id],
       brandId: [product.brand.id],
-      name: [product.name, [Validators.required, Validators.minLength(3), Validators.maxLength(16)]],
+      name: [product.name, [Validators.required,
+        Validators.minLength(3), Validators.maxLength(16)]],
       price: [product.price]
     })
 
@@ -194,14 +168,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
       height: '600px',
       width: '500px',
       data: {productForm: this.productForm, new: false}
-    }).afterClosed().subscribe(data => {
-      this.productService.editProduct(data).subscribe(data => {
+    }).afterClosed().subscribe({
+      next: (data) =>
+        this.productService.addProduct(data).subscribe(data => {
           this.getProducts();
           this.getProductTypes();
-        },
-        error => {
-          this.snackBar.open(error.error.message, '', {duration: 3000})
-        });
+        }),
+      error: (e) =>
+        this.snackBar.open(e.error.message, '', {duration: 3000})
     });
   }
 
@@ -212,11 +186,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
       data: {
         product: product
       }
-    }).afterClosed().subscribe(data => {
-      this.productService.deleteProduct(data).subscribe(data => {
-        this.getProducts();
-        this.getProductTypes();
-      });
+    }).afterClosed().subscribe({
+      next: (data) =>
+        this.productService.deleteProduct(data).subscribe(data => {
+          this.getProducts();
+          this.getProductTypes();
+        }),
+      error: (e) =>
+        this.snackBar.open(e.error.message, '', {duration: 3000})
     });
   }
 
