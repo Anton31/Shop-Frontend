@@ -43,6 +43,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   productSubscription!: Subscription;
   typeSubscription!: Subscription;
   cartSubscription!: Subscription;
+
   private productService = inject(ProductService);
   private authService = inject(AuthService);
   private orderService = inject(OrderService);
@@ -142,16 +143,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
       data: {
         productForm: this.productForm, new: true
       }
-    }).afterClosed().subscribe({
-        next: (data) =>
-          this.productService.addProduct(data).subscribe(data => {
-            this.getProducts();
-            this.getProductTypes();
-          }),
-        error: (e) =>
-          this.snackBar.open(e.error.message, '', {duration: 3000})
-      }
-    )
+    }).afterClosed().subscribe(data => {
+      this.productService.addProduct(data).subscribe(() => {
+        this.getProducts();
+        this.getProductTypes();
+      }, error => {
+        this.snackBar.open(error.error.message, '', {duration: 3000})
+      });
+    });
   }
 
   editProduct(product: Product) {
@@ -168,14 +167,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
       height: '600px',
       width: '500px',
       data: {productForm: this.productForm, new: false}
-    }).afterClosed().subscribe({
-      next: (data) =>
-        this.productService.addProduct(data).subscribe(data => {
-          this.getProducts();
-          this.getProductTypes();
-        }),
-      error: (e) =>
-        this.snackBar.open(e.error.message, '', {duration: 3000})
+    }).afterClosed().subscribe(data => {
+      this.productService.addProduct(data).subscribe(() => {
+        this.getProducts();
+        this.getProductTypes();
+      }, error => {
+        this.snackBar.open(error.error.message, '', {duration: 3000})
+      });
     });
   }
 
@@ -186,14 +184,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
       data: {
         product: product
       }
-    }).afterClosed().subscribe({
-      next: (data) =>
-        this.productService.deleteProduct(data).subscribe(data => {
-          this.getProducts();
-          this.getProductTypes();
-        }),
-      error: (e) =>
-        this.snackBar.open(e.error.message, '', {duration: 3000})
+    }).afterClosed().subscribe(data => {
+      this.productService.deleteProduct(data).subscribe(() => {
+        this.getProducts();
+        this.getProductTypes();
+      }, error => {
+        this.snackBar.open(error.error.message, '', {duration: 3000})
+      });
     });
   }
 
