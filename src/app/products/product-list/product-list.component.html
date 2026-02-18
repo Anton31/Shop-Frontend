@@ -19,11 +19,14 @@
     }
   </div>
   <p align="center">
-    <button (click)="openCart()" mat-flat-button matBadge="{{totalQuantity}}" matBadgePosition="after"
-            matBadgeSize="large">
-      Cart
-      <mat-icon>shopping_cart_checkout</mat-icon>
-    </button>
+    @if ((isAdmin | async) || (isUser | async)) {
+      <button (click)="openCart()" mat-flat-button matBadge="{{totalQuantity}}" matBadgePosition="after"
+              matBadgeSize="large">
+        Cart
+        <mat-icon>shopping_cart_checkout</mat-icon>
+      </button>
+    }
+  </p>
   <table (matSortChange)="sortProducts($event)" [dataSource]="products" class="mat-elevation-z8" mat-table matSort>
     <ng-container matColumnDef="name">
       <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by name"> Name</th>
@@ -72,14 +75,16 @@
     <ng-container matColumnDef="cart">
       <th *matHeaderCellDef mat-header-cell> Cart</th>
       <td *matCellDef="let product" mat-cell>
-        @if (!cartProductIds.includes(product.id)) {
-          <button (click)="addItemToCart(product)" mat-icon-button>
-            <mat-icon>add_shopping_cart</mat-icon>
-          </button>
-        } @else {
-          <button (click)="openCart()" mat-button>
-            in cart
-          </button>
+        @if ((isAdmin | async) || (isUser | async)) {
+          @if (!cartProductIds.includes(product.id)) {
+            <button (click)="addItemToCart(product)" mat-icon-button>
+              <mat-icon>add_shopping_cart</mat-icon>
+            </button>
+          } @else {
+            <button (click)="openCart()" mat-button>
+              in cart
+            </button>
+          }
         }
       </td>
     </ng-container>
