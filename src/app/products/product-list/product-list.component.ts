@@ -94,7 +94,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   getProductTypes() {
-    this.typeSubscription = this.productService.getProductTypes('id', 'ASC')
+    this.typeSubscription = this.productService.getProductTypes('name', 'ASC')
       .subscribe(data => {
         this.filterTypes = data;
       });
@@ -102,7 +102,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   getProductBrands(typeId: number) {
     this.selectedTypeId = typeId;
-    this.productService.getProductBrands(this.selectedTypeId, 'id', 'ASC')
+    this.productService.getProductBrands(this.selectedTypeId, 'name', 'ASC')
       .subscribe(data => {
         this.filterBrands = data;
       });
