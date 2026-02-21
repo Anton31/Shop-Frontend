@@ -25,7 +25,7 @@ import {CartComponent} from "../../cart/cart.component";
 })
 export class ProductListComponent implements OnInit, OnDestroy {
 
-  title = 'angularFrontend';
+  title = 'products';
   products: Product[] = [];
   filterTypes: Type[] = [];
   filterBrands: Brand[] = [];
@@ -55,8 +55,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
   constructor() {
     this.itemDto = new ItemDto(0, 0, 0);
     this.displayedColumns = ['name', 'photo', 'price', 'type', 'brand', 'actions', 'cart'];
+
     this.isAdmin = this.authService.userSubject.pipe(map(data => data.role === 'admin'));
     this.isUser = this.authService.userSubject.pipe(map(data => data.role === 'user'));
+
     this.cartSubscription = this.authService.cartSubject.subscribe(data => {
       this.totalQuantity = data.totalQuantity;
       this.cartProductIds = data.cartProductsIds;
@@ -109,7 +111,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   filterByType(typeId: number) {
-    if (typeId == this.selectedTypeId) {
+    if (typeId === this.selectedTypeId) {
       this.selectedTypeId = 0;
       this.selectedBrandId = 0;
     } else {
@@ -133,8 +135,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.productForm = this.fb.group({
       typeId: [1],
       brandId: [1],
-      name: ['', [Validators.required,
-        Validators.minLength(3), Validators.maxLength(16)]],
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(16)]],
       price: [1000]
     });
 
@@ -163,8 +164,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       id: [product.id],
       typeId: [product.type.id],
       brandId: [product.brand.id],
-      name: [product.name, [Validators.required,
-        Validators.minLength(3), Validators.maxLength(16)]],
+      name: [product.name, [Validators.required, Validators.minLength(3), Validators.maxLength(16)]],
       price: [product.price]
     })
 
@@ -173,7 +173,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       width: '500px',
       data: {productForm: this.productForm, new: false}
     }).afterClosed().subscribe(data => {
-      this.productService.addProduct(data).subscribe({
+      this.productService.editProduct(data).subscribe({
         next: () => {
           this.reset();
           this.getProducts();
@@ -226,7 +226,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       maxWidth: '800px',
       minWidth: '800px',
       height: '800px',
-    }).afterClosed().subscribe(data => {
+    }).afterClosed().subscribe(() => {
       this.getCart();
     });
   }

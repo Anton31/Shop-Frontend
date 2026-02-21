@@ -1,23 +1,20 @@
 <div style="padding: 20px">
-  <div>
+  <mat-chip-listbox>
     @for (type of filterTypes; track type.id) {
-      @if (type.id === selectedTypeId) {
-        <button (click)="filterByType(type.id)" mat-flat-button>{{ type.name }}</button>
-      } @else {
-        <button (click)="filterByType(type.id)" mat-stroked-button>{{ type.name }}</button>
-      }
+      <mat-chip-option (click)="filterByType(type.id)">
+        {{ type.name }}
+      </mat-chip-option>
     }
-  </div>
-  <br/>
-  <div>
-    @for (brand of filterBrands; track brand.id) {
-      @if (brand.id === selectedBrandId) {
-        <button (click)="filterByTypeAndBrand(brand.id)" mat-flat-button>{{ brand.name }}</button>
-      } @else {
-        <button (click)="filterByTypeAndBrand(brand.id)" mat-stroked-button>{{ brand.name }}</button>
+  </mat-chip-listbox>
+  @if (selectedTypeId > 0) {
+    <mat-chip-listbox>
+      @for (brand of filterBrands; track brand.id) {
+        <mat-chip-option (click)="filterByTypeAndBrand(brand.id)">
+          {{ brand.name }}
+        </mat-chip-option>
       }
-    }
-  </div>
+    </mat-chip-listbox>
+  }
   <p align="center">
     @if ((isAdmin | async) || (isUser | async)) {
       <button (click)="openCart()" mat-flat-button matBadge="{{totalQuantity}}" matBadgePosition="after"

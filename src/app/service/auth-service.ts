@@ -23,7 +23,7 @@ export class AuthService {
     this.oauthService.loadDiscoveryDocumentAndTryLogin();
     this.oauthService.setupAutomaticSilentRefresh();
     this.oauthService.events.pipe(filter(event => event.type === 'token_received'))
-      .subscribe(data => {
+      .subscribe(() => {
         this.getUser();
         this.getCart();
       })
