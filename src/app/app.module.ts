@@ -4,7 +4,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppComponent} from './app.component';
 import {provideHttpClient, withInterceptors} from "@angular/common/http";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatButtonModule} from "@angular/material/button";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatInputModule} from "@angular/material/input";
@@ -41,6 +40,7 @@ import {MatRadioModule} from "@angular/material/radio";
 import {NotFoundComponent} from "./not-found/not-found.component";
 import {CheckoutComponent} from "./checkout/checkout.component";
 import {OAuthModule} from "angular-oauth2-oidc";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 
 @NgModule({
@@ -80,8 +80,8 @@ import {OAuthModule} from "angular-oauth2-oidc";
     MatRadioModule,
     CarouselModule,
     FormsModule,
-    BrowserAnimationsModule,
     MatDialogModule,
+    BrowserAnimationsModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
