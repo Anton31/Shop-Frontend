@@ -53,7 +53,6 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     RegisterComponent,
     AddTypeComponent,
     AddBrandComponent,
-    TypeListComponent,
     BrandListComponent,
     ProductListComponent,
     DeleteTypeComponent,

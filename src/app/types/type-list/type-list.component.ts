@@ -2,19 +2,31 @@ import {Component, OnDestroy} from '@angular/core';
 import {Type} from "../../model/type";
 import {ProductService} from "../../service/product-service";
 import {AddTypeComponent} from "../add-type/add-type.component";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import {DeleteTypeComponent} from "../delete-type/delete-type.component";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Sort} from "@angular/material/sort";
+import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {MatSortModule, Sort} from "@angular/material/sort";
 import {map, Observable, Subscription} from "rxjs";
 import {AuthService} from "../../service/auth-service";
+import {MatButtonModule} from "@angular/material/button";
+import {MatIconModule} from "@angular/material/icon";
+import {MatTableModule} from "@angular/material/table";
+import {AsyncPipe} from "@angular/common";
 
 @Component({
   selector: 'app-type-list',
   templateUrl: './type-list.component.html',
   styleUrls: ['./type-list.component.css'],
-  standalone: false
+  imports: [
+    MatButtonModule,
+    MatDialogModule,
+    MatIconModule,
+    MatTableModule,
+    MatSortModule,
+    MatSnackBarModule,
+    AsyncPipe
+  ]
 })
 export class TypeListComponent implements OnDestroy {
   types: Type[] = [];
