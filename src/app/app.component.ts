@@ -47,18 +47,22 @@ export class AppComponent {
       password: [''],
       passwordConfirmed: [''],
     })
-    const dialogRef = this.dialog.open(RegisterComponent, {
+    this.dialog.open(RegisterComponent, {
       height: '600px',
       width: '500px',
       data: {userForm: this.userForm, new: true}
     }).afterClosed().subscribe(data => {
-      this.userService.addUser(data).subscribe(data2 => {
-          this.snackBar.open(data2.message, '', {duration: 3000})
-        },
-        err => {
-          this.snackBar.open(err.error.message, '', {duration: 3000})
-        })
-    })
+      if (data) {
+        this.userService.addUser(data).subscribe({
+          next: (data2) => {
+            this.snackBar.open(data2.message, '', {duration: 3000})
+          },
+          error: (err) => {
+            this.snackBar.open(err.error.message, '', {duration: 3000})
+          }
+        });
+      }
+    });
   }
 
   editUser() {
@@ -67,17 +71,19 @@ export class AppComponent {
       password: [''],
       passwordConfirmed: [''],
     })
-    const dialogRef = this.dialog.open(RegisterComponent, {
+    this.dialog.open(RegisterComponent, {
       height: '600px',
       width: '500px',
       data: {userForm: this.userForm, new: false}
     }).afterClosed().subscribe(data => {
-      this.userService.editUser(data).subscribe(data2 => {
+      this.userService.editUser(data).subscribe({
+        next: (data2) => {
           this.snackBar.open(data2.message, '', {duration: 3000})
         },
-        err => {
+        error: (err) => {
           this.snackBar.open(err.error.message, '', {duration: 3000})
-        })
-    })
+        }
+      });
+    });
   }
 }

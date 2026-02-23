@@ -1,17 +1,26 @@
 import {Component, inject, Inject, OnDestroy, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogModule} from "@angular/material/dialog";
 import {ProductService} from "../../service/product-service";
 import {Brand} from "../../model/brand";
 import {Type} from "../../model/type";
-import {FormGroup} from "@angular/forms";
+import {FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {DialogRef} from "@angular/cdk/dialog";
 import {Subscription} from "rxjs";
+import {MatInputModule} from "@angular/material/input";
+import {MatSelectModule} from "@angular/material/select";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
   selector: 'app-add-product',
   templateUrl: './add-product.component.html',
   styleUrls: ['./add-product.component.css'],
-  standalone: false
+  imports: [
+    MatInputModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatDialogModule
+  ]
 })
 export class AddProductComponent implements OnInit, OnDestroy {
   title: string;

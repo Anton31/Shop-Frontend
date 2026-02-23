@@ -3,11 +3,11 @@ import {Product} from "../../model/product";
 import {Type} from "../../model/type";
 import {Brand} from "../../model/brand";
 import {ProductService} from "../../service/product-service";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {AddProductComponent} from "../add-product/add-product.component";
 import {DeleteProductComponent} from "../delete-product/delete-product.component";
-import {Sort} from "@angular/material/sort";
+import {MatSortModule, Sort} from "@angular/material/sort";
 import {OrderService} from "../../service/order-service";
 import {ItemDto} from "../../dto/item-dto";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
@@ -15,13 +15,28 @@ import {Cart} from "../../model/cart";
 import {map, Observable, Subscription} from "rxjs";
 import {AuthService} from "../../service/auth-service";
 import {CartComponent} from "../../cart/cart.component";
+import {MatButtonModule} from "@angular/material/button";
+import {MatTableModule} from "@angular/material/table";
+import {MatIconModule} from "@angular/material/icon";
+import {AsyncPipe} from "@angular/common";
+import {MatBadge} from "@angular/material/badge";
+import {RouterLink} from "@angular/router";
 
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
-  standalone: false
+  imports: [
+    MatButtonModule,
+    MatTableModule,
+    MatSortModule,
+    MatIconModule,
+    MatDialogModule,
+    AsyncPipe,
+    MatBadge,
+    RouterLink
+  ]
 })
 export class ProductListComponent implements OnInit, OnDestroy {
 
@@ -123,7 +138,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   filterByTypeAndBrand(brandId: number) {
-    if (this.selectedBrandId === brandId) {
+    if (brandId === this.selectedBrandId) {
       this.selectedBrandId = 0;
     } else {
       this.selectedBrandId = brandId;
@@ -146,16 +161,18 @@ export class ProductListComponent implements OnInit, OnDestroy {
         productForm: this.productForm, new: true
       }
     }).afterClosed().subscribe(data => {
-      this.productService.addProduct(data).subscribe({
-        next: () => {
-          this.reset();
-          this.getProducts();
-          this.getProductTypes();
-          this.getProductBrands(this.selectedTypeId);
-        }, error: (error) => {
-          this.snackBar.open(error.error.message, '', {duration: 3000})
-        }
-      });
+      if (data) {
+        this.productService.addProduct(data).subscribe({
+          next: () => {
+            this.reset();
+            this.getProducts();
+            this.getProductTypes();
+            this.getProductBrands(this.selectedTypeId);
+          }, error: (error) => {
+            this.snackBar.open(error.error.message, '', {duration: 3000})
+          }
+        });
+      }
     });
   }
 
@@ -173,16 +190,18 @@ export class ProductListComponent implements OnInit, OnDestroy {
       width: '500px',
       data: {productForm: this.productForm, new: false}
     }).afterClosed().subscribe(data => {
-      this.productService.editProduct(data).subscribe({
-        next: () => {
-          this.reset();
-          this.getProducts();
-          this.getProductTypes();
-          this.getProductBrands(this.selectedTypeId);
-        }, error: (error) => {
-          this.snackBar.open(error.error.message, '', {duration: 3000})
-        }
-      });
+      if (data) {
+        this.productService.editProduct(data).subscribe({
+          next: () => {
+            this.reset();
+            this.getProducts();
+            this.getProductTypes();
+            this.getProductBrands(this.selectedTypeId);
+          }, error: (error) => {
+            this.snackBar.open(error.error.message, '', {duration: 3000})
+          }
+        });
+      }
     });
   }
 
@@ -194,16 +213,18 @@ export class ProductListComponent implements OnInit, OnDestroy {
         product: product
       }
     }).afterClosed().subscribe(data => {
-      this.productService.deleteProduct(data).subscribe({
-        next: () => {
-          this.reset();
-          this.getProducts();
-          this.getProductTypes();
-          this.getProductBrands(this.selectedTypeId);
-        }, error: (error) => {
-          this.snackBar.open(error.error.message, '', {duration: 3000})
-        }
-      });
+      if (data) {
+        this.productService.deleteProduct(data).subscribe({
+          next: () => {
+            this.reset();
+            this.getProducts();
+            this.getProductTypes();
+            this.getProductBrands(this.selectedTypeId);
+          }, error: (error) => {
+            this.snackBar.open(error.error.message, '', {duration: 3000})
+          }
+        });
+      }
     });
   }
 

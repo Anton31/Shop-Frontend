@@ -8,10 +8,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatInputModule} from "@angular/material/input";
 import {MatFormFieldModule} from "@angular/material/form-field";
-import {AddProductComponent} from './products/add-product/add-product.component';
 import {MatSelectModule} from "@angular/material/select";
-import {DeleteProductComponent} from './products/delete-product/delete-product.component';
-import {MatChipsModule} from "@angular/material/chips";
 import {MatIconModule} from "@angular/material/icon";
 import {RegisterComponent} from './register/register.component';
 import {MatTableModule} from "@angular/material/table";
@@ -46,15 +43,12 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 @NgModule({
   declarations: [
     AppComponent,
-    GetProductComponent,
-    AddProductComponent,
     AddPhotosComponent,
-    DeleteProductComponent,
+    GetProductComponent,
     RegisterComponent,
     AddTypeComponent,
     AddBrandComponent,
     BrandListComponent,
-    ProductListComponent,
     DeleteTypeComponent,
     DeleteBrandComponent,
     CartComponent,
@@ -78,14 +72,13 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     ReactiveFormsModule,
     MatRadioModule,
     CarouselModule,
+    BrowserAnimationsModule,
     FormsModule,
     MatDialogModule,
-    BrowserAnimationsModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatChipsModule,
     MatIconModule,
     MatTableModule,
     MatSortModule,

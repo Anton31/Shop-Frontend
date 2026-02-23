@@ -1,12 +1,16 @@
 import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {Product} from "../../model/product";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
-    selector: 'app-delete-product',
-    templateUrl: './delete-product.component.html',
-    styleUrls: ['./delete-product.component.css'],
-    standalone: false
+  selector: 'app-delete-product',
+  templateUrl: './delete-product.component.html',
+  styleUrls: ['./delete-product.component.css'],
+  imports: [
+    MatButtonModule,
+    MatDialogModule
+  ]
 })
 export class DeleteProductComponent {
   title = '';

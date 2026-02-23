@@ -1,29 +1,41 @@
 <div style="padding: 20px">
-  <mat-chip-listbox>
-    @for (type of filterTypes; track type.id) {
-      <mat-chip-option (click)="filterByType(type.id)">
-        {{ type.name }}
-      </mat-chip-option>
-    }
-  </mat-chip-listbox>
-  @if (selectedTypeId > 0) {
-    <mat-chip-listbox>
-      @for (brand of filterBrands; track brand.id) {
-        <mat-chip-option (click)="filterByTypeAndBrand(brand.id)">
-          {{ brand.name }}
-        </mat-chip-option>
+  <div>
+    @for (type of filterTypes; track type) {
+      @if (type.id === selectedTypeId) {
+        <button (click)="filterByType(type.id)" matButton="filled">
+          {{ type.name }}
+        </button>
+      } @else {
+        <button (click)="filterByType(type.id)" matButton="outlined">
+          {{ type.name }}
+        </button>
       }
-    </mat-chip-listbox>
-  }
-  <p align="center">
+    }
+  </div>
+  <p></p>
+  <div>
+    @for (brand of filterBrands; track brand) {
+      @if (brand.id === selectedBrandId) {
+        <button (click)="filterByTypeAndBrand(brand.id)" matButton="filled">
+          {{ brand.name }}
+        </button>
+      } @else {
+        <button (click)="filterByTypeAndBrand(brand.id)" matButton="outlined">{{ brand.name }}
+        </button>
+      }
+    }
+  </div>
+  <p></p>
+  <div align="center">
     @if ((isAdmin | async) || (isUser | async)) {
-      <button (click)="openCart()" mat-flat-button matBadge="{{totalQuantity}}" matBadgePosition="after"
-              matBadgeSize="large">
+      <button (click)="openCart()" matBadge="{{totalQuantity}}" matBadgePosition="after" matBadgeSize="large"
+              matButton="filled">
         Cart
         <mat-icon>shopping_cart_checkout</mat-icon>
       </button>
     }
-  </p>
+  </div>
+  <p></p>
   <table (matSortChange)="sortProducts($event)" [dataSource]="products" class="mat-elevation-z8" mat-table matSort>
     <ng-container matColumnDef="name">
       <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by name"> Name</th>
@@ -90,7 +102,7 @@
   </table>
   <p></p>
   @if (isAdmin | async) {
-    <button (click)="addProduct()" mat-flat-button>Add product</button>
+    <button (click)="addProduct()" matButton="filled">Add product</button>
   }
 </div>
 

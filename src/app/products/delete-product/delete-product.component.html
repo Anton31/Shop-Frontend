@@ -1,6 +1,7 @@
-<h1 align="center">{{title}}</h1>
-
-<div align="center" mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">No Thanks</button>
-  <button mat-button [mat-dialog-close]="id" cdkFocusInitial>Ok</button>
+<div align="center">
+  <h1 mat-dialog-title>{{ title }}</h1>
+  <div align="center" mat-dialog-actions>
+    <button (click)="onNoClick()" matButton="outlined">No Thanks</button>
+    <button [mat-dialog-close]="id" matButton="filled">Ok</button>
+  </div>
 </div>
