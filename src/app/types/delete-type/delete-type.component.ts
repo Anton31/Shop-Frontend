@@ -1,12 +1,16 @@
 import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {Type} from "../../model/type";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
-    selector: 'app-delete-type',
-    templateUrl: './delete-type.component.html',
-    styleUrls: ['./delete-type.component.css'],
-    standalone: false
+  selector: 'app-delete-type',
+  templateUrl: './delete-type.component.html',
+  styleUrls: ['./delete-type.component.css'],
+  imports: [
+    MatDialogModule,
+    MatButtonModule
+  ]
 })
 export class DeleteTypeComponent {
   title = '';

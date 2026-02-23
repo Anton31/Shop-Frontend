@@ -40,7 +40,7 @@ export class AuthService {
   getCart() {
     this.orderService.getCart().subscribe(data => {
       if (data != null) {
-        this.cartSubject.next(data);
+        this.cartSubject.next();
       }
     });
   }
@@ -48,7 +48,7 @@ export class AuthService {
   getUser() {
     this.userService.getUser().subscribe(data => {
       if (data != null) {
-        this.userSubject.next(data);
+        this.userSubject.next();
       }
     })
   }

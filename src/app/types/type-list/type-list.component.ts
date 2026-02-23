@@ -5,7 +5,7 @@ import {AddTypeComponent} from "../add-type/add-type.component";
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import {DeleteTypeComponent} from "../delete-type/delete-type.component";
 import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MatSortModule, Sort} from "@angular/material/sort";
 import {map, Observable, Subscription} from "rxjs";
 import {AuthService} from "../../service/auth-service";
@@ -80,14 +80,15 @@ export class TypeListComponent implements OnDestroy {
         typeForm: this.typeForm, new: true
       }
     }).afterClosed().subscribe(data => {
-      this.productService.addType(data).subscribe(data => {
+      this.productService.addType(data).subscribe({
+        next: () => {
           this.reset();
           this.getTypes();
         },
-        error => {
-          this.snackBar.open(error.error.message, '', {duration: 3000})
+        error: (err) => {
+          this.snackBar.open(err.error.message, '', {duration: 3000})
         }
-      )
+      });
     });
   }
 
@@ -103,11 +104,14 @@ export class TypeListComponent implements OnDestroy {
         typeForm: this.typeForm, new: false
       }
     }).afterClosed().subscribe(data => {
-      this.productService.editType(data).subscribe(data => {
-        this.reset();
-        this.getTypes();
-      }, error => {
-        this.snackBar.open(error.error.message, '', {duration: 3000})
+      this.productService.editType(data).subscribe({
+        next: () => {
+          this.reset();
+          this.getTypes();
+        },
+        error: (err) => {
+          this.snackBar.open(err.error.message, '', {duration: 3000})
+        }
       });
     });
   }
@@ -120,11 +124,14 @@ export class TypeListComponent implements OnDestroy {
         type: type
       }
     }).afterClosed().subscribe(data => {
-      this.productService.deleteType(data).subscribe(data => {
-        this.reset();
-        this.getTypes();
-      }, error => {
-        this.snackBar.open(error.error.message, '', {duration: 3000})
+      this.productService.deleteType(data).subscribe({
+        next: () => {
+          this.reset();
+          this.getTypes();
+        },
+        error: (err) => {
+          this.snackBar.open(err.error.message, '', {duration: 3000})
+        }
       });
     });
   }

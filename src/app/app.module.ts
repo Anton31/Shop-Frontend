@@ -14,13 +14,11 @@ import {RegisterComponent} from './register/register.component';
 import {MatTableModule} from "@angular/material/table";
 import {MatSortModule} from "@angular/material/sort";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
-import {AddTypeComponent} from './types/add-type/add-type.component';
 import {AddBrandComponent} from './brands/add-brand/add-brand.component';
 import {TypeListComponent} from './types/type-list/type-list.component';
 import {BrandListComponent} from './brands/brand-list/brand-list.component';
 import {RouterModule} from "@angular/router";
 import {ProductListComponent} from './products/product-list/product-list.component';
-import {DeleteTypeComponent} from './types/delete-type/delete-type.component';
 import {DeleteBrandComponent} from './brands/delete-brand/delete-brand.component';
 import {NgOptimizedImage} from "@angular/common";
 import {MatMenuModule} from "@angular/material/menu";
@@ -46,10 +44,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     AddPhotosComponent,
     GetProductComponent,
     RegisterComponent,
-    AddTypeComponent,
     AddBrandComponent,
     BrandListComponent,
-    DeleteTypeComponent,
     DeleteBrandComponent,
     CartComponent,
     CheckoutComponent,
