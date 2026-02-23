@@ -34,7 +34,7 @@ export class TypeListComponent implements OnDestroy {
   typeForm!: FormGroup;
   currentSort = 'name';
   currentDir = 'ASC';
-  isLoggedIn: Observable<boolean>;
+  isAdmin: Observable<boolean>;
   subscription!: Subscription;
 
   constructor(
@@ -43,7 +43,7 @@ export class TypeListComponent implements OnDestroy {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private snackBar: MatSnackBar) {
-    this.isLoggedIn = this.authService.userSubject.pipe(map(data => data.role === 'admin'));
+    this.isAdmin = this.authService.userSubject.pipe(map(data => data.role === 'admin'));
     this.getTypes();
   }
 
@@ -73,22 +73,24 @@ export class TypeListComponent implements OnDestroy {
     this.typeForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
     })
-    const dialogRef = this.dialog.open(AddTypeComponent, {
+    this.dialog.open(AddTypeComponent, {
       height: '500px',
       width: '500px',
       data: {
         typeForm: this.typeForm, new: true
       }
     }).afterClosed().subscribe(data => {
-      this.productService.addType(data).subscribe({
-        next: () => {
-          this.reset();
-          this.getTypes();
-        },
-        error: (err) => {
-          this.snackBar.open(err.error.message, '', {duration: 3000})
-        }
-      });
+      if (data) {
+        this.productService.addType(data).subscribe({
+          next: () => {
+            this.reset();
+            this.getTypes();
+          },
+          error: (err) => {
+            this.snackBar.open(err.error.message, '', {duration: 3000})
+          }
+        });
+      }
     });
   }
 
@@ -97,42 +99,46 @@ export class TypeListComponent implements OnDestroy {
       id: [type.id],
       name: [type.name, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
     })
-    const dialogRef = this.dialog.open(AddTypeComponent, {
+    this.dialog.open(AddTypeComponent, {
       height: '500px',
       width: '500px',
       data: {
         typeForm: this.typeForm, new: false
       }
     }).afterClosed().subscribe(data => {
-      this.productService.editType(data).subscribe({
-        next: () => {
-          this.reset();
-          this.getTypes();
-        },
-        error: (err) => {
-          this.snackBar.open(err.error.message, '', {duration: 3000})
-        }
-      });
+      if (data) {
+        this.productService.editType(data).subscribe({
+          next: () => {
+            this.reset();
+            this.getTypes();
+          },
+          error: (err) => {
+            this.snackBar.open(err.error.message, '', {duration: 3000})
+          }
+        });
+      }
     });
   }
 
   deleteType(type: Type) {
-    const dialogRef = this.dialog.open(DeleteTypeComponent, {
+    this.dialog.open(DeleteTypeComponent, {
       height: '500px',
       width: '500px',
       data: {
         type: type
       }
     }).afterClosed().subscribe(data => {
-      this.productService.deleteType(data).subscribe({
-        next: () => {
-          this.reset();
-          this.getTypes();
-        },
-        error: (err) => {
-          this.snackBar.open(err.error.message, '', {duration: 3000})
-        }
-      });
+      if (data) {
+        this.productService.deleteType(data).subscribe({
+          next: () => {
+            this.reset();
+            this.getTypes();
+          },
+          error: (err) => {
+            this.snackBar.open(err.error.message, '', {duration: 3000})
+          }
+        });
+      }
     });
   }
 }
