@@ -1,30 +1,23 @@
 <div style="padding: 20px">
-  <div>
+  <mat-button-toggle-group>
+    <mat-button-toggle (click)="filterByType(0)">All types</mat-button-toggle>
     @for (type of filterTypes; track type) {
-      @if (type.id === selectedTypeId) {
-        <button (click)="filterByType(type.id)" matButton="filled">
-          {{ type.name }}
-        </button>
-      } @else {
-        <button (click)="filterByType(type.id)" matButton="outlined">
-          {{ type.name }}
-        </button>
-      }
+      <mat-button-toggle (click)="filterByType(type.id)">
+        {{ type.name }}
+      </mat-button-toggle>
     }
-  </div>
+  </mat-button-toggle-group>
   <p></p>
-  <div>
-    @for (brand of filterBrands; track brand) {
-      @if (brand.id === selectedBrandId) {
-        <button (click)="filterByTypeAndBrand(brand.id)" matButton="filled">
+  @if (selectedTypeId > 0) {
+    <mat-button-toggle-group>
+      <mat-button-toggle (click)="filterByTypeAndBrand(0)">All brands</mat-button-toggle>
+      @for (brand of filterBrands; track brand) {
+        <mat-button-toggle (click)="filterByTypeAndBrand(brand.id)">
           {{ brand.name }}
-        </button>
-      } @else {
-        <button (click)="filterByTypeAndBrand(brand.id)" matButton="outlined">{{ brand.name }}
-        </button>
+        </mat-button-toggle>
       }
-    }
-  </div>
+    </mat-button-toggle-group>
+  }
   <p></p>
   <div align="center">
     @if ((isAdmin | async) || (isUser | async)) {
