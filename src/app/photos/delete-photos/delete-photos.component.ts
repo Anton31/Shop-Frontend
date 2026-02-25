@@ -1,12 +1,16 @@
 import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {Product} from "../../model/product";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
   selector: 'app-delete-photo',
   templateUrl: './delete-photos.component.html',
   styleUrls: ['./delete-photos.component.css'],
-  standalone: false
+  imports: [
+    MatDialogModule,
+    MatButtonModule
+  ]
 })
 export class DeletePhotosComponent {
   title = '';

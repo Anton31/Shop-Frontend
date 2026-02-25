@@ -14,22 +14,17 @@ import {RegisterComponent} from './register/register.component';
 import {MatTableModule} from "@angular/material/table";
 import {MatSortModule} from "@angular/material/sort";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
-import {AddBrandComponent} from './brands/add-brand/add-brand.component';
 import {TypeListComponent} from './types/type-list/type-list.component';
 import {BrandListComponent} from './brands/brand-list/brand-list.component';
 import {RouterModule} from "@angular/router";
 import {ProductListComponent} from './products/product-list/product-list.component';
-import {DeleteBrandComponent} from './brands/delete-brand/delete-brand.component';
 import {NgOptimizedImage} from "@angular/common";
 import {MatMenuModule} from "@angular/material/menu";
 import {CartComponent} from './cart/cart.component';
-import {DeletePhotosComponent} from './photos/delete-photos/delete-photos.component';
 import {ListOrdersComponent} from './orders/list-orders/list-orders.component';
 import {MatBadgeModule} from "@angular/material/badge";
 import {authInterceptor} from "./service/auth-interceptor";
-import {DeletePhotoComponent} from "./photos/delete-photo/delete-photo.component";
 import {CarouselModule} from "ngx-owl-carousel-o";
-import {AddPhotosComponent} from "./photos/add-photos/add-photos.component";
 import {GetProductComponent} from "./products/get-product/get-product.component";
 import {MatRadioModule} from "@angular/material/radio";
 import {NotFoundComponent} from "./not-found/not-found.component";
@@ -41,14 +36,11 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 @NgModule({
   declarations: [
     AppComponent,
-    AddPhotosComponent,
     GetProductComponent,
     RegisterComponent,
     CartComponent,
     CheckoutComponent,
-    DeletePhotosComponent,
     ListOrdersComponent,
-    DeletePhotoComponent,
     NotFoundComponent
   ],
   bootstrap: [AppComponent], imports: [BrowserModule,

@@ -1,12 +1,17 @@
 import {Component, Inject} from '@angular/core';
 import {ProductService} from "../../service/product-service";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {Product} from "../../model/product";
-import {FormGroup} from "@angular/forms";
+import {FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
   selector: 'app-add-photos',
-  standalone: false,
+  imports: [
+    MatDialogModule,
+    MatButtonModule,
+    ReactiveFormsModule
+  ],
   templateUrl: './add-photos.component.html',
   styleUrl: './add-photos.component.css'
 })
