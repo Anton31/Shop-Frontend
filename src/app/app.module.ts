@@ -20,7 +20,6 @@ import {RouterModule} from "@angular/router";
 import {ProductListComponent} from './products/product-list/product-list.component';
 import {NgOptimizedImage} from "@angular/common";
 import {MatMenuModule} from "@angular/material/menu";
-import {CartComponent} from './cart/cart.component';
 import {ListOrdersComponent} from './orders/list-orders/list-orders.component';
 import {MatBadgeModule} from "@angular/material/badge";
 import {authInterceptor} from "./service/auth-interceptor";
@@ -38,8 +37,6 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     AppComponent,
     GetProductComponent,
     RegisterComponent,
-    CartComponent,
-    CheckoutComponent,
     ListOrdersComponent,
     NotFoundComponent
   ],

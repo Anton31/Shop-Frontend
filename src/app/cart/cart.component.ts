@@ -4,13 +4,22 @@ import {OrderService} from "../service/order-service";
 import {Cart} from "../model/cart";
 import {Router} from "@angular/router";
 import {DialogRef} from "@angular/cdk/dialog";
+import {MatButtonModule} from "@angular/material/button";
+import {MatTableModule} from "@angular/material/table";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatIconModule} from "@angular/material/icon";
 
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
-  standalone: false
+  imports: [
+    MatButtonModule,
+    MatTableModule,
+    MatDialogModule,
+    MatIconModule
+  ]
 })
 export class CartComponent implements OnInit {
   title = 'Cart';

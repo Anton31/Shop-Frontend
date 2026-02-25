@@ -2,13 +2,21 @@ import {Component, inject, OnInit} from '@angular/core';
 import {OrderService} from "../service/order-service";
 import {Cart} from "../model/cart";
 import {Router} from "@angular/router";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {CartComponent} from "../cart/cart.component";
 import {MatDialog} from "@angular/material/dialog";
+import {MatTableModule} from "@angular/material/table";
+import {MatButtonModule} from "@angular/material/button";
+import {MatInputModule} from "@angular/material/input";
 
 @Component({
   selector: 'app-checkout',
-  standalone: false,
+  imports: [
+    MatTableModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatInputModule
+  ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.css'
 })
