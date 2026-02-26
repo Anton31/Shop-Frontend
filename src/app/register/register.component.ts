@@ -1,12 +1,21 @@
 import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {FormGroup} from "@angular/forms";
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
+import {FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {MatButtonModule} from "@angular/material/button";
+import {MatInputModule} from "@angular/material/input";
+import {MatSelectModule} from "@angular/material/select";
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
-  standalone: false
+  imports: [
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatDialogModule,
+    MatSelectModule
+  ]
 })
 export class RegisterComponent {
 

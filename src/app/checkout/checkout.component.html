@@ -6,8 +6,11 @@
     <ng-container align="center" matColumnDef="name">
       <th *matHeaderCellDef mat-header-cell>Name</th>
       <td *matCellDef="let item" mat-cell>
-        <p>
-          <img *ngIf="item.product.photos.length>0" alt="no photo" src="{{item.product.photos[0].url}}"/></p>
+        <p>@if (item.product.photos.length > 0) {
+          <p>
+            <img alt="no photo" src="{{item.product.photos[0].url}}"/>
+          </p>
+        }
         <p>{{ item.product.name }}</p>
       </td>
     </ng-container>

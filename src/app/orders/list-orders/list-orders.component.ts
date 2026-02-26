@@ -1,12 +1,19 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {OrderService} from "../../service/order-service";
 import {Order} from "../../model/order";
+import {MatButtonModule} from "@angular/material/button";
+import {MatIconModule} from "@angular/material/icon";
+import {MatTableModule} from "@angular/material/table";
 
 @Component({
   selector: 'app-list-orders',
   templateUrl: './list-orders.component.html',
   styleUrls: ['./list-orders.component.css'],
-  standalone: false
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatTableModule
+  ]
 })
 export class ListOrdersComponent implements OnInit {
   orders: Order[] = [];
