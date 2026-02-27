@@ -21,7 +21,6 @@ import {MatIconModule} from "@angular/material/icon";
 import {AsyncPipe} from "@angular/common";
 import {MatBadge} from "@angular/material/badge";
 import {RouterLink} from "@angular/router";
-import {MatButtonToggleModule} from "@angular/material/button-toggle";
 
 
 @Component({
@@ -36,8 +35,7 @@ import {MatButtonToggleModule} from "@angular/material/button-toggle";
     MatDialogModule,
     AsyncPipe,
     MatBadge,
-    RouterLink,
-    MatButtonToggleModule
+    RouterLink
   ]
 })
 export class ProductListComponent implements OnInit, OnDestroy {
@@ -128,7 +126,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   filterByType(typeId: number) {
-    if (typeId <= 0) {
+    if (typeId === this.selectedTypeId) {
       this.selectedTypeId = 0;
       this.selectedBrandId = 0;
     } else {
@@ -140,7 +138,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   filterByTypeAndBrand(brandId: number) {
-    if (brandId <= 0) {
+    if (brandId === this.selectedBrandId) {
       this.selectedBrandId = 0;
     } else {
       this.selectedBrandId = brandId;
