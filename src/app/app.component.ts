@@ -10,12 +10,23 @@ import {UserService} from "./service/user-service";
 import {UserInfo} from "./dto/user-info";
 import {Observable} from "rxjs";
 import {AuthService} from "./service/auth-service";
+import {MatButtonModule} from "@angular/material/button";
+import {MatIconModule} from "@angular/material/icon";
+import {MatMenuModule} from "@angular/material/menu";
+import {RouterModule} from "@angular/router";
+import {AsyncPipe} from "@angular/common";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  standalone: false
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    RouterModule,
+    AsyncPipe
+  ]
 })
 export class AppComponent {
   userForm!: FormGroup;
