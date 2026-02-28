@@ -1,26 +1,22 @@
 <div style="padding: 20px">
-  @for (type of filterTypes; track type) {
-    @if (type.id === selectedTypeId) {
-      <button (click)="filterByType(type.id)" matButton="filled">
-        {{ type.name }}
-      </button>
-    } @else {
-      <button (click)="filterByType(type.id)" matButton="outlined">
-        {{ type.name }}
-      </button>
-    }
+  @if (showTypeFilter) {
+    <mat-chip-listbox>
+      @for (type of filterTypes; track type) {
+        <mat-chip-option (click)="filterByType(type.id)">
+          {{ type.name }}
+        </mat-chip-option>
+      }
+    </mat-chip-listbox>
   }
   <p></p>
-  @for (brand of filterBrands; track brand) {
-    @if (brand.id === selectedBrandId) {
-      <button (click)="filterByTypeAndBrand(brand.id)" matButton="filled">
-        {{ brand.name }}
-      </button>
-    } @else {
-      <button (click)="filterByTypeAndBrand(brand.id)" matButton="outlined">
-        {{ brand.name }}
-      </button>
-    }
+  @if (selectedTypeId > 0) {
+    <mat-chip-listbox>
+      @for (brand of filterBrands; track brand) {
+        <mat-chip-option (click)="filterByTypeBrand(brand.id)">
+          {{ brand.name }}
+        </mat-chip-option>
+      }
+    </mat-chip-listbox>
   }
   <p></p>
   <div align="center">

@@ -19,8 +19,9 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatTableModule} from "@angular/material/table";
 import {MatIconModule} from "@angular/material/icon";
 import {AsyncPipe} from "@angular/common";
-import {MatBadge} from "@angular/material/badge";
-import {RouterLink} from "@angular/router";
+import {MatBadgeModule} from "@angular/material/badge";
+import {RouterModule} from "@angular/router";
+import {MatChipsModule} from "@angular/material/chips";
 
 
 @Component({
@@ -29,13 +30,14 @@ import {RouterLink} from "@angular/router";
   styleUrls: ['./product-list.component.css'],
   imports: [
     MatButtonModule,
+    MatChipsModule,
     MatTableModule,
     MatSortModule,
     MatIconModule,
     MatDialogModule,
     AsyncPipe,
-    MatBadge,
-    RouterLink
+    MatBadgeModule,
+    RouterModule
   ]
 })
 export class ProductListComponent implements OnInit, OnDestroy {
@@ -50,12 +52,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
   selectedDir = 'ASC';
   itemDto!: ItemDto;
   displayedColumns: string[] = [];
-  cartProductIds: number [] = [];
+  cartProductIds: number[] = [];
   productForm!: FormGroup;
   totalQuantity = 0;
   cart!: Cart;
   isUser!: Observable<boolean>;
   isAdmin!: Observable<boolean>;
+  showTypeFilter = true;
   productSubscription!: Subscription;
   typeSubscription!: Subscription;
   cartSubscription!: Subscription;
@@ -81,9 +84,15 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.getData();
+    this.getCart();
+  }
+
+  getData() {
+    this.showTypeFilter = true;
     this.getProducts();
     this.getProductTypes();
-    this.getCart();
+    this.getProductBrands(this.selectedTypeId);
   }
 
   ngOnDestroy(): void {
@@ -137,7 +146,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.getProducts();
   }
 
-  filterByTypeAndBrand(brandId: number) {
+  filterByTypeBrand(brandId: number) {
     if (brandId === this.selectedBrandId) {
       this.selectedBrandId = 0;
     } else {
@@ -147,10 +156,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   addProduct() {
+    this.showTypeFilter = false;
     this.productForm = this.fb.group({
       typeId: [1],
       brandId: [1],
-      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(16)]],
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
       price: [1000]
     });
 
@@ -165,9 +175,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.productService.addProduct(data).subscribe({
           next: () => {
             this.reset();
-            this.getProducts();
-            this.getProductTypes();
-            this.getProductBrands(this.selectedTypeId);
+            this.getData();
           }, error: (error) => {
             this.snackBar.open(error.error.message, '', {duration: 3000})
           }
@@ -177,11 +185,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   editProduct(product: Product) {
+    this.showTypeFilter = false;
     this.productForm = this.fb.group({
       id: [product.id],
       typeId: [product.type.id],
       brandId: [product.brand.id],
-      name: [product.name, [Validators.required, Validators.minLength(3), Validators.maxLength(16)]],
+      name: [product.name, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
       price: [product.price]
     })
 
@@ -194,9 +203,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.productService.editProduct(data).subscribe({
           next: () => {
             this.reset();
-            this.getProducts();
-            this.getProductTypes();
-            this.getProductBrands(this.selectedTypeId);
+            this.getData();
           }, error: (error) => {
             this.snackBar.open(error.error.message, '', {duration: 3000})
           }
@@ -206,6 +213,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   deleteProduct(product: Product) {
+    this.showTypeFilter = false;
     this.dialog.open(DeleteProductComponent, {
       height: '600px',
       width: '500px',
@@ -217,9 +225,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.productService.deleteProduct(data).subscribe({
           next: () => {
             this.reset();
-            this.getProducts();
-            this.getProductTypes();
-            this.getProductBrands(this.selectedTypeId);
+            this.getData();
           }, error: (error) => {
             this.snackBar.open(error.error.message, '', {duration: 3000})
           }
