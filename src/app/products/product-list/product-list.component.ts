@@ -89,7 +89,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   getData() {
-    this.showTypeFilter = true;
     this.getProducts();
     this.getProductTypes();
     this.getProductBrands(this.selectedTypeId);
@@ -120,9 +119,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   getProductTypes() {
+    this.showTypeFilter = false;
     this.typeSubscription = this.productService.getProductTypes('name', 'ASC')
       .subscribe(data => {
         this.filterTypes = data;
+        this.showTypeFilter = true;
       });
   }
 
@@ -156,7 +157,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   addProduct() {
-    this.showTypeFilter = false;
     this.productForm = this.fb.group({
       typeId: [1],
       brandId: [1],
@@ -165,8 +165,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
     });
 
     this.dialog.open(AddProductComponent, {
+      minWidth: '600px',
       height: '600px',
-      width: '500px',
       data: {
         productForm: this.productForm, new: true
       }
@@ -185,7 +185,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   editProduct(product: Product) {
-    this.showTypeFilter = false;
     this.productForm = this.fb.group({
       id: [product.id],
       typeId: [product.type.id],
@@ -195,8 +194,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
     })
 
     this.dialog.open(AddProductComponent, {
+      minWidth: '600px',
       height: '600px',
-      width: '500px',
       data: {productForm: this.productForm, new: false}
     }).afterClosed().subscribe(data => {
       if (data) {
@@ -213,10 +212,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   deleteProduct(product: Product) {
-    this.showTypeFilter = false;
     this.dialog.open(DeleteProductComponent, {
+      minWidth: '600px',
       height: '600px',
-      width: '500px',
       data: {
         product: product
       }
