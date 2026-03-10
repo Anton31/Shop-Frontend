@@ -1,42 +1,44 @@
 <div align="center">
   <h3 mat-dialog-title>{{ title }}</h3>
-<form [formGroup]="data.userForm">
-  <div>
-    <mat-form-field>
-      <mat-label>Role:</mat-label>
-      <mat-select formControlName="role">
-        <mat-option [value]="'user'">USER</mat-option>
-        <mat-option [value]="'admin'">ADMIN</mat-option>
-      </mat-select>
-    </mat-form-field>
+  <form [formGroup]="data.userForm">
+    <div>
+      <mat-form-field>
+        <mat-label>Role:</mat-label>
+        <mat-select formControlName="role">
+          <mat-option [value]="'user'">USER</mat-option>
+          <mat-option [value]="'admin'">ADMIN</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    @if (title === 'register') {
+      <div>
+        <mat-form-field>
+          <mat-label>User:</mat-label>
+          <input formControlName="username" matInput>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label>Email:</mat-label>
+          <input formControlName="email" matInput>
+        </mat-form-field>
+      </div>
+    }
+    <div>
+      <mat-form-field>
+        <mat-label>Password:</mat-label>
+        <input formControlName="password" matInput>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Confirm password:</mat-label>
+        <input formControlName="passwordConfirmed" matInput>
+      </mat-form-field>
+    </div>
+  </form>
+  <div align="center" mat-dialog-actions>
+    <button (click)="onNoClick()" matButton="text">No Thanks</button>
+    <button [mat-dialog-close]="data.userForm.value" matButton="filled">Ok</button>
   </div>
-  <div>
-    <mat-form-field>
-      <mat-label>User:</mat-label>
-      <input formControlName="username" matInput>
-    </mat-form-field>
-  </div>
-  <div>
-    <mat-form-field>
-      <mat-label>Email:</mat-label>
-      <input formControlName="email" matInput>
-    </mat-form-field>
-  </div>
-  <div>
-    <mat-form-field>
-      <mat-label>Password:</mat-label>
-      <input formControlName="password" matInput>
-    </mat-form-field>
-  </div>
-  <div>
-    <mat-form-field>
-      <mat-label>Confirm password:</mat-label>
-      <input formControlName="passwordConfirmed" matInput>
-    </mat-form-field>
-  </div>
-</form>
-<div align="center" mat-dialog-actions>
-  <button (click)="onNoClick()" matButton="text">No Thanks</button>
-  <button [mat-dialog-close]="data.userForm.value" matButton="filled">Ok</button>
-</div>
 </div>
