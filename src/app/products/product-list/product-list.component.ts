@@ -58,7 +58,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   cart!: Cart;
   isUser!: Observable<boolean>;
   isAdmin!: Observable<boolean>;
-  showTypeFilter = true;
   productSubscription!: Subscription;
   typeSubscription!: Subscription;
   cartSubscription!: Subscription;
@@ -84,14 +83,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getData();
-    this.getCart();
-  }
-
-  getData() {
     this.getProducts();
     this.getProductTypes();
-    this.getProductBrands(this.selectedTypeId);
+    this.getCart();
   }
 
   ngOnDestroy(): void {
@@ -119,11 +113,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   getProductTypes() {
-    this.showTypeFilter = false;
     this.typeSubscription = this.productService.getProductTypes('name', 'ASC')
       .subscribe(data => {
         this.filterTypes = data;
-        this.showTypeFilter = true;
       });
   }
 
@@ -174,8 +166,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
       if (data) {
         this.productService.addProduct(data).subscribe({
           next: () => {
-            this.reset();
-            this.getData();
+            this.getProducts();
+            this.getProductTypes();
+            this.getProductBrands(this.selectedTypeId);
           }, error: (error) => {
             this.snackBar.open(error.error.message, '', {duration: 3000})
           }
@@ -201,8 +194,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
       if (data) {
         this.productService.editProduct(data).subscribe({
           next: () => {
-            this.reset();
-            this.getData();
+            this.getProducts();
+            this.getProductTypes();
+            this.getProductBrands(this.selectedTypeId);
           }, error: (error) => {
             this.snackBar.open(error.error.message, '', {duration: 3000})
           }
@@ -222,8 +216,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
       if (data) {
         this.productService.deleteProduct(data).subscribe({
           next: () => {
-            this.reset();
-            this.getData();
+            this.getProducts();
+            this.getProductTypes();
+            this.getProductBrands(this.selectedTypeId);
           }, error: (error) => {
             this.snackBar.open(error.error.message, '', {duration: 3000})
           }

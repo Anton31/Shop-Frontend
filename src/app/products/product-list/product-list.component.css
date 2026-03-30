@@ -3,11 +3,6 @@ img {
   max-width: 100px;
 }
 
-.selectedChip {
-  background-color: green !important;
-  --mat-chip-with-icon-selected-icon-color: white;
-  --mat-chip-selected-label-text-color: white;
-}
 
 
 
