@@ -3,7 +3,12 @@ img {
   max-width: 100px;
 }
 
-
+.selectedChip {
+  background-color: green !important;
+  span {
+    color: white;
+  }
+}
 
 
 

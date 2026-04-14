@@ -166,9 +166,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       if (data) {
         this.productService.addProduct(data).subscribe({
           next: () => {
-            this.getProducts();
-            this.getProductTypes();
-            this.getProductBrands(this.selectedTypeId);
+            this.reset();
           }, error: (error) => {
             this.snackBar.open(error.error.message, '', {duration: 3000})
           }
@@ -194,9 +192,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       if (data) {
         this.productService.editProduct(data).subscribe({
           next: () => {
-            this.getProducts();
-            this.getProductTypes();
-            this.getProductBrands(this.selectedTypeId);
+            this.reset();
           }, error: (error) => {
             this.snackBar.open(error.error.message, '', {duration: 3000})
           }
@@ -216,9 +212,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       if (data) {
         this.productService.deleteProduct(data).subscribe({
           next: () => {
-            this.getProducts();
-            this.getProductTypes();
-            this.getProductBrands(this.selectedTypeId);
+            this.reset();
           }, error: (error) => {
             this.snackBar.open(error.error.message, '', {duration: 3000})
           }
@@ -230,6 +224,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
   reset() {
     this.selectedTypeId = 0;
     this.selectedBrandId = 0;
+    this.getProducts();
+    this.getProductTypes();
+    this.getProductBrands(this.selectedTypeId);
   }
 
   addItemToCart(product: Product) {

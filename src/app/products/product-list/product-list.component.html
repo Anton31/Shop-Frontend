@@ -1,24 +1,31 @@
 <div style="padding: 20px">
-  <mat-chip-listbox>
-    <mat-chip-option (click)="filterByType(0)" [selected]="selectedTypeId==0">
-      All
-    </mat-chip-option>
+  <mat-chip-set>
     @for (type of filterTypes; track type) {
-      <mat-chip-option (click)="filterByType(type.id)">
-        {{ type.name }}
-      </mat-chip-option>
-    }
-  </mat-chip-listbox>
-  <p></p>
-  @if (selectedTypeId > 0) {
-    <mat-chip-listbox>
-      @for (brand of filterBrands; track brand) {
-        <mat-chip-option (click)="filterByTypeBrand(brand.id)">
-          {{ brand.name }}
-        </mat-chip-option>
+      @if (type.id === selectedTypeId) {
+        <mat-chip (click)="filterByType(type.id)" class="selectedChip">
+          <span>{{ type.name }}</span>
+        </mat-chip>
+      } @else {
+        <mat-chip (click)="filterByType(type.id)">
+          {{ type.name }}
+        </mat-chip>
       }
-    </mat-chip-listbox>
-  }
+    }
+  </mat-chip-set>
+  <p></p>
+  <mat-chip-set>
+    @for (brand of filterBrands; track brand) {
+      @if (brand.id === selectedBrandId) {
+        <mat-chip (click)="filterByTypeBrand(brand.id)" class="selectedChip">
+          <span>{{ brand.name }}</span>
+        </mat-chip>
+      } @else {
+        <mat-chip (click)="filterByTypeBrand(brand.id)">
+          {{ brand.name }}
+        </mat-chip>
+      }
+    }
+  </mat-chip-set>
   <p></p>
   <div align="center">
     @if ((isAdmin | async) || (isUser | async)) {
