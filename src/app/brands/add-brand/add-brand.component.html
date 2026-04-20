@@ -19,6 +19,6 @@
   </p>
 </form>
 <div align="center" mat-dialog-actions>
-  <button (click)="onNoClick()" mat-button>No Thanks</button>
-  <button [disabled]="!data.brandForm.valid" [mat-dialog-close]="data.brandForm.value" mat-button>Ok</button>
+  <button (click)="onNoClick()" matButton="outlined">No Thanks</button>
+  <button [disabled]="!data.brandForm.valid" [mat-dialog-close]="data.brandForm.value" matButton="filled">Ok</button>
 </div>

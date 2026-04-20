@@ -84,12 +84,10 @@ export class ProductService {
   }
 
   addType(data: any): Observable<any> {
-
     return this.http.post<any>(`${this.baseUrl}/products/type`, data);
   }
 
   editType(data: any): Observable<any> {
-
     return this.http.put<any>(`${this.baseUrl}/products/type`, data);
   }
 

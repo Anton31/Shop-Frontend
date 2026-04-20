@@ -46,7 +46,7 @@
     </p>
   </form>
   <div align="center" mat-dialog-actions>
-    <button (click)="onNoClick()" mat-button>No Thanks</button>
+    <button (click)="onNoClick()" matButton="outlined">No Thanks</button>
     <button [disabled]="!data.productForm.valid" [mat-dialog-close]="data.productForm.value" matButton="filled">Ok</button>
   </div>
 </div>

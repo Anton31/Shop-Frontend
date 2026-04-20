@@ -1,5 +1,5 @@
 <h1 align="center">{{title}}</h1>
 <div align="center" mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">No Thanks</button>
-  <button mat-button [mat-dialog-close]="id" cdkFocusInitial>Ok</button>
+  <button (click)="onNoClick()" matButton="outlined">No Thanks</button>
+  <button [mat-dialog-close]="id" matButton="filled">Ok</button>
 </div>

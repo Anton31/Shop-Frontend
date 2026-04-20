@@ -53,11 +53,11 @@ export class GetProductComponent {
 
     this.activatedRoute.params.subscribe((params) => {
       this.productId = Number(params['id']);
-      this.getProducts(this.productId);
+      this.getProduct(this.productId);
     });
   }
 
-  getProducts(id: number) {
+  getProduct(id: number) {
     this.productService.getProduct(id).subscribe(data => {
       this.product = data;
     });
@@ -77,7 +77,7 @@ export class GetProductComponent {
       }
     }).afterClosed().subscribe(data => {
       this.productService.addPhotos(data).subscribe(data => {
-        this.getProducts(data);
+        this.getProduct(data);
       })
     })
   }
@@ -91,7 +91,7 @@ export class GetProductComponent {
       }
     }).afterClosed().subscribe(data => {
       this.productService.deletePhotos(data).subscribe(data => {
-        this.getProducts(data);
+        this.getProduct(data);
       });
     });
   }
@@ -105,7 +105,7 @@ export class GetProductComponent {
       }
     }).afterClosed().subscribe(data => {
       this.productService.deletePhoto(product.id, data.id).subscribe(data => {
-        this.getProducts(data);
+        this.getProduct(data);
       });
     });
   }
