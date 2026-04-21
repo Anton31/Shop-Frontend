@@ -4,14 +4,6 @@
       <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by name">Type</th>
       <td *matCellDef="let type" mat-cell>{{ type.name }}</td>
     </ng-container>
-    <ng-container matColumnDef="brands">
-      <th *matHeaderCellDef mat-header-cell>Brands</th>
-      <td *matCellDef="let type" mat-cell>
-        @for (brand of type.brands; track brand) {
-          <p>{{ brand.name }}</p>
-        }
-      </td>
-    </ng-container>
     <ng-container matColumnDef="edit">
       <th *matHeaderCellDef mat-header-cell>Edit</th>
       <td *matCellDef="let type" mat-cell>

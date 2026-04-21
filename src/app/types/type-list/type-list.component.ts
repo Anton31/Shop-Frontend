@@ -1,4 +1,4 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Type} from "../../model/type";
 import {ProductService} from "../../service/product-service";
 import {AddTypeComponent} from "../add-type/add-type.component";
@@ -28,22 +28,26 @@ import {AsyncPipe} from "@angular/common";
     AsyncPipe
   ]
 })
-export class TypeListComponent implements OnDestroy {
+export class TypeListComponent implements OnInit, OnDestroy {
   types: Type[] = [];
-  displayedColumns: string[] = ['name', 'brands', 'edit', 'delete'];
+  displayedColumns: string[] = ['name', 'edit', 'delete'];
   typeForm!: FormGroup;
   currentSort = 'name';
   currentDir = 'ASC';
   isAdmin: Observable<boolean>;
   subscription!: Subscription;
 
-  constructor(
-    private authService: AuthService,
-    private productService: ProductService,
-    private fb: FormBuilder,
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar) {
+  private authService = inject(AuthService);
+  private productService = inject(ProductService);
+  private fb = inject(FormBuilder);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+
+  constructor() {
     this.isAdmin = this.authService.userSubject.pipe(map(data => data.role === 'admin'));
+  }
+
+  ngOnInit(): void {
     this.getTypes();
   }
 
