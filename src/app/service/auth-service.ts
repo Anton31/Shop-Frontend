@@ -11,7 +11,7 @@ import {UserService} from "./user-service";
 @Injectable({providedIn: 'root'})
 export class AuthService {
 
-  userSubject = new BehaviorSubject<UserInfo>(new UserInfo('', ''));
+  userSubject = new BehaviorSubject<UserInfo>(new UserInfo('', '', ''));
   cartSubject = new BehaviorSubject<Cart>(new Cart());
 
   private orderService = inject(OrderService);

@@ -1,4 +1,4 @@
-import {Component, Inject, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject, signal} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
@@ -10,6 +10,7 @@ import {MatIconModule} from "@angular/material/icon";
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
+  standalone: true,
   imports: [
     MatButtonModule,
     MatIconModule,
@@ -17,12 +18,15 @@ import {MatIconModule} from "@angular/material/icon";
     MatInputModule,
     MatDialogModule,
     MatSelectModule
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
+
 export class RegisterComponent {
 
   title: string;
   hide = signal(true);
+  hide2 = signal(true);
 
   constructor(public dialogRef: MatDialogRef<RegisterComponent>,
               @Inject(MAT_DIALOG_DATA) public data: UserDialogData) {
@@ -33,8 +37,21 @@ export class RegisterComponent {
     }
   }
 
+  get username() {
+    return this.data.userForm.get('username')!;
+  }
+
+  get email() {
+    return this.data.userForm.get('email')!;
+  }
+
   clickEvent(event: MouseEvent) {
     this.hide.set(!this.hide())
+    event.preventDefault();
+  }
+
+  clickEvent2(event: MouseEvent) {
+    this.hide2.set(!this.hide2())
     event.preventDefault();
   }
 

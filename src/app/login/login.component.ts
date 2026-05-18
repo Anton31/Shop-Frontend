@@ -1,13 +1,10 @@
 import {Component, inject} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {Observable} from "rxjs";
-import {UserInfo} from "../dto/user-info";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../service/auth-service";
 import {UserService} from "../service/user-service";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {RegisterComponent} from "../register/register.component";
-import {AsyncPipe} from "@angular/common";
 import {MatButtonModule} from "@angular/material/button";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
@@ -19,15 +16,17 @@ import {RouterModule} from "@angular/router";
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
-    RouterModule,
-    AsyncPipe
+    RouterModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
+  standalone: true
 })
 export class LoginComponent {
   userForm!: FormGroup;
-  user!: Observable<UserInfo>;
+  username!: string;
+  email!: string;
+  role!: string;
 
   private authService = inject(AuthService);
   private userService = inject(UserService);
@@ -36,7 +35,11 @@ export class LoginComponent {
   private snackBar = inject(MatSnackBar);
 
   constructor() {
-    this.user = this.authService.userSubject.pipe();
+    this.authService.userSubject.subscribe(data => {
+      this.username = data.username;
+      this.role = data.role;
+      this.email = data.email;
+    })
   }
 
   login() {
@@ -50,8 +53,8 @@ export class LoginComponent {
   addUser() {
     this.userForm = this.fb.group({
       role: ['user'],
-      username: [''],
-      email: [''],
+      username: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: [''],
       passwordConfirmed: [''],
     })
@@ -75,7 +78,9 @@ export class LoginComponent {
 
   editUser() {
     this.userForm = this.fb.group({
-      role: ['user'],
+      role: [this.role],
+      username: [this.username],
+      email: [this.email],
       password: [''],
       passwordConfirmed: [''],
     })

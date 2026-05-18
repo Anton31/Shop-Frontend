@@ -28,6 +28,7 @@ import {MatChipsModule} from "@angular/material/chips";
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
+  standalone: true,
   imports: [
     MatButtonModule,
     MatChipsModule,

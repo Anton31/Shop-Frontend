@@ -15,12 +15,25 @@
         <mat-form-field>
           <mat-label>User:</mat-label>
           <input formControlName="username" matInput>
+          @if (username.invalid && (username.dirty || username.touched)) {
+            @if (username.hasError('required')) {
+              <div>username is required</div>
+            }
+          }
         </mat-form-field>
       </div>
       <div>
         <mat-form-field>
           <mat-label>Email:</mat-label>
           <input formControlName="email" matInput>
+          @if (email.invalid && (email.dirty || email.touched)) {
+            @if (email.hasError('required')) {
+              <div>email is required</div>
+            }
+            @if (email.hasError('email')) {
+              <div>not valid email</div>
+            }
+          }
         </mat-form-field>
       </div>
     }
@@ -31,14 +44,15 @@
         <button (click)="clickEvent($event)" matIconButton matSuffix>
           <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
+
       </mat-form-field>
     </div>
     <div>
       <mat-form-field>
         <mat-label>Confirm password:</mat-label>
-        <input [type]="hide() ? 'password' : 'text'" formControlName="passwordConfirmed" matInput/>
-        <button (click)="clickEvent($event)" matIconButton matSuffix>
-          <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        <input [type]="hide2() ? 'password' : 'text'" formControlName="passwordConfirmed" matInput/>
+        <button (click)="clickEvent2($event)" matIconButton matSuffix>
+          <mat-icon>{{ hide2() ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
       </mat-form-field>
     </div>
