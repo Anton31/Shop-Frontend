@@ -8,15 +8,13 @@ import {RegisterComponent} from "../register/register.component";
 import {MatButtonModule} from "@angular/material/button";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
-import {RouterModule} from "@angular/router";
 
 @Component({
   selector: 'app-login',
   imports: [
     MatButtonModule,
     MatIconModule,
-    MatMenuModule,
-    RouterModule
+    MatMenuModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
@@ -55,7 +53,8 @@ export class LoginComponent {
       role: ['user'],
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: [''],
+      password: ['', [Validators.required, Validators.minLength(4),
+        Validators.pattern('^(?=.*[0-9])(?=.*[A-Z]).{2,}$')]],
       passwordConfirmed: [''],
     })
     this.dialog.open(RegisterComponent, {
@@ -81,7 +80,8 @@ export class LoginComponent {
       role: [this.role],
       username: [this.username],
       email: [this.email],
-      password: [''],
+      password: ['', [Validators.required, Validators.minLength(4),
+        Validators.pattern('^(?=.*[0-9])(?=.*[A-Z]).{2,}$')]],
       passwordConfirmed: [''],
     })
     this.dialog.open(RegisterComponent, {

@@ -24,16 +24,15 @@ import {MatIconModule} from "@angular/material/icon";
 
 export class RegisterComponent {
 
-  title: string;
-  hide = signal(true);
-  hide2 = signal(true);
+  title = signal('');
+  hidePassword = signal(true);
 
   constructor(public dialogRef: MatDialogRef<RegisterComponent>,
               @Inject(MAT_DIALOG_DATA) public data: UserDialogData) {
     if (data.new) {
-      this.title = 'register'
+      this.title.set('register');
     } else {
-      this.title = 'change password';
+      this.title.set('change password');
     }
   }
 
@@ -45,13 +44,12 @@ export class RegisterComponent {
     return this.data.userForm.get('email')!;
   }
 
-  clickEvent(event: MouseEvent) {
-    this.hide.set(!this.hide())
-    event.preventDefault();
+  get password() {
+    return this.data.userForm.get('password')!;
   }
 
-  clickEvent2(event: MouseEvent) {
-    this.hide2.set(!this.hide2())
+  togglePasswordVisibility(event: MouseEvent) {
+    this.hidePassword.set(!this.hidePassword())
     event.preventDefault();
   }
 

@@ -1,5 +1,5 @@
 <div align="center">
-  <h3 mat-dialog-title>{{ title }}</h3>
+  <h3 mat-dialog-title>{{ title() }}</h3>
   <form [formGroup]="data.userForm">
     <div>
       <mat-form-field>
@@ -10,7 +10,7 @@
         </mat-select>
       </mat-form-field>
     </div>
-    @if (title === 'register') {
+    @if (title() === 'register') {
       <div>
         <mat-form-field>
           <mat-label>User:</mat-label>
@@ -40,19 +40,29 @@
     <div>
       <mat-form-field>
         <mat-label>Password:</mat-label>
-        <input [type]="hide() ? 'password' : 'text'" formControlName="password" matInput/>
-        <button (click)="clickEvent($event)" matIconButton matSuffix>
-          <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        <input [type]="hidePassword() ? 'password' : 'text'" formControlName="password" matInput/>
+        @if (password.invalid && (password.dirty || password.touched)) {
+          @if (password.hasError('required')) {
+            <div>password is required</div>
+          }
+          @if (password.hasError('minlength')) {
+            <div>password must be at least 4 characters long</div>
+          }
+          @if (password.hasError('pattern')) {
+            <div>password must contain at least one capital letter and one digit</div>
+          }
+        }
+        <button (click)="togglePasswordVisibility($event)" matIconButton matSuffix>
+          <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
-
       </mat-form-field>
     </div>
     <div>
       <mat-form-field>
         <mat-label>Confirm password:</mat-label>
-        <input [type]="hide2() ? 'password' : 'text'" formControlName="passwordConfirmed" matInput/>
-        <button (click)="clickEvent2($event)" matIconButton matSuffix>
-          <mat-icon>{{ hide2() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        <input [type]="hidePassword() ? 'password' : 'text'" formControlName="passwordConfirmed" matInput/>
+        <button matIconButton matSuffix>
+          <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
       </mat-form-field>
     </div>
