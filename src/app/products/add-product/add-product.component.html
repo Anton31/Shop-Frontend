@@ -6,7 +6,7 @@
       <mat-form-field>
         <mat-label>Type</mat-label>
         <mat-select formControlName="typeId" required>
-          <mat-option [value]="1">None</mat-option>
+          <mat-option [value]="0">None</mat-option>
           @for (type of types; track type) {
             <mat-option [value]="type.id">{{ type.name }}</mat-option>
           }
@@ -17,7 +17,7 @@
       <mat-form-field>
         <mat-label>Brand</mat-label>
         <mat-select formControlName="brandId" required>
-          <mat-option [value]="1">None</mat-option>
+          <mat-option [value]="0">None</mat-option>
           @for (brand of brands; track brand) {
             <mat-option [value]="brand.id">{{ brand.name }}</mat-option>
           }
@@ -30,10 +30,10 @@
         <input formControlName="name" matInput required>
         @if (name.invalid && (name.dirty || name.touched)) {
           @if (name.hasError('required')) {
-            <div>Name is required.</div>
+            <mat-error>Name is required</mat-error>
           }
           @if (name.hasError('minlength') || name.hasError('maxlength')) {
-            <div>Name must be between 3 and 20 characters</div>
+            <mat-error>Name must be between 3 and 20 characters</mat-error>
           }
         }
       </mat-form-field>
@@ -47,6 +47,7 @@
   </form>
   <div align="center" mat-dialog-actions>
     <button (click)="onNoClick()" matButton="outlined">No Thanks</button>
-    <button [disabled]="!data.productForm.valid" [mat-dialog-close]="data.productForm.value" matButton="filled">Ok</button>
+    <button [disabled]="!data.productForm.valid" [mat-dialog-close]="data.productForm.value" matButton="filled">Ok
+    </button>
   </div>
 </div>

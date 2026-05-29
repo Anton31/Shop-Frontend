@@ -17,7 +17,7 @@
           <input formControlName="username" matInput>
           @if (username.invalid && (username.dirty || username.touched)) {
             @if (username.hasError('required')) {
-              <div>username is required</div>
+              <mat-error>username is required</mat-error>
             }
           }
         </mat-form-field>
@@ -28,10 +28,10 @@
           <input formControlName="email" matInput>
           @if (email.invalid && (email.dirty || email.touched)) {
             @if (email.hasError('required')) {
-              <div>email is required</div>
+              <mat-error>email is required</mat-error>
             }
             @if (email.hasError('email')) {
-              <div>not valid email</div>
+              <mat-error>not valid email</mat-error>
             }
           }
         </mat-form-field>
@@ -43,13 +43,13 @@
         <input [type]="hidePassword() ? 'password' : 'text'" formControlName="password" matInput/>
         @if (password.invalid && (password.dirty || password.touched)) {
           @if (password.hasError('required')) {
-            <div>password is required</div>
+            <mat-error>password is required</mat-error>
           }
           @if (password.hasError('minlength')) {
-            <div>password must be at least 4 characters long</div>
+            <mat-error>password must be at least 4 characters</mat-error>
           }
           @if (password.hasError('pattern')) {
-            <div>password must contain at least one capital letter and one digit</div>
+            <mat-error>password must contain at least one capital letter and one digit</mat-error>
           }
         }
         <button (click)="togglePasswordVisibility($event)" matIconButton matSuffix>
