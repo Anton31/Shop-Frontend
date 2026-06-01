@@ -1,4 +1,4 @@
-<div align="center">
+<div class="user-container">
   <h3 mat-dialog-title>{{ title() }}</h3>
   <form [formGroup]="data.userForm">
     <div>
@@ -67,7 +67,7 @@
       </mat-form-field>
     </div>
   </form>
-  <div align="center" mat-dialog-actions>
+  <div mat-dialog-actions>
     <button (click)="onNoClick()" matButton="outlined">No Thanks</button>
     <button [mat-dialog-close]="data.userForm.value" matButton="filled">Ok</button>
   </div>

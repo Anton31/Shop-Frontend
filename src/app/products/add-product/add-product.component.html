@@ -1,8 +1,8 @@
-<div align="center">
+<div class="product-container">
   <h1 mat-dialog-title>{{ title }}</h1>
   <form [formGroup]="data.productForm">
     <input formControlName="id" type="hidden"/>
-    <p align="center">
+    <p>
       <mat-form-field>
         <mat-label>Type</mat-label>
         <mat-select formControlName="typeId" required>
@@ -13,7 +13,7 @@
         </mat-select>
       </mat-form-field>
     </p>
-    <p align="center">
+    <p>
       <mat-form-field>
         <mat-label>Brand</mat-label>
         <mat-select formControlName="brandId" required>
@@ -24,30 +24,28 @@
         </mat-select>
       </mat-form-field>
     </p>
-    <p align="center">
+    <p>
       <mat-form-field>
         <mat-label>Name:</mat-label>
         <input formControlName="name" matInput required>
-        @if (name.invalid && (name.dirty || name.touched)) {
-          @if (name.hasError('required')) {
-            <mat-error>Name is required</mat-error>
-          }
-          @if (name.hasError('minlength') || name.hasError('maxlength')) {
-            <mat-error>Name must be between 3 and 20 characters</mat-error>
-          }
+        @if (name.hasError('required')) {
+          <mat-error>Name is required</mat-error>
+        }
+        @if (name.hasError('minlength')) {
+          <mat-error>Name must be at least 3 characters</mat-error>
         }
       </mat-form-field>
     </p>
-    <p align="center">
+    <p>
       <mat-form-field>
         <mat-label>Price:</mat-label>
         <input formControlName="price" matInput>
       </mat-form-field>
     </p>
   </form>
-  <div align="center" mat-dialog-actions>
+  <mat-dialog-actions>
     <button (click)="onNoClick()" matButton="outlined">No Thanks</button>
     <button [disabled]="!data.productForm.valid" [mat-dialog-close]="data.productForm.value" matButton="filled">Ok
     </button>
-  </div>
+  </mat-dialog-actions>
 </div>

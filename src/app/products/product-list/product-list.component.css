@@ -3,8 +3,15 @@ img {
   max-width: 100px;
 }
 
+.product-list-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
 .selectedChip {
   background-color: green !important;
+
   span {
     color: white;
   }
