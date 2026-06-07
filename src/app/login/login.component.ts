@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, Signal} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../service/auth-service";
 import {UserService} from "../service/user-service";
@@ -8,6 +8,8 @@ import {RegisterComponent} from "../register/register.component";
 import {MatButtonModule} from "@angular/material/button";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
+import {toSignal} from "@angular/core/rxjs-interop";
+import {UserInfo} from "../dto/user-info";
 
 @Component({
   selector: 'app-login',
@@ -22,9 +24,7 @@ import {MatIconModule} from "@angular/material/icon";
 })
 export class LoginComponent {
   userForm!: FormGroup;
-  username!: string;
-  email!: string;
-  role!: string;
+  user: Signal<UserInfo>;
 
   private authService = inject(AuthService);
   private userService = inject(UserService);
@@ -33,11 +33,7 @@ export class LoginComponent {
   private snackBar = inject(MatSnackBar);
 
   constructor() {
-    this.authService.userSubject.subscribe(data => {
-      this.username = data.username;
-      this.role = data.role;
-      this.email = data.email;
-    })
+    this.user = toSignal(this.authService.userSubject, {initialValue: new UserInfo('', '', '')});
   }
 
   login() {
@@ -77,9 +73,9 @@ export class LoginComponent {
 
   editUser() {
     this.userForm = this.fb.group({
-      role: [this.role],
-      username: [this.username],
-      email: [this.email],
+      role: [this.user().role],
+      username: [this.user().username],
+      email: [this.user().email],
       password: ['', [Validators.required, Validators.minLength(4),
         Validators.pattern('^(?=.*[0-9])(?=.*[A-Z]).{2,}$')]],
       passwordConfirmed: [''],

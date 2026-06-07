@@ -1,7 +1,7 @@
 <div align="right" style="margin: 20px">
-  @if (role === 'user' || role === 'admin') {
+  @if (user().role === 'admin' || user().role === 'user') {
     <button [matMenuTriggerFor]="menu" color="primary" matButton="outlined">
-      {{ username }} : {{ role }}
+      {{ user().username }} : {{ user().role }}
     </button>
     <mat-menu #menu="matMenu">
       <p>
