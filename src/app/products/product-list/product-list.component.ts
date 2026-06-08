@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit, Signal} from '@angular/core';
 import {Product} from "../../model/product";
 import {Type} from "../../model/type";
 import {Brand} from "../../model/brand";
@@ -12,23 +12,22 @@ import {OrderService} from "../../service/order-service";
 import {ItemDto} from "../../dto/item-dto";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Cart} from "../../model/cart";
-import {map, Observable, Subscription} from "rxjs";
+import {map, Subscription} from "rxjs";
 import {AuthService} from "../../service/auth-service";
 import {CartComponent} from "../../cart/cart.component";
 import {MatButtonModule} from "@angular/material/button";
 import {MatTableModule} from "@angular/material/table";
 import {MatIconModule} from "@angular/material/icon";
-import {AsyncPipe} from "@angular/common";
 import {MatBadgeModule} from "@angular/material/badge";
 import {RouterModule} from "@angular/router";
 import {MatChipsModule} from "@angular/material/chips";
+import {toSignal} from "@angular/core/rxjs-interop";
 
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css'],
-  standalone: true,
   imports: [
     MatButtonModule,
     MatChipsModule,
@@ -36,7 +35,6 @@ import {MatChipsModule} from "@angular/material/chips";
     MatSortModule,
     MatIconModule,
     MatDialogModule,
-    AsyncPipe,
     MatBadgeModule,
     RouterModule
   ]
@@ -53,15 +51,15 @@ export class ProductListComponent implements OnInit, OnDestroy {
   selectedDir = 'ASC';
   itemDto!: ItemDto;
   displayedColumns: string[] = [];
-  cartProductIds: number[] = [];
   productForm!: FormGroup;
-  totalQuantity = 0;
-  cart!: Cart;
-  isUser!: Observable<boolean>;
-  isAdmin!: Observable<boolean>;
+
+  cart!: Signal<Cart>;
+  isUser!: Signal<boolean>;
+  isAdmin!: Signal<boolean>;
+
   productSubscription!: Subscription;
   typeSubscription!: Subscription;
-  cartSubscription!: Subscription;
+
 
   private productService = inject(ProductService);
   private authService = inject(AuthService);
@@ -74,13 +72,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.itemDto = new ItemDto(0, 0, 0);
     this.displayedColumns = ['name', 'photo', 'price', 'type', 'brand', 'actions', 'cart'];
 
-    this.isAdmin = this.authService.userSubject.pipe(map(data => data.role === 'admin'));
-    this.isUser = this.authService.userSubject.pipe(map(data => data.role === 'user'));
+    this.isAdmin = toSignal(this.authService.userSubject
+      .pipe(map(data => data.role === 'admin')), {initialValue: false});
 
-    this.cartSubscription = this.authService.cartSubject.subscribe(data => {
-      this.totalQuantity = data.totalQuantity;
-      this.cartProductIds = data.cartProductsIds;
-    });
+    this.isUser = toSignal(this.authService.userSubject
+      .pipe(map(data => data.role === 'user')), {initialValue: false});
+
+    this.cart = toSignal(this.authService.cartSubject, {initialValue: new Cart()});
+
   }
 
   ngOnInit(): void {
@@ -92,7 +91,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.productSubscription.unsubscribe();
     this.typeSubscription.unsubscribe();
-    this.cartSubscription.unsubscribe();
   }
 
   getCart() {
