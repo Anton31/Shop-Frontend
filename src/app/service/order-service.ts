@@ -36,7 +36,7 @@ export class OrderService {
     return this.http.post<any>(`${this.baseUrl}/cart/order`, data);
   }
 
-  removeOrder(itemId: number): Observable<any> {
-    return this.http.delete<any>(`${this.baseUrl}/cart/order/${itemId}`);
+  removeOrder(orderId: number): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/cart/order/${orderId}`);
   }
 }

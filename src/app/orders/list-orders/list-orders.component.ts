@@ -27,8 +27,8 @@ export class ListOrdersComponent implements OnInit {
     })
   }
 
-  deleteOrder(itemId: number) {
-    this.orderService.removeOrder(itemId).subscribe(() => {
+  deleteOrder(orderId: number) {
+    this.orderService.removeOrder(orderId).subscribe(() => {
       this.getOrders();
     })
   }

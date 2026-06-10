@@ -6,14 +6,15 @@ import {UserInfo} from "../dto/user-info";
 import {Cart} from "../model/cart";
 import {OrderService} from "./order-service";
 import {UserService} from "./user-service";
+import {toSignal} from "@angular/core/rxjs-interop";
 
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
 
   userSubject = new BehaviorSubject<UserInfo>(new UserInfo('', '', ''));
-  cartSubject = new BehaviorSubject<Cart>(new Cart());
-
+  private cartSubject = new BehaviorSubject<Cart>(new Cart());
+  public cart = toSignal(this.cartSubject, {requireSync: true});
   private orderService = inject(OrderService);
   private oauthService = inject(OAuthService);
   private userService = inject(UserService);

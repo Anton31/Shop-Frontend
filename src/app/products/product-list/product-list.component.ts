@@ -78,7 +78,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.isUser = toSignal(this.authService.userSubject
       .pipe(map(data => data.role === 'user')), {initialValue: false});
 
-    this.cart = toSignal(this.authService.cartSubject, {initialValue: new Cart()});
+    this.cart = this.authService.cart;
 
   }
 
