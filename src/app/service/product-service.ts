@@ -53,19 +53,6 @@ export class ProductService {
     return this.http.get<Brand[]>(`${this.baseUrl}/products/productBrand`, {params: params});
   }
 
-  getProducts(typeId: number, brandId: number,
-              sort: string, dir: string): Observable<Product[]> {
-    let params = new HttpParams();
-    params = params.set('sort', sort);
-    params = params.set('dir', dir);
-    if (typeId > 0) {
-      params = params.set('typeId', typeId);
-    }
-    if (brandId > 0) {
-      params = params.set('brandId', brandId);
-    }
-    return this.http.get<Product[]>(`${this.baseUrl}/products/product`, {params: params});
-  }
 
   getProduct(id: number): Observable<Product> {
     return this.http.get<Product>(`${this.baseUrl}/products/product/${id}`);

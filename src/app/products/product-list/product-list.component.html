@@ -1,7 +1,7 @@
 <div style="padding: 20px">
   <mat-chip-set>
     @for (type of filterTypes; track type) {
-      @if (type.id === selectedTypeId) {
+      @if (type.id === selectedTypeId()) {
         <mat-chip (click)="filterByType(type.id)" class="selectedChip">
           <span>{{ type.name }}</span>
         </mat-chip>
@@ -14,7 +14,7 @@
   </mat-chip-set>
   <mat-chip-set>
     @for (brand of filterBrands; track brand) {
-      @if (brand.id === selectedBrandId) {
+      @if (brand.id === selectedBrandId()) {
         <mat-chip (click)="filterByTypeBrand(brand.id)" class="selectedChip">
           <span>{{ brand.name }}</span>
         </mat-chip>
@@ -35,7 +35,8 @@
       </button>
     }
     <p></p>
-    <table (matSortChange)="sortProducts($event)" [dataSource]="products" class="mat-elevation-z8" mat-table matSort>
+    <table (matSortChange)="sortProducts($event)" [dataSource]="products.value()" class="mat-elevation-z8" mat-table
+           matSort>
       <ng-container matColumnDef="name">
         <th *matHeaderCellDef mat-header-cell mat-sort-header sortActionDescription="Sort by name"> Name</th>
         <td *matCellDef="let product" mat-cell>

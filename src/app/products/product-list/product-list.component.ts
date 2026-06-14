@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy, OnInit, Signal} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit, signal, Signal} from '@angular/core';
 import {Product} from "../../model/product";
 import {Type} from "../../model/type";
 import {Brand} from "../../model/brand";
@@ -22,6 +22,7 @@ import {MatBadgeModule} from "@angular/material/badge";
 import {RouterModule} from "@angular/router";
 import {MatChipsModule} from "@angular/material/chips";
 import {toSignal} from "@angular/core/rxjs-interop";
+import {httpResource, HttpResourceRef} from "@angular/common/http";
 
 
 @Component({
@@ -42,13 +43,15 @@ import {toSignal} from "@angular/core/rxjs-interop";
 export class ProductListComponent implements OnInit, OnDestroy {
 
   title = 'products';
-  products: Product[] = [];
+  products: HttpResourceRef<any>;
   filterTypes: Type[] = [];
   filterBrands: Brand[] = [];
-  selectedTypeId = 0;
-  selectedBrandId = 0;
-  selectedSort = 'name';
-  selectedDir = 'ASC';
+
+  selectedTypeId = signal(0);
+  selectedBrandId = signal(0);
+  selectedSort = signal('name');
+  selectedDir = signal('ASC');
+
   itemDto!: ItemDto;
   displayedColumns: string[] = [];
   productForm!: FormGroup;
@@ -57,7 +60,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   isUser!: Signal<boolean>;
   isAdmin!: Signal<boolean>;
 
-  productSubscription!: Subscription;
   typeSubscription!: Subscription;
 
 
@@ -69,6 +71,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
   private snackBar = inject(MatSnackBar);
 
   constructor() {
+    this.products = httpResource(() => `http://localhost:8080/products/product?typeId=
+    ${this.selectedTypeId()}&brandId=${this.selectedBrandId()}&sort=${this.selectedSort()}&dir=${this.selectedDir()}`);
+
     this.itemDto = new ItemDto(0, 0, 0);
     this.displayedColumns = ['name', 'photo', 'price', 'type', 'brand', 'actions', 'cart'];
 
@@ -83,13 +88,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.getProducts();
     this.getProductTypes();
     this.getCart();
   }
 
   ngOnDestroy(): void {
-    this.productSubscription.unsubscribe();
     this.typeSubscription.unsubscribe();
   }
 
@@ -97,18 +100,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.authService.getCart();
   }
 
-  getProducts() {
-    this.productSubscription = this.productService.getProducts(
-      this.selectedTypeId, this.selectedBrandId, this.selectedSort, this.selectedDir)
-      .subscribe(data => {
-        this.products = data;
-      })
-  }
-
   sortProducts(sortState: Sort) {
-    this.selectedSort = sortState.active;
-    this.selectedDir = sortState.direction;
-    this.getProducts();
+    this.selectedSort.set(sortState.active);
+    this.selectedDir.set(sortState.direction);
   }
 
   getProductTypes() {
@@ -119,32 +113,30 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   getProductBrands(typeId: number) {
-    this.selectedTypeId = typeId;
-    this.productService.getProductBrands(this.selectedTypeId, 'name', 'ASC')
+    this.selectedTypeId.set(typeId);
+    this.productService.getProductBrands(this.selectedTypeId(), 'name', 'ASC')
       .subscribe(data => {
         this.filterBrands = data;
       });
   }
 
   filterByType(typeId: number) {
-    if (typeId === this.selectedTypeId) {
-      this.selectedTypeId = 0;
-      this.selectedBrandId = 0;
+    if (typeId === this.selectedTypeId()) {
+      this.selectedTypeId.set(0);
+      this.selectedBrandId.set(0);
     } else {
-      this.selectedTypeId = typeId;
-      this.selectedBrandId = 0;
+      this.selectedTypeId.set(typeId);
+      this.selectedBrandId.set(0);
     }
-    this.getProductBrands(this.selectedTypeId);
-    this.getProducts();
+    this.getProductBrands(this.selectedTypeId());
   }
 
   filterByTypeBrand(brandId: number) {
-    if (brandId === this.selectedBrandId) {
-      this.selectedBrandId = 0;
+    if (brandId === this.selectedBrandId()) {
+      this.selectedBrandId.set(0);
     } else {
-      this.selectedBrandId = brandId;
+      this.selectedBrandId.set(brandId);
     }
-    this.getProducts();
   }
 
   addProduct() {
@@ -166,6 +158,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.productService.addProduct(data).subscribe({
           next: () => {
             this.reset();
+            this.products.reload();
           }, error: (error) => {
             this.snackBar.open(error.error.message, '', {duration: 3000})
           }
@@ -200,6 +193,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.productService.editProduct(data).subscribe({
           next: () => {
             this.reset();
+            this.products.reload();
           }, error: (error) => {
             this.snackBar.open(error.error.message, '', {duration: 3000})
           }
@@ -220,6 +214,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.productService.deleteProduct(data).subscribe({
           next: () => {
             this.reset();
+            this.products.reload();
           }, error: (error) => {
             this.snackBar.open(error.error.message, '', {duration: 3000})
           }
@@ -229,11 +224,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   reset() {
-    this.selectedTypeId = 0;
-    this.selectedBrandId = 0;
-    this.getProducts();
+    this.selectedTypeId.set(0);
+    this.selectedBrandId.set(0);
+    this.selectedSort.set('name');
+    this.selectedDir.set('ASC');
     this.getProductTypes();
-    this.getProductBrands(this.selectedTypeId);
+    this.getProductBrands(this.selectedTypeId());
   }
 
   addItemToCart(product: Product) {
