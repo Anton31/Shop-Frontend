@@ -1,5 +1,5 @@
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {Injectable} from "@angular/core";
+import {HttpClient, HttpParams, httpResource} from "@angular/common/http";
+import {inject, Injectable, Signal} from "@angular/core";
 import {Observable} from "rxjs";
 
 import {Type} from "../model/type";
@@ -8,11 +8,11 @@ import {Product} from "../model/product";
 
 @Injectable({providedIn: 'root'})
 export class ProductService {
+
   fileArray!: File[];
   baseUrl: string = 'http://localhost:8080';
 
-  constructor(private http: HttpClient) {
-  }
+  private http = inject(HttpClient);
 
   setFiles(file: FileList) {
     this.fileArray = Array.from(file);
@@ -20,6 +20,11 @@ export class ProductService {
 
   deleteFiles() {
     this.fileArray = [];
+  }
+
+  getProducts(typeId: Signal<number>, brandId: Signal<number>, sort: Signal<string>, dir: Signal<string>) {
+    return httpResource(() => `http://localhost:8080/products/product?typeId=
+    ${typeId()}&brandId=${brandId()}&sort=${sort()}&dir=${dir()}`);
   }
 
   getAllTypes(sort: string, dir: string): Observable<Type[]> {
@@ -43,14 +48,9 @@ export class ProductService {
     return this.http.get<Type[]>(`${this.baseUrl}/products/productType`, {params: params});
   }
 
-  getProductBrands(typeId: number, sort: string, dir: string): Observable<Brand[]> {
-    let params = new HttpParams();
-    if (typeId > 0) {
-      params = params.set('typeId', typeId);
-    }
-    params = params.set('sort', sort);
-    params = params.set('dir', dir);
-    return this.http.get<Brand[]>(`${this.baseUrl}/products/productBrand`, {params: params});
+  getProductBrands(typeId: Signal<number>) {
+    return httpResource(() => typeId() > 0 ? `${this.baseUrl}/products/productBrand?typeId=
+    ${typeId()}` : `${this.baseUrl}/products/productBrand`);
   }
 
 

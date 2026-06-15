@@ -1,7 +1,6 @@
-import {Component, inject, OnDestroy, OnInit, signal, Signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, signal, Signal} from '@angular/core';
 import {Product} from "../../model/product";
 import {Type} from "../../model/type";
-import {Brand} from "../../model/brand";
 import {ProductService} from "../../service/product-service";
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -22,7 +21,7 @@ import {MatBadgeModule} from "@angular/material/badge";
 import {RouterModule} from "@angular/router";
 import {MatChipsModule} from "@angular/material/chips";
 import {toSignal} from "@angular/core/rxjs-interop";
-import {httpResource, HttpResourceRef} from "@angular/common/http";
+import {HttpResourceRef} from "@angular/common/http";
 
 
 @Component({
@@ -38,14 +37,14 @@ import {httpResource, HttpResourceRef} from "@angular/common/http";
     MatDialogModule,
     MatBadgeModule,
     RouterModule
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductListComponent implements OnInit, OnDestroy {
 
-  title = 'products';
-  products: HttpResourceRef<any>;
+  products!: HttpResourceRef<any>;
   filterTypes: Type[] = [];
-  filterBrands: Brand[] = [];
+  filterBrands!: HttpResourceRef<any>;
 
   selectedTypeId = signal(0);
   selectedBrandId = signal(0);
@@ -53,7 +52,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   selectedDir = signal('ASC');
 
   itemDto!: ItemDto;
-  displayedColumns: string[] = [];
+  displayedColumns = signal(['']);
   productForm!: FormGroup;
 
   cart!: Signal<Cart>;
@@ -61,7 +60,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   isAdmin!: Signal<boolean>;
 
   typeSubscription!: Subscription;
-
 
   private productService = inject(ProductService);
   private authService = inject(AuthService);
@@ -71,11 +69,14 @@ export class ProductListComponent implements OnInit, OnDestroy {
   private snackBar = inject(MatSnackBar);
 
   constructor() {
-    this.products = httpResource(() => `http://localhost:8080/products/product?typeId=
-    ${this.selectedTypeId()}&brandId=${this.selectedBrandId()}&sort=${this.selectedSort()}&dir=${this.selectedDir()}`);
+    this.products = this.productService.getProducts(
+      this.selectedTypeId, this.selectedBrandId, this.selectedSort, this.selectedDir);
+
+    this.filterBrands = this.productService.getProductBrands(this.selectedTypeId);
 
     this.itemDto = new ItemDto(0, 0, 0);
-    this.displayedColumns = ['name', 'photo', 'price', 'type', 'brand', 'actions', 'cart'];
+
+    this.displayedColumns.set(['name', 'photo', 'price', 'type', 'brand', 'actions', 'cart']);
 
     this.isAdmin = toSignal(this.authService.userSubject
       .pipe(map(data => data.role === 'admin')), {initialValue: false});
@@ -114,10 +115,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   getProductBrands(typeId: number) {
     this.selectedTypeId.set(typeId);
-    this.productService.getProductBrands(this.selectedTypeId(), 'name', 'ASC')
-      .subscribe(data => {
-        this.filterBrands = data;
-      });
+
   }
 
   filterByType(typeId: number) {
@@ -129,6 +127,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       this.selectedBrandId.set(0);
     }
     this.getProductBrands(this.selectedTypeId());
+
   }
 
   filterByTypeBrand(brandId: number) {
@@ -158,7 +157,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.productService.addProduct(data).subscribe({
           next: () => {
             this.reset();
-            this.products.reload();
           }, error: (error) => {
             this.snackBar.open(error.error.message, '', {duration: 3000})
           }
@@ -193,7 +191,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.productService.editProduct(data).subscribe({
           next: () => {
             this.reset();
-            this.products.reload();
           }, error: (error) => {
             this.snackBar.open(error.error.message, '', {duration: 3000})
           }
@@ -214,7 +211,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.productService.deleteProduct(data).subscribe({
           next: () => {
             this.reset();
-            this.products.reload();
           }, error: (error) => {
             this.snackBar.open(error.error.message, '', {duration: 3000})
           }
@@ -228,6 +224,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.selectedBrandId.set(0);
     this.selectedSort.set('name');
     this.selectedDir.set('ASC');
+    this.products.reload();
     this.getProductTypes();
     this.getProductBrands(this.selectedTypeId());
   }
