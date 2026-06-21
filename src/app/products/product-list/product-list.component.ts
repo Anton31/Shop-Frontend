@@ -40,7 +40,7 @@ import {HttpResourceRef} from "@angular/common/http";
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductListComponent implements OnInit, OnDestroy {
+class ProductListComponent implements OnInit, OnDestroy {
 
   products!: HttpResourceRef<any>;
   filterTypes: Type[] = [];
@@ -107,7 +107,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   getProductTypes() {
-    this.typeSubscription = this.productService.getProductTypes('name', 'ASC')
+    this.typeSubscription = this.productService.getProductTypes('id', 'ASC')
       .subscribe(data => {
         this.filterTypes = data;
       });
@@ -115,7 +115,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   getProductBrands(typeId: number) {
     this.selectedTypeId.set(typeId);
-
   }
 
   filterByType(typeId: number) {
@@ -140,9 +139,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   addProduct() {
     this.productForm = this.fb.group({
-      typeId: [0],
-      brandId: [0],
-      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+      typeId: [1],
+      brandId: [1],
+      name: ['', [Validators.required, Validators.minLength(3)]],
       price: [1000]
     });
 
@@ -166,19 +165,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   editProduct(product: Product) {
-    let typeId = 0;
-    let brandId = 0;
-    if (product.type !== null) {
-      typeId = product.type.id
-    }
-    if (product.brand !== null) {
-      brandId = product.brand.id
-    }
+
     this.productForm = this.fb.group({
       id: [product.id],
-      typeId: [typeId],
-      brandId: [brandId],
-      name: [product.name, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
+      typeId: [product.type.id],
+      brandId: [product.brand.id],
+      name: [product.name, [Validators.required, Validators.minLength(3)]],
       price: [product.price]
     })
 
@@ -248,3 +240,5 @@ export class ProductListComponent implements OnInit, OnDestroy {
     });
   }
 }
+
+export default ProductListComponent

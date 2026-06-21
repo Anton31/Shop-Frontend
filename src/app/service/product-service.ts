@@ -23,7 +23,7 @@ export class ProductService {
   }
 
   getProducts(typeId: Signal<number>, brandId: Signal<number>, sort: Signal<string>, dir: Signal<string>) {
-    return httpResource(() => `http://localhost:8080/products/product?typeId=
+    return httpResource(() => `${this.baseUrl}/products/product?typeId=
     ${typeId()}&brandId=${brandId()}&sort=${sort()}&dir=${dir()}`);
   }
 
@@ -49,8 +49,7 @@ export class ProductService {
   }
 
   getProductBrands(typeId: Signal<number>) {
-    return httpResource(() => typeId() > 0 ? `${this.baseUrl}/products/productBrand?typeId=
-    ${typeId()}` : `${this.baseUrl}/products/productBrand`);
+    return httpResource(() => `${this.baseUrl}/products/productBrand?typeId=${typeId()}`);
   }
 
 
