@@ -40,14 +40,14 @@ import {HttpResourceRef} from "@angular/common/http";
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-class ProductListComponent implements OnInit, OnDestroy {
+export class ProductListComponent implements OnInit, OnDestroy {
 
   products!: HttpResourceRef<any>;
   filterTypes: Type[] = [];
   filterBrands!: HttpResourceRef<any>;
 
-  selectedTypeId = signal(0);
-  selectedBrandId = signal(0);
+  selectedTypeId = signal<number | ''>('');
+  selectedBrandId = signal<number | ''>('');
   selectedSort = signal('name');
   selectedDir = signal('ASC');
 
@@ -113,17 +113,17 @@ class ProductListComponent implements OnInit, OnDestroy {
       });
   }
 
-  getProductBrands(typeId: number) {
+  getProductBrands(typeId: number | '') {
     this.selectedTypeId.set(typeId);
   }
 
   filterByType(typeId: number) {
     if (typeId === this.selectedTypeId()) {
-      this.selectedTypeId.set(0);
-      this.selectedBrandId.set(0);
+      this.selectedTypeId.set('');
+      this.selectedBrandId.set('');
     } else {
       this.selectedTypeId.set(typeId);
-      this.selectedBrandId.set(0);
+      this.selectedBrandId.set('');
     }
     this.getProductBrands(this.selectedTypeId());
 
@@ -131,7 +131,7 @@ class ProductListComponent implements OnInit, OnDestroy {
 
   filterByTypeBrand(brandId: number) {
     if (brandId === this.selectedBrandId()) {
-      this.selectedBrandId.set(0);
+      this.selectedBrandId.set('');
     } else {
       this.selectedBrandId.set(brandId);
     }
@@ -212,13 +212,13 @@ class ProductListComponent implements OnInit, OnDestroy {
   }
 
   reset() {
-    this.selectedTypeId.set(0);
-    this.selectedBrandId.set(0);
+    this.selectedTypeId.set('');
+    this.selectedBrandId.set('');
     this.selectedSort.set('name');
     this.selectedDir.set('ASC');
     this.products.reload();
     this.getProductTypes();
-    this.getProductBrands(this.selectedTypeId());
+    this.filterBrands.reload();
   }
 
   addItemToCart(product: Product) {
@@ -241,4 +241,4 @@ class ProductListComponent implements OnInit, OnDestroy {
   }
 }
 
-export default ProductListComponent
+

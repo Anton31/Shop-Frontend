@@ -1,5 +1,5 @@
 import {GetProductComponent} from "./products/get-product/get-product.component";
-import ProductListComponent from "./products/product-list/product-list.component";
+import {ProductListComponent} from "./products/product-list/product-list.component";
 import {TypeListComponent} from "./types/type-list/type-list.component";
 import {BrandListComponent} from "./brands/brand-list/brand-list.component";
 import {CheckoutComponent} from "./checkout/checkout.component";
