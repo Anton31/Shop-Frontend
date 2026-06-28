@@ -74,7 +74,7 @@ export class BrandListComponent implements OnInit, OnDestroy {
 
   addBrand() {
     this.brandForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
+      name: ['', [Validators.required, Validators.minLength(3)]]
     });
     this.dialog.open(AddBrandComponent, {
       height: '500px',
@@ -100,7 +100,7 @@ export class BrandListComponent implements OnInit, OnDestroy {
   editBrand(brand: Brand) {
     this.brandForm = this.fb.group({
       id: [brand.id],
-      name: [brand.name, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
+      name: [brand.name, [Validators.required, Validators.minLength(3)]]
     })
     this.dialog.open(AddBrandComponent, {
       height: '500px',

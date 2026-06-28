@@ -75,7 +75,7 @@ export class TypeListComponent implements OnInit, OnDestroy {
 
   addType() {
     this.typeForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
+      name: ['', [Validators.required, Validators.minLength(3)]]
     })
     this.dialog.open(AddTypeComponent, {
       height: '500px',
@@ -101,7 +101,7 @@ export class TypeListComponent implements OnInit, OnDestroy {
   editType(type: Type) {
     this.typeForm = this.fb.group({
       id: [type.id],
-      name: [type.name, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
+      name: [type.name, [Validators.required, Validators.minLength(3)]]
     })
     this.dialog.open(AddTypeComponent, {
       height: '500px',
