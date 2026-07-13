@@ -1,9 +1,6 @@
-import {HttpClient, HttpParams, httpResource} from "@angular/common/http";
+import {HttpClient, httpResource} from "@angular/common/http";
 import {inject, Injectable, Signal} from "@angular/core";
 import {Observable} from "rxjs";
-
-import {Type} from "../model/type";
-import {Brand} from "../model/brand";
 import {Product} from "../model/product";
 
 @Injectable({providedIn: 'root'})
@@ -28,31 +25,21 @@ export class ProductService {
     ${typeId()}&brandId=${brandId()}&sort=${sort()}&dir=${dir()}`);
   }
 
-  getAllTypes(sort: string, dir: string): Observable<Type[]> {
-    let params = new HttpParams();
-    params = params.set('sort', sort);
-    params = params.set('dir', dir);
-    return this.http.get<Type[]>(`${this.baseUrl}/products/type`, {params: params});
+  getAllTypes(sort: Signal<string>, dir: Signal<string>) {
+    return httpResource(() => `${this.baseUrl}/products/type?sort=${sort()}&dir=${dir()}`);
   }
 
-  getAllBrands(sort: string, dir: string): Observable<Brand[]> {
-    let params = new HttpParams();
-    params = params.set('sort', sort);
-    params = params.set('dir', dir);
-    return this.http.get<Brand[]>(`${this.baseUrl}/products/brand`, {params: params});
+  getAllBrands(sort: Signal<string>, dir: Signal<string>) {
+    return httpResource(() => `${this.baseUrl}/products/brand?sort=${sort()}&dir=${dir()}`);
   }
 
-  getProductTypes(sort: string, dir: string): Observable<Type[]> {
-    let params = new HttpParams();
-    params = params.set('sort', sort);
-    params = params.set('dir', dir);
-    return this.http.get<Type[]>(`${this.baseUrl}/products/productType`, {params: params});
+  getProductTypes() {
+    return httpResource(() => `${this.baseUrl}/products/productType`);
   }
 
   getProductBrands(typeId: Signal<number | ''>) {
     return httpResource(() => `${this.baseUrl}/products/productBrand?typeId=${typeId()}`);
   }
-
 
   getProduct(id: number): Observable<Product> {
     return this.http.get<Product>(`${this.baseUrl}/products/product/${id}`);

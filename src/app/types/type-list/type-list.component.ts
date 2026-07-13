@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, Signal, signal} from '@angular/core';
 import {Type} from "../../model/type";
 import {ProductService} from "../../service/product-service";
 import {AddTypeComponent} from "../add-type/add-type.component";
@@ -7,12 +7,13 @@ import {DeleteTypeComponent} from "../delete-type/delete-type.component";
 import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MatSortModule, Sort} from "@angular/material/sort";
-import {map, Observable, Subscription} from "rxjs";
+import {map} from "rxjs";
 import {AuthService} from "../../service/auth-service";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {MatTableModule} from "@angular/material/table";
-import {AsyncPipe} from "@angular/common";
+import {HttpResourceRef} from "@angular/common/http";
+import {toSignal} from "@angular/core/rxjs-interop";
 
 @Component({
   selector: 'app-type-list',
@@ -24,18 +25,17 @@ import {AsyncPipe} from "@angular/common";
     MatIconModule,
     MatTableModule,
     MatSortModule,
-    MatSnackBarModule,
-    AsyncPipe
+    MatSnackBarModule
   ]
 })
-export class TypeListComponent implements OnInit, OnDestroy {
-  types: Type[] = [];
+export class TypeListComponent {
+  types: HttpResourceRef<any>;
   displayedColumns: string[] = ['name', 'edit', 'delete'];
   typeForm!: FormGroup;
-  currentSort = 'name';
-  currentDir = 'ASC';
-  isAdmin: Observable<boolean>;
-  subscription!: Subscription;
+
+  currentSort = signal('name');
+  currentDir = signal('ASC');
+  isAdmin: Signal<boolean>;
 
   private authService = inject(AuthService);
   private productService = inject(ProductService);
@@ -44,33 +44,20 @@ export class TypeListComponent implements OnInit, OnDestroy {
   private snackBar = inject(MatSnackBar);
 
   constructor() {
-    this.isAdmin = this.authService.userSubject.pipe(map(data => data.role === 'admin'));
-  }
-
-  ngOnInit(): void {
-    this.getTypes();
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.types = this.productService.getAllTypes(this.currentSort, this.currentDir);
+    this.isAdmin = toSignal(this.authService.userSubject.pipe(map(data => data.role === 'admin')),
+      {initialValue: false});
   }
 
   sortTypes(sortState: Sort) {
-    this.currentDir = sortState.direction;
-    this.currentSort = sortState.active;
-    this.getTypes();
+    this.currentDir.set(sortState.direction);
+    this.currentSort.set(sortState.active);
   }
 
   reset() {
-    this.currentSort = 'name';
-    this.currentDir = 'ASC';
-  }
-
-  getTypes() {
-    this.subscription = this.productService.getAllTypes(this.currentSort, this.currentDir)
-      .subscribe(data => {
-        this.types = data;
-      });
+    this.currentSort.set('name');
+    this.currentDir.set('ASC');
+    this.types.reload();
   }
 
   addType() {
@@ -88,7 +75,6 @@ export class TypeListComponent implements OnInit, OnDestroy {
         this.productService.addType(data).subscribe({
           next: () => {
             this.reset();
-            this.getTypes();
           },
           error: (err) => {
             this.snackBar.open(err.error.message, '', {duration: 3000})
@@ -114,7 +100,6 @@ export class TypeListComponent implements OnInit, OnDestroy {
         this.productService.editType(data).subscribe({
           next: () => {
             this.reset();
-            this.getTypes();
           },
           error: (err) => {
             this.snackBar.open(err.error.message, '', {duration: 3000})
@@ -136,7 +121,6 @@ export class TypeListComponent implements OnInit, OnDestroy {
         this.productService.deleteType(data).subscribe({
           next: () => {
             this.reset();
-            this.getTypes();
           },
           error: (err) => {
             this.snackBar.open(err.error.message, '', {duration: 3000})

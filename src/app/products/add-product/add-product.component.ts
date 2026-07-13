@@ -1,14 +1,12 @@
-import {Component, inject, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, Inject, signal} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogModule} from "@angular/material/dialog";
 import {ProductService} from "../../service/product-service";
-import {Brand} from "../../model/brand";
-import {Type} from "../../model/type";
 import {FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {DialogRef} from "@angular/cdk/dialog";
-import {Subscription} from "rxjs";
 import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
 import {MatButtonModule} from "@angular/material/button";
+import {HttpResourceRef} from "@angular/common/http";
 
 @Component({
   selector: 'app-add-product',
@@ -22,13 +20,16 @@ import {MatButtonModule} from "@angular/material/button";
     MatDialogModule
   ]
 })
-export class AddProductComponent implements OnInit, OnDestroy {
+export class AddProductComponent {
   title: string;
-  types!: Type[];
-  brands!: Brand[];
+
+  types!: HttpResourceRef<any>;
+  brands!: HttpResourceRef<any>;
+
+  currentSort = signal('name');
+  currentDir = signal('ASC');
+
   productForm: FormGroup;
-  typeSubscription!: Subscription;
-  brandSubscription!: Subscription;
 
   private productService = inject(ProductService);
   private dialogRef = inject(DialogRef);
@@ -40,37 +41,17 @@ export class AddProductComponent implements OnInit, OnDestroy {
       this.title = 'Edit product'
     }
     this.productForm = data.productForm;
-  }
 
+    this.types = this.productService.getAllTypes(this.currentSort, this.currentDir);
+    this.brands = this.productService.getAllBrands(this.currentSort, this.currentDir);
+  }
 
   get name() {
     return this.productForm.get('name')!;
   }
 
-  getTypes() {
-    this.typeSubscription = this.productService.getAllTypes('name', 'ASC').subscribe(data => {
-      this.types = data;
-    });
-  }
-
-  getBrands() {
-    this.brandSubscription = this.productService.getAllBrands('name', 'ASC').subscribe(data => {
-      this.brands = data;
-    });
-  }
-
   onNoClick(): void {
     this.dialogRef.close();
-  }
-
-  ngOnInit(): void {
-    this.getTypes();
-    this.getBrands();
-  }
-
-  ngOnDestroy(): void {
-    this.typeSubscription.unsubscribe();
-    this.brandSubscription.unsubscribe();
   }
 }
 

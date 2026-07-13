@@ -1,6 +1,5 @@
-import {ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, signal, Signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, signal, Signal} from '@angular/core';
 import {Product} from "../../model/product";
-import {Type} from "../../model/type";
 import {ProductService} from "../../service/product-service";
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -11,7 +10,7 @@ import {OrderService} from "../../service/order-service";
 import {ItemDto} from "../../dto/item-dto";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Cart} from "../../model/cart";
-import {map, Subscription} from "rxjs";
+import {map} from "rxjs";
 import {AuthService} from "../../service/auth-service";
 import {CartComponent} from "../../cart/cart.component";
 import {MatButtonModule} from "@angular/material/button";
@@ -40,10 +39,10 @@ import {HttpResourceRef} from "@angular/common/http";
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductListComponent implements OnInit, OnDestroy {
+export class ProductListComponent {
 
   products!: HttpResourceRef<any>;
-  filterTypes: Type[] = [];
+  filterTypes!: HttpResourceRef<any>;
   filterBrands!: HttpResourceRef<any>;
 
   selectedTypeId = signal<number | ''>('');
@@ -59,8 +58,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   isUser!: Signal<boolean>;
   isAdmin!: Signal<boolean>;
 
-  typeSubscription!: Subscription;
-
   private productService = inject(ProductService);
   private authService = inject(AuthService);
   private orderService = inject(OrderService);
@@ -71,7 +68,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   constructor() {
     this.products = this.productService.getProducts(
       this.selectedTypeId, this.selectedBrandId, this.selectedSort, this.selectedDir);
-
+    this.filterTypes = this.productService.getProductTypes();
     this.filterBrands = this.productService.getProductBrands(this.selectedTypeId);
 
     this.itemDto = new ItemDto(0, 0, 0);
@@ -88,15 +85,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   }
 
-  ngOnInit(): void {
-    this.getProductTypes();
-    this.getCart();
-  }
-
-  ngOnDestroy(): void {
-    this.typeSubscription.unsubscribe();
-  }
-
   getCart() {
     this.authService.getCart();
   }
@@ -104,13 +92,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   sortProducts(sortState: Sort) {
     this.selectedSort.set(sortState.active);
     this.selectedDir.set(sortState.direction);
-  }
-
-  getProductTypes() {
-    this.typeSubscription = this.productService.getProductTypes('id', 'ASC')
-      .subscribe(data => {
-        this.filterTypes = data;
-      });
   }
 
   getProductBrands(typeId: number | '') {
@@ -165,7 +146,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   editProduct(product: Product) {
-
     this.productForm = this.fb.group({
       id: [product.id],
       typeId: [product.type.id],
@@ -212,12 +192,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   reset() {
-    this.selectedTypeId.set('');
-    this.selectedBrandId.set('');
-    this.selectedSort.set('name');
-    this.selectedDir.set('ASC');
     this.products.reload();
-    this.getProductTypes();
+    this.filterTypes.reload();
     this.filterBrands.reload();
   }
 

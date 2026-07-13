@@ -22,7 +22,7 @@
   </div>
   <br/>
   <div align="center">
-    @if (isAdmin | async) {
+    @if (isAdmin()) {
       @for (photo of product.photos; track photo.id) {
         <img [src]="photo.url"/>
         <button (click)="deletePhoto(product, photo)" color="primary" matIconButton>

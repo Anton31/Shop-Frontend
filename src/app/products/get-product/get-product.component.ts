@@ -1,10 +1,10 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, Signal} from '@angular/core';
 import {CarouselModule, OwlOptions} from "ngx-owl-carousel-o";
 import {ProductService} from "../../service/product-service";
 import {Product} from "../../model/product";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
-import {map, Observable} from "rxjs";
+import {map} from "rxjs";
 import {AddPhotosComponent} from "../../photos/add-photos/add-photos.component";
 import {DeletePhotosComponent} from "../../photos/delete-photos/delete-photos.component";
 import {DeletePhotoComponent} from "../../photos/delete-photo/delete-photo.component";
@@ -14,7 +14,7 @@ import {AuthService} from "../../service/auth-service";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {MatRadioModule} from "@angular/material/radio";
-import {AsyncPipe} from "@angular/common";
+import {toSignal} from "@angular/core/rxjs-interop";
 
 @Component({
   selector: 'app-get-product',
@@ -23,8 +23,7 @@ import {AsyncPipe} from "@angular/common";
     MatIconModule,
     MatDialogModule,
     MatRadioModule,
-    CarouselModule,
-    AsyncPipe
+    CarouselModule
   ],
   templateUrl: './get-product.component.html',
   styleUrl: './get-product.component.css'
@@ -39,7 +38,7 @@ export class GetProductComponent {
   product!: Product;
   title = '';
   photoForm!: FormGroup;
-  isAdmin!: Observable<boolean>;
+  isAdmin!: Signal<boolean>;
   productId = 0;
 
   private authService = inject(AuthService);
@@ -49,7 +48,8 @@ export class GetProductComponent {
   private activatedRoute = inject(ActivatedRoute);
 
   constructor() {
-    this.isAdmin = this.authService.userSubject.pipe(map(data => data.role === 'admin'));
+    this.isAdmin = toSignal(this.authService.userSubject.pipe(map(data => data.role === 'admin'))
+      , {initialValue: false});
 
     this.activatedRoute.params.subscribe((params) => {
       this.productId = Number(params['id']);

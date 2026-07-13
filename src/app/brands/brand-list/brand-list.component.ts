@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, Signal, signal} from '@angular/core';
 import {ProductService} from "../../service/product-service";
 import {Brand} from "../../model/brand";
 import {AddBrandComponent} from "../add-brand/add-brand.component";
@@ -8,12 +8,13 @@ import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MatSortModule, Sort} from "@angular/material/sort";
-import {map, Observable, Subscription} from "rxjs";
+import {map} from "rxjs";
 import {AuthService} from "../../service/auth-service";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {MatTableModule} from "@angular/material/table";
-import {AsyncPipe} from "@angular/common";
+import {HttpResourceRef} from "@angular/common/http";
+import {toSignal} from "@angular/core/rxjs-interop";
 
 
 @Component({
@@ -26,17 +27,17 @@ import {AsyncPipe} from "@angular/common";
     MatIconModule,
     MatTableModule,
     MatSortModule,
-    MatSnackBarModule,
-    AsyncPipe
+    MatSnackBarModule
   ]
 })
-export class BrandListComponent implements OnInit, OnDestroy {
-  brands: Brand[] = [];
+export class BrandListComponent {
+  brands!: HttpResourceRef<any>;
   brandForm!: FormGroup;
   displayedColumns: string[] = ['name', 'edit', 'delete'];
-  currentDir = 'ASC';
-  isLoggedIn!: Observable<boolean>;
-  brandSubscription!: Subscription;
+
+  currentSort = signal('name');
+  currentDir = signal('ASC');
+  isLoggedIn!: Signal<boolean>;
 
   private authService = inject(AuthService);
   private productService = inject(ProductService);
@@ -45,31 +46,18 @@ export class BrandListComponent implements OnInit, OnDestroy {
   private snackBar = inject(MatSnackBar);
 
   constructor() {
-    this.isLoggedIn = this.authService.userSubject.pipe(map(value => value.role === 'admin'));
-  }
-
-  ngOnInit(): void {
-    this.getBrands();
-  }
-
-  ngOnDestroy(): void {
-    this.brandSubscription.unsubscribe();
-  }
-
-  getBrands() {
-    this.brandSubscription = this.productService.getAllBrands('name', this.currentDir)
-      .subscribe(data => {
-        this.brands = data;
-      });
+    this.brands = this.productService.getAllBrands(this.currentSort, this.currentDir);
+    this.isLoggedIn = toSignal(this.authService.userSubject.pipe(map(value => value.role === 'admin')),
+      {initialValue: false});
   }
 
   sortBrands(sortState: Sort) {
-    this.currentDir = sortState.direction;
-    this.getBrands();
+    this.currentDir.set(sortState.direction);
   }
 
   reset() {
-    this.currentDir = 'ASC';
+    this.currentDir.set('ASC');
+    this.brands.reload();
   }
 
   addBrand() {
@@ -87,7 +75,6 @@ export class BrandListComponent implements OnInit, OnDestroy {
         this.productService.addBrand(data).subscribe({
           next: () => {
             this.reset();
-            this.getBrands();
           },
           error: (error) => {
             this.snackBar.open(error.error.message, '', {duration: 3000})
@@ -113,7 +100,6 @@ export class BrandListComponent implements OnInit, OnDestroy {
         this.productService.editBrand(data).subscribe({
           next: () => {
             this.reset();
-            this.getBrands();
           },
           error: (error) => {
             this.snackBar.open(error.error.message, '', {duration: 3000})
@@ -135,7 +121,6 @@ export class BrandListComponent implements OnInit, OnDestroy {
         this.productService.deleteBrand(data).subscribe({
           next: () => {
             this.reset();
-            this.getBrands();
           }, error: (error) => {
             this.snackBar.open(error.error.message, '', {duration: 3000})
           }

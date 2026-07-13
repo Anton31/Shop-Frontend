@@ -1,6 +1,6 @@
 <div style="padding: 20px">
   <mat-chip-set>
-    @for (type of filterTypes; track type.id) {
+    @for (type of filterTypes.value(); track type.id) {
       @if (type.id === selectedTypeId()) {
         <mat-chip (click)="filterByType(type.id)" class="selectedChip">
           <span>{{ type.name }}</span>
