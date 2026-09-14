@@ -193,8 +193,10 @@ export class ProductListComponent {
 
   reset() {
     this.products.reload();
-    this.filterTypes.reload();
-    this.filterBrands.reload();
+    this.selectedTypeId.set('');
+    this.selectedBrandId.set('');
+    this.selectedSort.set('name');
+    this.selectedDir.set('ASC');
   }
 
   addItemToCart(product: Product) {
