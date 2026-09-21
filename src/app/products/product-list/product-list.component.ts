@@ -45,8 +45,8 @@ export class ProductListComponent {
   filterTypes!: HttpResourceRef<any>;
   filterBrands!: HttpResourceRef<any>;
 
-  selectedTypeId = signal<number | ''>('');
-  selectedBrandId = signal<number | ''>('');
+  selectedTypeId = signal<number>(0);
+  selectedBrandId = signal<number>(0);
   selectedSort = signal('name');
   selectedDir = signal('ASC');
 
@@ -94,25 +94,24 @@ export class ProductListComponent {
     this.selectedDir.set(sortState.direction);
   }
 
-  getProductBrands(typeId: number | '') {
+  getProductBrands(typeId: number) {
     this.selectedTypeId.set(typeId);
   }
 
   filterByType(typeId: number) {
     if (typeId === this.selectedTypeId()) {
-      this.selectedTypeId.set('');
-      this.selectedBrandId.set('');
+      this.selectedTypeId.set(0);
+      this.selectedBrandId.set(0);
     } else {
       this.selectedTypeId.set(typeId);
-      this.selectedBrandId.set('');
+      this.selectedBrandId.set(0);
     }
     this.getProductBrands(this.selectedTypeId());
-
   }
 
   filterByTypeBrand(brandId: number) {
     if (brandId === this.selectedBrandId()) {
-      this.selectedBrandId.set('');
+      this.selectedBrandId.set(0);
     } else {
       this.selectedBrandId.set(brandId);
     }
@@ -192,11 +191,12 @@ export class ProductListComponent {
   }
 
   reset() {
-    this.products.reload();
-    this.selectedTypeId.set('');
-    this.selectedBrandId.set('');
-    this.selectedSort.set('name');
-    this.selectedDir.set('ASC');
+    if (this.selectedTypeId() > 0) {
+      this.selectedTypeId.set(0);
+      this.selectedBrandId.set(0);
+    } else {
+      this.products.reload();
+    }
   }
 
   addItemToCart(product: Product) {

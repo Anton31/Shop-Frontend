@@ -19,11 +19,12 @@ export class ProductService {
     this.fileArray = [];
   }
 
-  getProducts(typeId: Signal<number | ''>, brandId: Signal<number | ''>,
+  getProducts(typeId: Signal<number>, brandId: Signal<number>,
               sort: Signal<string>, dir: Signal<string>) {
     return httpResource(() => `${this.baseUrl}/products/product?typeId=
     ${typeId()}&brandId=${brandId()}&sort=${sort()}&dir=${dir()}`);
   }
+
 
   getAllTypes(sort: Signal<string>, dir: Signal<string>) {
     return httpResource(() => `${this.baseUrl}/products/type?sort=${sort()}&dir=${dir()}`);
@@ -37,7 +38,7 @@ export class ProductService {
     return httpResource(() => `${this.baseUrl}/products/productType`);
   }
 
-  getProductBrands(typeId: Signal<number | ''>) {
+  getProductBrands(typeId: Signal<number>) {
     return httpResource(() => `${this.baseUrl}/products/productBrand?typeId=${typeId()}`);
   }
 
