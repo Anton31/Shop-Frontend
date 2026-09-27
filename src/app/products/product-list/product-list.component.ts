@@ -45,8 +45,8 @@ export class ProductListComponent {
   filterTypes!: HttpResourceRef<any>;
   filterBrands!: HttpResourceRef<any>;
 
-  selectedTypeId = signal<number>(0);
-  selectedBrandId = signal<number>(0);
+  selectedTypeId = signal<number | string>('');
+  selectedBrandId = signal<number | string>('');
   selectedSort = signal('name');
   selectedDir = signal('ASC');
 
@@ -94,24 +94,24 @@ export class ProductListComponent {
     this.selectedDir.set(sortState.direction);
   }
 
-  getProductBrands(typeId: number) {
+  getProductBrands(typeId: number | string) {
     this.selectedTypeId.set(typeId);
   }
 
   filterByType(typeId: number) {
     if (typeId === this.selectedTypeId()) {
-      this.selectedTypeId.set(0);
-      this.selectedBrandId.set(0);
+      this.selectedTypeId.set('');
+      this.selectedBrandId.set('');
     } else {
       this.selectedTypeId.set(typeId);
-      this.selectedBrandId.set(0);
+      this.selectedBrandId.set('');
     }
     this.getProductBrands(this.selectedTypeId());
   }
 
   filterByTypeBrand(brandId: number) {
     if (brandId === this.selectedBrandId()) {
-      this.selectedBrandId.set(0);
+      this.selectedBrandId.set('');
     } else {
       this.selectedBrandId.set(brandId);
     }
@@ -191,9 +191,9 @@ export class ProductListComponent {
   }
 
   reset() {
-    if (this.selectedTypeId() > 0) {
-      this.selectedTypeId.set(0);
-      this.selectedBrandId.set(0);
+    if (this.selectedTypeId() !== '') {
+      this.selectedTypeId.set('');
+      this.selectedBrandId.set('');
     } else {
       this.products.reload();
     }
