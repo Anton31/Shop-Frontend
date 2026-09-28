@@ -45,8 +45,8 @@ export class ProductListComponent {
   filterTypes!: HttpResourceRef<any>;
   filterBrands!: HttpResourceRef<any>;
 
-  selectedTypeId = signal<number | string>('');
-  selectedBrandId = signal<number | string>('');
+  selectedTypeId = signal('');
+  selectedBrandId = signal('');
   selectedSort = signal('');
   selectedDir = signal('');
 
@@ -94,11 +94,11 @@ export class ProductListComponent {
     this.selectedDir.set(sortState.direction);
   }
 
-  getProductBrands(typeId: number | string) {
+  getProductBrands(typeId: string) {
     this.selectedTypeId.set(typeId);
   }
 
-  filterByType(typeId: number) {
+  filterByType(typeId: string) {
     if (typeId === this.selectedTypeId()) {
       this.selectedTypeId.set('');
       this.selectedBrandId.set('');
@@ -109,7 +109,7 @@ export class ProductListComponent {
     this.getProductBrands(this.selectedTypeId());
   }
 
-  filterByTypeBrand(brandId: number) {
+  filterByTypeBrand(brandId: string) {
     if (brandId === this.selectedBrandId()) {
       this.selectedBrandId.set('');
     } else {
@@ -197,6 +197,7 @@ export class ProductListComponent {
     } else {
       this.products.reload();
     }
+    this.filterTypes.reload();
   }
 
   addItemToCart(product: Product) {

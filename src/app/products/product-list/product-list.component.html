@@ -1,12 +1,12 @@
 <div style="padding: 20px">
   <mat-chip-set>
     @for (type of filterTypes.value(); track type.id) {
-      @if (type.id === selectedTypeId()) {
-        <mat-chip (click)="filterByType(type.id)" class="selectedChip">
+      @if (type.id.toString() === selectedTypeId()) {
+        <mat-chip (click)="filterByType(type.id.toString())" class="selectedChip">
           <span>{{ type.name }}</span>
         </mat-chip>
       } @else {
-        <mat-chip (click)="filterByType(type.id)">
+        <mat-chip (click)="filterByType(type.id.toString())">
           {{ type.name }}
         </mat-chip>
       }
@@ -14,12 +14,12 @@
   </mat-chip-set>
   <mat-chip-set>
     @for (brand of filterBrands.value(); track brand.id) {
-      @if (brand.id === selectedBrandId()) {
-        <mat-chip (click)="filterByTypeBrand(brand.id)" class="selectedChip">
+      @if (brand.id.toString() === selectedBrandId()) {
+        <mat-chip (click)="filterByTypeBrand(brand.id.toString())" class="selectedChip">
           <span>{{ brand.name }}</span>
         </mat-chip>
       } @else {
-        <mat-chip (click)="filterByTypeBrand(brand.id)">
+        <mat-chip (click)="filterByTypeBrand(brand.id.toString())">
           {{ brand.name }}
         </mat-chip>
       }
