@@ -47,8 +47,8 @@ export class ProductListComponent {
 
   selectedTypeId = signal<number | string>('');
   selectedBrandId = signal<number | string>('');
-  selectedSort = signal('name');
-  selectedDir = signal('ASC');
+  selectedSort = signal('');
+  selectedDir = signal('');
 
   itemDto!: ItemDto;
   displayedColumns = signal(['']);

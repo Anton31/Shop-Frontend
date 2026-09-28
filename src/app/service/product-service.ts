@@ -7,7 +7,7 @@ import {Product} from "../model/product";
 export class ProductService {
 
   fileArray!: File[];
-  baseUrl: string = 'http://localhost:8080';
+  baseUrl: string = 'http://localhost:8080/products';
 
   private http = inject(HttpClient);
 
@@ -21,65 +21,64 @@ export class ProductService {
 
   getProducts(typeId: Signal<number | string>, brandId: Signal<number | string>,
               sort: Signal<string>, dir: Signal<string>) {
-    return httpResource(() => `${this.baseUrl}/products/product?typeId=
+    return httpResource(() => `${this.baseUrl}/product?typeId=
     ${typeId()}&brandId=${brandId()}&sort=${sort()}&dir=${dir()}`);
   }
 
-
   getAllTypes(sort: Signal<string>, dir: Signal<string>) {
-    return httpResource(() => `${this.baseUrl}/products/type?sort=${sort()}&dir=${dir()}`);
+    return httpResource(() => `${this.baseUrl}/type?sort=${sort()}&dir=${dir()}`);
   }
 
   getAllBrands(sort: Signal<string>, dir: Signal<string>) {
-    return httpResource(() => `${this.baseUrl}/products/brand?sort=${sort()}&dir=${dir()}`);
+    return httpResource(() => `${this.baseUrl}/brand?sort=${sort()}&dir=${dir()}`);
   }
 
   getProductTypes() {
-    return httpResource(() => `${this.baseUrl}/products/productType`);
+    return httpResource(() => `${this.baseUrl}/productType`);
   }
 
   getProductBrands(typeId: Signal<number | string>) {
-    return httpResource(() => `${this.baseUrl}/products/productBrand?typeId=${typeId()}`);
+    return httpResource(() => `${this.baseUrl}/productBrand?typeId=${typeId()}`);
   }
 
   getProduct(id: number): Observable<Product> {
-    return this.http.get<Product>(`${this.baseUrl}/products/product/${id}`);
+    return this.http.get<Product>(`${this.baseUrl}/product/${id}`);
   }
 
   addProduct(data: any): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/products/product`, data);
+    return this.http.post<any>(`${this.baseUrl}/product`, data);
   }
 
   editProduct(data: any): Observable<any> {
-    return this.http.put<any>(`${this.baseUrl}/products/product`, data);
+    return this.http.put<any>(`${this.baseUrl}/product`, data);
   }
 
   deleteProduct(productId: number): Observable<any> {
-    return this.http.delete<any>(`${this.baseUrl}/products/product/${productId}`);
+    return this.http.delete<any>(`${this.baseUrl}/product/${productId}`);
   }
 
   addType(data: any): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/products/type`, data);
+    return this.http.post<any>(`${this.baseUrl}/type`, data);
   }
 
   editType(data: any): Observable<any> {
-    return this.http.put<any>(`${this.baseUrl}/products/type`, data);
+    return this.http.put<any>(`${this.baseUrl}/type`, data);
   }
 
   deleteType(typeId: number): Observable<any> {
-    return this.http.delete<any>(`${this.baseUrl}/products/type/${typeId}`);
+    return this.http.delete<any>(`${this.baseUrl}/type/${typeId}`);
   }
 
   addBrand(data: any): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/products/brand`, data);
+    return this.http.post<any>(`${this.baseUrl}/brand`, data);
   }
 
   editBrand(data: any): Observable<any> {
-    return this.http.put<any>(`${this.baseUrl}/products/brand`, data);
+    return this.http.put<any>(`${this.baseUrl}/brand`, data);
   }
 
   deleteBrand(brandId: number): Observable<any> {
-    return this.http.delete<any>(`${this.baseUrl}/products/brand/${brandId}`);
+    return this.http.delete<any>(`${this.baseUrl}/brand/${brandId}`);
   }
 
   addPhotos(data: any) {
@@ -89,14 +88,14 @@ export class ProductService {
       formData.append('photos', this.fileArray[i]);
     }
     this.deleteFiles();
-    return this.http.post<any>(`${this.baseUrl}/products/photo`, formData)
+    return this.http.post<any>(`${this.baseUrl}/photo`, formData)
   }
 
   deletePhotos(productId: number): Observable<any> {
-    return this.http.delete<any>(`${this.baseUrl}/products/photo/${productId}`);
+    return this.http.delete<any>(`${this.baseUrl}/photo/${productId}`);
   }
 
   deletePhoto(productId: number, photoId: number): Observable<any> {
-    return this.http.delete<any>(`${this.baseUrl}/products/photo/${productId}/${photoId}`);
+    return this.http.delete<any>(`${this.baseUrl}/photo/${productId}/${photoId}`);
   }
 }
